@@ -1,0 +1,37 @@
+<template>
+
+  <form>
+    <h1>Edit profile</h1>
+    <div class=row>
+      <input name=firstname placeholder="First name" value="Vincent">
+      <input class=row name=lastname placeholder="Last name" value="Agnano">
+    </div>
+    <input class=row type=email name=email placeholder="Email" value="vincent@home.net">
+
+    <fieldset>
+      <legend>Test informations</legend>
+      <div class=row>
+        <label>Language for the test</label>
+        <select name=language>
+          <option value=fr selected>French</option>
+          <option value=en>English</option>
+        </select>
+      </div>
+      <div class=row>
+        <label>Cultural country</label>
+        <select class=row name=country>
+          <option value=fr selected>France</option>
+          <option value=us>USA</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <footer class=toolbar>
+      <input type=submit class=primary value=Save>
+    </footer>
+  </form>
+</template>
+
+<style>
+  @import url('/assets/css/main.css');
+</style>

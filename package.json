@@ -1,0 +1,20 @@
+{
+  "name": "tci-professionals",
+  "version": "0.1.0",
+  "description": "TCI for professionals",
+  "main": "index.html",
+  "scripts": {
+    "watch": "LIB_PATH=https://www.gitcdn.xyz/repo/Polight/lego/master/lib lego bricks/ dist/bricks.js -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/anthropedia/tci/professionals"
+  },
+  "author": "Vincent Agnano",
+  "license": "ISC",
+  "dependencies": {
+    "@polight/lego": "^0.3.1",
+    "jsdom": "^13.0.0"
+  }
+}
