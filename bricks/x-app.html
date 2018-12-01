@@ -1,0 +1,29 @@
+<template>
+  <header>
+    <h1><a href="/">TCI</a></h1>
+  </header>
+
+  <main>
+    <test-list :if="this.state.page === 'list'"></test-list>
+    <user-edit :if="this.state.page === 'user-edit'"></user-edit>
+  </main>
+</template>
+
+<script>
+  page('/', () => {
+    this.state.page = 'list'
+    this.render()
+  })
+
+  page('/user', () => {
+    console.log('user page')
+    this.state.page = 'user-edit'
+    this.render()
+  })
+
+  page({ hashbang: true })
+
+  page('*', () => {
+    console.debug('page loaded')
+  })
+</script>
