@@ -1,0 +1,62 @@
+<template>
+  <main>
+    <h1>Dashboard</h1>
+
+    <section>
+      <table>
+        <tr>
+          <th>Client</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+        <tr>
+          <td><a href=/user>Loic Fuentes</a><td>
+          <td>December 10, 2017</td>
+          <td>View score</td>
+        </tr>
+        <tr>
+          <td>Valentin Agnano<td>
+          <td>November 27, 2017</td>
+          <td>View score</td>
+        </tr>
+        <tr>
+          <td>Amanda Martinez<td>
+          <td>November 3, 2017</td>
+          <td>Pending</td>
+        </tr>
+      </table>
+    </section>
+  </main>
+
+  <aside>
+    <section>
+      47 credits remaining.<br>
+      <a class="button primary" href=/buy>Purchase credit</a>
+    </section>
+
+    <section>
+      <h2>Clients</h2>
+      <ul>
+        <li><a href=/user>Loic Fuentes</a></li>
+        <li><a href=/user>Vincent Agnano</a></li>
+      </ul>
+    </section>
+  </aside>
+</template>
+
+<style>
+  @import url('/assets/css/main.css');
+
+  root {
+    display: grid;
+    grid-template:
+      'main aside' / 1fr auto;
+  }
+
+  root > section {
+    grid-area: main;
+  }
+  root > aside {
+    grid-area: aside;
+  }
+</style>

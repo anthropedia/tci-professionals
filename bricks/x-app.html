@@ -2,16 +2,21 @@
   <header>
     <h1><a href="/">TCI</a></h1>
   </header>
-
+  
   <main>
-    <test-list :if="this.state.page === 'list'"></test-list>
+    <x-dashboard :if="this.state.page === 'dashboard'"></x-dashboard>
     <user-edit :if="this.state.page === 'user-edit'"></user-edit>
   </main>
+
+  <footer>
+    ANTHROPEDIA™ FOUNDATION is a U.S. registered 501(c)(3) tax-deductible nonprofit charity<br>
+    ©2013 ANTHROPEDIA™ FOUNDATION all rights reserved.
+  </footer>
 </template>
 
 <script>
   page('/', () => {
-    this.state.page = 'list'
+    this.state.page = 'dashboard'
     this.render()
   })
 
@@ -22,8 +27,4 @@
   })
 
   page({ hashbang: true })
-
-  page('*', () => {
-    console.debug('page loaded')
-  })
 </script>
