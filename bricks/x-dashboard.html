@@ -1,40 +1,15 @@
 <template>
 <div class=two-columns>
-  <main>
-    <h1>Dashboard</h1>
+  <h1>Dashboard</h1>
 
-    <x-stripe></x-stripe>
-
-    <section>
-      <table>
-        <tr>
-          <th>Client</th>
-          <th>Date</th>
-          <th>Status</th>
-        </tr>
-        <tr>
-          <td><a href=/user>Loic Fuentes</a><td>
-          <td>December 10, 2017</td>
-          <td>View score</td>
-        </tr>
-        <tr>
-          <td>Valentin Agnano<td>
-          <td>November 27, 2017</td>
-          <td>View score</td>
-        </tr>
-        <tr>
-          <td>Amanda Martinez<td>
-          <td>November 3, 2017</td>
-          <td>Pending</td>
-        </tr>
-      </table>
-    </section>
-  </main>
+  <section class=block>
+  </section>
 
   <aside>
     <section>
-      47 credits remaining.<br>
-      <a class="button primary" href=/buy>Purchase credit</a>
+      47 credits remaining<br>
+      <p>Add <input name=quantity type=number on:input="this.addCredit"></p>
+      <stripe-button quantity="${ this.quantity }">Purchase credit</stripe-button>
     </section>
 
     <section>
@@ -48,6 +23,16 @@
 
 </div>
 </template>
+
+<script>
+  this.setState({
+    quantity: 0
+  })
+  
+  this.addCredit = (event) => {
+    this.render({ quantity: event.currentTarget.value })
+  }
+</script>
 
 <style>
   @import url('/assets/css/main.css');

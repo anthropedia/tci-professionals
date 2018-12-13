@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "start": "concurrently 'npm run watch' 'http-server'",
-    "watch": "LEGO_PATH=/dist/lego/lib/index.js lego bricks/ dist/bricks.js -w",
+    "watch": "LEGO_PATH=/dist/lego/lib/index.js ./dist/lego/bin/compile.js bricks/ dist/bricks.js -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@polight/lego": "*",
-    "jsdom": "^13.0.0"
+    "jsdom": "*"
   },
   "devDependencies": {
     "concurrently": "*",

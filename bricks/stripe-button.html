@@ -1,23 +1,29 @@
-<template>
-  <button on:click="this.showPayment">Proceed</button>
+<template quantity=0>
+  <button on:click="this.showPayment"><slot></slot></button>
 </template>
 
 <script>
-  this.handler = StripeCheckout.configure({
-    key: 'pk_test_idontexist!',
-    image: 'https://assets.tci.anthropedia.org/images/anthropedia.svg',
-    locale: 'auto',
-    token: async (token) => {
-      const response = await api('/payment', token)
-      console.info(response.status, response.data)
-    }
+  this.setState({
+    quantity: 1
   })
 
+  this.connected = () => {
+    this.handler = StripeCheckout.configure({
+      key: config.stripeKey,
+      image: '',
+      locale: 'auto',
+      token: async (token) => {
+        const response = await api('/payment', token)
+      }
+    })
+  }
+
   this.showPayment = () => {
+    const unitPrice = 15
     this.handler.open({
       name: 'Anthropedia',
-      description: '2 TCI tests',
-      amount: 2000
+      description: `${this.state.quantity} TCI tests`,
+      amount: this.state.quantity * 100 * unitPrice
     })
   }
 </script>
