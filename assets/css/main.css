@@ -1,1 +1,14 @@
 @import url('https://cdn.jsdelivr.net/gh/polight/decor@master/decor.css');
+
+.two-columns {
+  display: grid;
+  grid-template:
+    'main aside' / 1fr auto;
+}
+
+.two-columns main {
+  grid-area: main;
+}
+.two-columns aside {
+  grid-area: aside;
+}

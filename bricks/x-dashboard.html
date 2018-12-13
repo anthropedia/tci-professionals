@@ -1,6 +1,9 @@
 <template>
+<div class=two-columns>
   <main>
     <h1>Dashboard</h1>
+
+    <x-stripe></x-stripe>
 
     <section>
       <table>
@@ -42,21 +45,10 @@
       </ul>
     </section>
   </aside>
+
+</div>
 </template>
 
 <style>
   @import url('/assets/css/main.css');
-
-  root {
-    display: grid;
-    grid-template:
-      'main aside' / 1fr auto;
-  }
-
-  root > section {
-    grid-area: main;
-  }
-  root > aside {
-    grid-area: aside;
-  }
 </style>

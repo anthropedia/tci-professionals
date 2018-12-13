@@ -1,11 +1,13 @@
 <template>
   <header>
-    <h1><a href="/">TCI</a></h1>
+    <h1 id=logo><a href="/">
+      <img src=https://assets.tci.anthropedia.org/images/anthropedia.svg alt="Anthropedia Foundation">
+    </a></h1>
   </header>
-  
+
   <main>
-    <x-dashboard :if="this.state.page === 'dashboard'"></x-dashboard>
-    <user-edit :if="this.state.page === 'user-edit'"></user-edit>
+    <x-dashboard :if="this.page === 'dashboard'"></x-dashboard>
+    <user-edit :if="this.page === 'user-edit'"></user-edit>
   </main>
 
   <footer>
@@ -28,3 +30,18 @@
 
   page({ hashbang: true })
 </script>
+
+<style>
+  header {
+    padding: .3rem 1rem;
+  }
+  #logo {
+    width: 5rem;
+  }
+  #logo a,
+  #logo img {
+    display: block;
+    width: 100%;
+  }
+
+</style>
