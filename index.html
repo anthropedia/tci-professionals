@@ -3,10 +3,18 @@
 
 <link rel=stylesheet href=/assets/css/main.css>
 
-<x-app></x-app>
+<body>
+  <x-app></x-app>
+</body>
 
 <script src=https://cdn.jsdelivr.net/gh/visionmedia/page.js@master/page.js></script>
 <script src="https://checkout.stripe.com/checkout.js"></script>
 <script src="/config.js"></script>
-
 <script type=module src=dist/bricks.js></script>
+
+<style>
+  body {
+    margin: 0;
+    background-color: #1e88e5;
+  }
+</style>
