@@ -8,6 +8,7 @@
   <main>
     <x-dashboard :if="this.page === 'dashboard'"></x-dashboard>
     <user-edit :if="this.page === 'user-edit'"></user-edit>
+    <error-404 :if="this.page === 'error'"></error-404>
   </main>
 
   <footer>
@@ -28,13 +29,19 @@
     this.render()
   })
 
+  page('*', () => this.state.page = 'error')
+
   page({ hashbang: true })
 </script>
 
 <style>
   header {
-    padding: .3rem 1rem;
-    background-color: white;
+    padding: .1rem 1rem;
+    background-color: var(--white-background);
+    box-shadow: .3rem 0 .5rem rgba(0, 0, 0, .4);
+    position: sticky;
+    top: 0;
+    z-index: 3;
   }
   #logo {
     width: 5rem;
@@ -48,8 +55,7 @@
   footer {
     color: white;
     padding: 1rem;
-    font-size: .7rem;
-    background-color: #1e88e5;
+    font-size: .6rem;
   }
 
 </style>

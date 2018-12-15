@@ -3,41 +3,57 @@
 
   <section class=block>
 
-    <h2>Clients</h2>
+    <h1><x-icon figure=address-book></x-icon>Overview</h1>
     <div class=row>
-      <input type=search name=name placeholder="Lookup a client name">
+      <input type=search name=name placeholder="Look up a client">
       <button class=primary>Search</button>
     </div>
+
+    <div class=row>
+      <strong>Filter</strong>
+      <div>
+        <x-tag :active="true">st-patrick</x-tag>
+        <x-tag dimmed>palm</x-tag>
+        <x-tag dimmed>archive</x-tag>
+      </div>
+    </div>
+
     <nav>
       <a href=/user>
         <h3><x-icon figure=user></x-icon>Loic Fuentes</h3>
-        <p><x-icon figure=clipboard-check></x-icon>3 tests - completed on Jan 4th 2015</p>
+        <p><x-icon figure=clipboard-check></x-icon>completed on Jan 4th 2015 – 3 tests</p>
+        <x-tag>archive</x-tag>
       </a>
       <a href=/user>
         <h3><x-icon figure=user></x-icon>Vincent Agnano</h3>
-        <p><x-icon figure=clock color=#b56060></x-icon>5 tests - pending since Jan 7th 2019</p>
+        <p><x-icon figure=clock color=#F5BA01></x-icon>pending since Jan 7th 2019 – 5 tests</p>
+        <x-tag>palm</x-tag>
       </a>
       <a href=/user>
         <h3><x-icon figure=user></x-icon>Aymeric Faivre</h3>
-        <p><x-icon figure=clock color=#b56060></x-icon>2 tests - pending since Jan 4th 2017</p>
+        <p><x-icon figure=clock color=#F5BA01></x-icon>pending since Jan 4th 2017 – 2 tests</p>
+        <x-tag>st-patrick</x-tag>
       </a>
       <a href=/user>
         <h3><x-icon figure=user></x-icon>Jeremy Jones</h3>
-        <p><x-icon figure=clipboard-check></x-icon>8 tests - completed on Jan 1th 2017</p>
+        <p><x-icon figure=clipboard-check></x-icon>completed on Jan 1th 2017 – 8 tests</p>
+        <x-tag>palm</x-tag>
       </a>
     </nav>
+    <footer class="row  toolbar">
+      <a href=/user class="button"><x-icon figure=user-plus></x-icon>Add a user</a>
+    </footer>
   </section>
 
   <aside class=block>
-    <section>
-      <h4><x-icon figure=info-circle></x-icon>47 credits remaining</h4>
-      <p class=row>
-        <span>Purchase</span>
-        <input name=quantity type=number on:input="this.addCredit" value=50>
-        <span>TCI tests</span>
-      </p>
-      <stripe-button quantity="${ this.quantity || 50 }" class="button primary"><x-icon figure=credit-card></x-icon> Purchase</stripe-button>
-    </section>
+    <h1><x-icon figure=balance-scale></x-icon>Balance</h1>
+    <p><strong>47</strong> TCIs remaining</p>
+    <p class=row>
+      <span>Reload balance with</span>
+      <input name=quantity type=number on:input="this.addCredit" value=50>
+      <span>TCIs</span>
+    </p>
+    <stripe-button quantity="${ this.quantity || 50 }" class="button primary"><x-icon figure=credit-card></x-icon> Purchase</stripe-button>
   </aside>
 
 </div>
@@ -57,22 +73,22 @@
   @import url('/assets/css/main.css');
 
   nav a {
+    position: relative;
     display: block;
     padding: .3rem .5rem;
     text-decoration: none;
     color: inherit;
     border-bottom: 1px solid #eee;
-    transition: all .3s;
+    transition: all .2s;
   }
   nav a:last-of-type {
     border-bottom: none;
   }
   nav a:hover,
   nav a:focus {
-    background-color: #42a5f5;
+    background-color: var(--light-color);
     color: white;
-    padding: .3rem 1rem;
-    border: none;
+    padding-left: .8rem;
   }
   nav h3,
   nav p {
@@ -87,6 +103,11 @@
   nav x-icon {
     display: inline-block;
     width: 1rem;
+  }
+  nav x-tag {
+    position: absolute;
+    right: 1rem;
+    top: .5rem;
   }
 
   aside input {

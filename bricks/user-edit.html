@@ -1,13 +1,22 @@
 <template>
 <div class=two-columns>
   <main class=block>
+    <h1><x-icon figure=user-edit></x-icon>Edit profile</h1>
     <form>
-      <h1>Edit profile</h1>
+
       <div class=row>
         <input name=firstname placeholder="First name" value="Vincent">
-        <input class=row name=lastname placeholder="Last name" value="Agnano">
+        <input name=lastname placeholder="Last name" value="Agnano" required>
       </div>
+
       <input class=row type=email name=email placeholder="Email" value="vincent@home.net">
+
+      <input class=row name=tag placeholder="Assigned group" value="" list=tags-list>
+      <datalist id=tags-list>
+        <option value=palm>
+        <option value=st-patrick>
+        <option value=archive>
+      </datalist>
 
       <fieldset>
         <legend>Test informations</legend>
@@ -25,39 +34,56 @@
             <option value=us>USA</option>
           </select>
         </div>
-        <div class=row>
-          <label>Notes</label>
-          <textarea name=note></textarea>
-        </div>
       </fieldset>
 
+      <div class=row>
+        <label>Notes</label>
+        <textarea name=note></textarea>
+      </div>
+
       <footer class=toolbar>
-        <input type=submit class=primary value=Save>
+        <button class=primary>Save</button>
         <a href=/ class=button>Cancel</a>
       </footer>
     </form>
   </main>
 
   <aside class="block">
-    <h2>Assigned tests</h2>
+    <h1><x-icon figure=file-medical-alt></x-icon>Assigned tests</h1>
     <ul>
       <li>
-        Pending since jan 1, 2018
-        <a href="mailto:agnano.vince@gmail.com?subject=A TCI test was assigned to you.">Send</a>
-        <a href=https://client.tci.anthropedia.org/123dsw>Run</a>
+        <span><x-icon figure=clock color=#F5BA01></x-icon>Pending since jan 1, 2018</span>
+        <nav class=actions>
+          <a href="mailto:agnano.vince@gmail.com?subject=A TCI test was assigned to you." title="Send the TCI by email to the Client">
+            <x-icon figure=envelope></x-icon>
+          </a>
+          <a href=https://client.tci.anthropedia.org/123dsw title="Go to the TCI test form">
+            <x-icon figure=file-signature></x-icon>
+          </a>
+          <x-icon figure=trash on:click="this.removeAssignement" title="Unassign this test from the Client"></x-icon>
+        </nav>
       </li>
       <li>
-        Completed on jan 12, 2018
-        <a href=/score/123/1d>1D</a>
-        <a href=/score/123/1d>2D</a>
-        <a href=/score/123/1d>3D</a>
+        <span><x-icon figure=file-invoice></x-icon>Completed on jan 12, 2018</span>
+        <nav class=actions>
+          <a class=score href=/score/123/1d>1D</a>
+          <a class=score href=/score/123/1d>2D</a>
+          <a class=score href=/score/123/1d>3D</a>
+        </nav>
       </li>
     </ul>
-    <a class="button" href=/dashboard>Assign a new test</a>
+    <button class=primary><x-icon figure=file-medical></x-icon>Assign a new test</button>
   </aside>
 
 </div>
 </template>
+
+<script>
+  this.removeAssignement = () => {
+     if(!confirm('Are your sure you want to remove this assignment?')) return
+     alert('Should delete this then!')
+  }
+</script>
 
 <style>
   @import url('/assets/css/main.css');
@@ -65,5 +91,38 @@
   aside ul {
     padding: 0;
     list-style: none;
+  }
+
+  aside li {
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  nav > * {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: bold;
+    width: 1.5rem;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    padding: .2rem;
+    border-radius: .2rem;
+    border: 1px solid transparent;
+  }
+  nav > *:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+
+  aside button {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  a.score {
   }
 </style>

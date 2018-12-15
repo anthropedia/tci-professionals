@@ -4,8 +4,8 @@
   "description": "TCI for professionals",
   "main": "index.html",
   "scripts": {
-    "start": "concurrently 'npm run watch' 'live-server --no-browser",
-    "watch": "LEGO_PATH=/dist/lego/lib/index.js ./dist/lego/bin/compile.js bricks/ dist/bricks.js -w",
+    "start": "concurrently 'npm run watch' 'live-server --no-browser'",
+    "watch": "lego bricks/ dist/bricks.js -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,7 +15,7 @@
   "author": "Vincent Agnano",
   "license": "ISC",
   "dependencies": {
-    "@polight/lego": "*",
+    "@polight/lego": "^0.7.2",
     "jsdom": "*"
   },
   "devDependencies": {
