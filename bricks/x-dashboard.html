@@ -28,11 +28,15 @@
     </nav>
   </section>
 
-  <aside>
+  <aside class=block>
     <section>
-      47 credits remaining<br>
-      <p>Add <input name=quantity type=number on:input="this.addCredit"></p>
-      <stripe-button quantity="${ this.quantity }">Purchase credit</stripe-button>
+      <h4><x-icon figure=info-circle></x-icon>47 credits remaining</h4>
+      <p class=row>
+        <span>Purchase</span>
+        <input name=quantity type=number on:input="this.addCredit" value=50>
+        <span>TCI tests</span>
+      </p>
+      <stripe-button quantity="${ this.quantity || 50 }" class="button primary"><x-icon figure=credit-card></x-icon> Purchase</stripe-button>
     </section>
   </aside>
 
@@ -57,14 +61,18 @@
     padding: .3rem .5rem;
     text-decoration: none;
     color: inherit;
-    border-bottom: 1px solid #eee
+    border-bottom: 1px solid #eee;
+    transition: all .3s;
   }
   nav a:last-of-type {
     border-bottom: none;
   }
-  nav a:hover {
+  nav a:hover,
+  nav a:focus {
     background-color: #42a5f5;
     color: white;
+    padding: .3rem 1rem;
+    border: none;
   }
   nav h3,
   nav p {
@@ -79,5 +87,18 @@
   nav x-icon {
     display: inline-block;
     width: 1rem;
+  }
+
+  aside input {
+    width: 3rem;
+    padding: .1rem;
+    border: 0;
+    border-bottom: 1px dashed #888;
+    text-align: center;
+  }
+
+  stripe-button {
+    display: block !important;
+    margin-top: 2rem;
   }
 </style>

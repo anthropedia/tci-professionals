@@ -1,6 +1,16 @@
 @import url('https://cdn.jsdelivr.net/gh/polight/decor@master/decor.css');
 @import url('https://use.fontawesome.com/releases/v5.6.1/css/all.css');
 
+:root {
+  --primary-color: #1e88e5;
+  --light-color: #42a5f5;
+}
+
+button:hover,
+.button:hover,
+[type=input]:hover {
+  background-color: var(--light-color) !important;
+}
 
 .two-columns {
   display: grid;
