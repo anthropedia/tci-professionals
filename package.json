@@ -4,8 +4,10 @@
   "description": "TCI for professionals",
   "main": "index.html",
   "scripts": {
-    "start": "concurrently 'npm run watch' 'live-server --no-browser'",
-    "watch": "lego bricks/ dist/bricks.js -w",
+    "start": "concurrently 'npm run build -- -w' 'live-server --no-browser'",
+    "watch": " -w",
+    "build": "lego bricks/ dist/bricks.js",
+    "deploy": "ssh athens 'cd tci/professionals && git pull && npm install && npm run build'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

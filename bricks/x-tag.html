@@ -1,0 +1,26 @@
+<template disabled="true">
+  <a href="/${ this.filter }" class="${ this.dimmed !== undefined ? 'dimmed' : '' }"><slot></slot></a>
+</template>
+
+<script>
+  const value = this.textContent
+  this.state.filter = this.state.active ? '' : `?tag=${ this.textContent }`;
+</script>
+
+<style>
+  @import url(/assets/css/main.css);
+
+  a {
+    border-radius: .8rem;
+    padding: .1rem .8rem;
+    background-color: var(--primary-color);
+    color: #fff;
+    font-size: .7rem;
+    text-decoration: none;
+  }
+  a.dimmed {
+    color: var(--primary-color);
+    background-color: var(--white-background);
+    border: 1px solid var(--primary-color);
+  }
+</style>
