@@ -19,7 +19,7 @@
     </div>
 
     <nav>
-      <a :for="user in this.users" href=/user>
+      <a :for="user in this.users" href="/user/${ this.user.id }">
         <h3><x-icon figure=user></x-icon>${ this.user.name }</h3>
         <p><x-icon figure=clock color=#F5BA01></x-icon>pending since Jan 7th 2019 – 5 tests</p>
         <x-tag :if="this.user" :for="tag in this.user.tags">hey${ this.tag }</x-tag>
@@ -52,12 +52,7 @@
 
   this.connected = async () => {
     const response = await api('/clients')
-    this.state.users = response.data
-    this.render()
-  }
-
-  this.changed = () => {
-    console.table('state in dashboard', this.state.users)
+    this.render({ users: response.data })
   }
 
   this.addCredit = (event) => {

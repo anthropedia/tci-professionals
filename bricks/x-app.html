@@ -7,7 +7,7 @@
 
   <main>
     <x-dashboard :if="this.page === 'dashboard'" users="${ this.users }"></x-dashboard>
-    <user-edit :if="this.page === 'user-edit'"></user-edit>
+    <user-edit :if="this.page === 'user-edit'" id="${ this.userId }"></user-edit>
     <error-404 :if="this.page === 'error'"></error-404>
   </main>
 
@@ -18,17 +18,9 @@
 </template>
 
 <script>
-  page('/', () => {
-    this.state.page = 'dashboard'
-    this.state.users = [{ name: "Vincent" }, { name: "Loic" }, { name: "Kevin" }]
-    console.debug('app users defined')
-    this.render()
-  })
-
-  page('/user', () => {
-    this.state.page = 'user-edit'
-    this.render()
-  })
+  page('/', () => this.render({ page: 'dashboard' }))
+  page('/user', () => this.render({ page: 'user-edit', userId: '' }))
+  page('/user/:id', (req) => this.render({ page: 'user-edit', userId: req.params.id }))
 
   page('*', () => this.state.page = 'error')
 
