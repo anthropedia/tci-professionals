@@ -1,4 +1,4 @@
-<template>
+<template users>
 <div class=two-columns>
 
   <section class=block>
@@ -19,25 +19,10 @@
     </div>
 
     <nav>
-      <a href=/user>
-        <h3><x-icon figure=user></x-icon>Vincent Agnano</h3>
+      <a :for="user in this.users" href=/user>
+        <h3><x-icon figure=user></x-icon>${ this.user.name }</h3>
         <p><x-icon figure=clock color=#F5BA01></x-icon>pending since Jan 7th 2019 – 5 tests</p>
-        <x-tag>palm</x-tag>
-      </a>
-      <a href=/user>
-        <h3><x-icon figure=user></x-icon>Jeremy Jones</h3>
-        <p><x-icon figure=clipboard-check></x-icon>completed on Jan 1th 2018 – 8 tests</p>
-        <x-tag>palm</x-tag>
-      </a>
-      <a href=/user>
-        <h3><x-icon figure=user></x-icon>Aymeric Faivre</h3>
-        <p><x-icon figure=clock color=#F5BA01></x-icon>pending since Jan 4th 2017 – 2 tests</p>
-        <x-tag>st-patrick</x-tag>
-      </a>
-      <a href=/user>
-        <h3><x-icon figure=user></x-icon>Loic Fuentes</h3>
-        <p><x-icon figure=clipboard-check></x-icon>completed on Jan 4th 2015 – 3 tests</p>
-        <x-tag>archive</x-tag>
+        <x-tag :if="this.user" :for="tag in this.user.tags">hey${ this.tag }</x-tag>
       </a>
     </nav>
     <footer class="row  toolbar">
@@ -61,8 +46,19 @@
 
 <script>
   this.setState({
-    quantity: 0
+    quantity: 0,
+    users: []
   })
+
+  this.connected = async () => {
+    const response = await api('/clients')
+    this.state.users = response.data
+    this.render()
+  }
+
+  this.changed = () => {
+    console.table('state in dashboard', this.state.users)
+  }
 
   this.addCredit = (event) => {
     this.render({ quantity: event.currentTarget.value })

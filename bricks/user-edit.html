@@ -2,16 +2,15 @@
 <div class=two-columns>
   <main class=block>
     <h1><x-icon figure=user-edit></x-icon>Edit profile</h1>
-    <form>
+    <form on:submit="this.submit">
 
       <div class=row>
-        <input name=firstname placeholder="First name" value="Vincent">
-        <input name=lastname placeholder="Last name" value="Agnano" required>
+        <input name=name placeholder="Full Name*" value="Vincent Agnano" required>
       </div>
 
       <input class=row type=email name=email placeholder="Email" value="vincent@home.net">
 
-      <input class=row name=tag placeholder="Assigned group" value="" list=tags-list>
+      <input class=row name=tags placeholder="Assigned Groups (insert multiple tag separated with a comma)" value="" list=tags-list>
       <datalist id=tags-list>
         <option value=palm>
         <option value=st-patrick>
@@ -28,8 +27,8 @@
           </select>
         </div>
         <div class=row>
-          <label>Cultural country</label>
-          <select class=row name=country>
+          <label>Cultural Country</label>
+          <select class=row name=culture>
             <option value=fr selected>France</option>
             <option value=us>USA</option>
           </select>
@@ -82,6 +81,14 @@
   this.removeAssignement = () => {
      if(!confirm('Are your sure you want to remove this assignment?')) return
      alert('Should delete this then!')
+  }
+
+  this.submit = (event) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const data = {}
+    Array.from(form.elements).filter(e => e.name).forEach(e => data[e.name] = e.value)
+    api('/client', { data })
   }
 </script>
 

@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "start": "concurrently 'npm run watch' 'live-server --no-browser'",
-    "watch": "lego bricks/ dist/bricks.js -w",
+    "watch": "LEGO_PATH=./lego/index.js lego bricks/ dist/bricks.js -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
