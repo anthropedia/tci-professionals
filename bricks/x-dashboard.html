@@ -1,32 +1,19 @@
-<template users>
+<template clients>
 <div class=two-columns>
 
   <section class=block>
 
     <h1><x-icon figure=address-book></x-icon>Overview</h1>
-    <div class=row>
-      <input type=search name=name placeholder="Look up a client">
-      <button class=primary>Search</button>
-    </div>
-
-    <div class=row>
-      <strong>Filter</strong>
-      <div>
-        <x-tag :active="true">st-patrick</x-tag>
-        <x-tag dimmed>palm</x-tag>
-        <x-tag dimmed>archive</x-tag>
-      </div>
-    </div>
 
     <nav>
-      <a :for="user in this.users" href="/user/${ this.user.id }">
-        <h3><x-icon figure=user></x-icon>${ this.user.name }</h3>
+      <a :for="client in this.clients" href="/client/${ this.client.id }">
+        <h3><x-icon figure=user></x-icon>${ this.client.name }</h3>
         <p><x-icon figure=clock color=#F5BA01></x-icon>pending since Jan 7th 2019 – 5 tests</p>
-        <x-tag :if="this.user" :for="tag in this.user.tags">hey${ this.tag }</x-tag>
+        <x-tag :if="this.client" :for="tag in this.client.tags">hey${ this.tag }</x-tag>
       </a>
     </nav>
     <footer class="row  toolbar">
-      <a href=/user class="button"><x-icon figure=user-plus></x-icon>Add a user</a>
+      <a href=/client class="button"><x-icon figure=user-plus></x-icon>Add a client</a>
     </footer>
   </section>
 
@@ -45,14 +32,15 @@
 </template>
 
 <script>
+  this.useVDOM = false
   this.setState({
     quantity: 0,
-    users: []
+    clients: []
   })
 
   this.connected = async () => {
     const response = await api('/clients')
-    this.render({ users: response.data })
+    this.render({ clients: response.data })
   }
 
   this.addCredit = (event) => {

@@ -1,16 +1,16 @@
 <template id>
 <div class=two-columns>
   <main class=block>
-    <h1><x-icon figure=user-edit></x-icon>Edit profile</h1>
+    <h1><x-icon figure=client-edit></x-icon>Edit profile</h1>
     <form on:submit="this.submit">
 
       <div class=row>
-        <input name=name placeholder="Full Name*" value="${ this.user.name }" required>
+        <input name=name placeholder="Full Name*" value="${ this.client.name }" required>
       </div>
 
-      <input class=row type=email name=email placeholder="Email" value="${ this.user.email }">
+      <input class=row type=email name=email placeholder="Email" value="${ this.client.email }">
 
-      <input class=row name=tags placeholder="Assigned Groups (insert multiple tag separated with a comma)" value="${ this.user.tags.join(', ') }" list=tags-list>
+      <input class=row name=tags placeholder="Assigned Groups (insert multiple tag separated with a comma)" value="${ this.client.tags.join(', ') }" list=tags-list>
       <datalist id=tags-list>
         <option value=palm>
         <option value=st-patrick>
@@ -22,22 +22,22 @@
         <div class=row>
           <label>Language for the test</label>
           <select name=language>
-            <option value=fr :selected="${ this.user.language == 'fr' }">French</option>
-            <option value=en :selected="${ this.user.language == 'en' }">English</option>
+            <option value=fr :selected="${ this.client.language == 'fr' }">French</option>
+            <option value=en :selected="${ this.client.language == 'en' }">English</option>
           </select>
         </div>
         <div class=row>
           <label>Cultural Country</label>
           <select class=row name=culture>
-            <option value=fr :selected="${ this.user.language == 'fr' }">France</option>
-            <option value=us :selected="${ this.user.language == 'us' }">United States</option>
+            <option value=fr :selected="${ this.client.language == 'fr' }">France</option>
+            <option value=us :selected="${ this.client.language == 'us' }">United States</option>
           </select>
         </div>
       </fieldset>
 
       <div class=row>
         <label>Notes</label>
-        <textarea name=note>${ this.user.note }</textarea>
+        <textarea name=note>${ this.client.note }</textarea>
       </div>
 
       <footer class=toolbar>
@@ -71,7 +71,7 @@
         </nav>
       </li>
     </ul>
-    <button class=primary><x-icon figure=file-medical></x-icon>Assign a new test</button>
+    <button class=primary on:click="this.assign"><x-icon figure=file-medical></x-icon>Assign a new test</button>
   </aside>
 
 </div>
@@ -80,15 +80,21 @@
 <script>
   this.setState({
     id: null,
-    user: { tags: [] },
+    client: { tags: [] },
   })
 
   this.connected = async () => {
     if(this.state.id) {
       const response = await api(`/client/${ this.state.id }`)
-      this.state.user = response.data
+      this.state.client = response.data
     }
     this.render()
+  }
+
+  this.assign = async () => {
+    const response = await api(`/client/${this.state.id}/assignment`, { method: 'post' })
+    debugger
+    this.render({ user: response.data })
   }
 
   this.removeAssignement = () => {

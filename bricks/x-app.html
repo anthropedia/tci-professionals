@@ -6,8 +6,8 @@
   </header>
 
   <main>
-    <x-dashboard :if="this.page === 'dashboard'" users="${ this.users }"></x-dashboard>
-    <user-edit :if="this.page === 'user-edit'" id="${ this.userId }"></user-edit>
+    <x-dashboard :if="this.page === 'dashboard'" clients="${ this.clients }"></x-dashboard>
+    <client-edit :if="this.page === 'client-edit'" id="${ this.clientId }"></client-edit>
     <error-404 :if="this.page === 'error'"></error-404>
   </main>
 
@@ -19,8 +19,8 @@
 
 <script>
   page('/', () => this.render({ page: 'dashboard' }))
-  page('/user', () => this.render({ page: 'user-edit', userId: '' }))
-  page('/user/:id', (req) => this.render({ page: 'user-edit', userId: req.params.id }))
+  page('/client', () => this.render({ page: 'client-edit', clientId: '' }))
+  page('/client/:id', (req) => this.render({ page: 'client-edit', clientId: req.params.id }))
 
   page('*', () => this.state.page = 'error')
 
