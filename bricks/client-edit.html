@@ -1,14 +1,17 @@
 <template id>
 <div class=two-columns>
   <main class=block>
-    <h1><x-icon figure=user-edit></x-icon>Edit profile</h1>
+    <h1><x-icon figure=user-edit></x-icon>
+      <span :if="this.client.id">${ this.client.name } profile</span>
+      <span :if="!this.client.id">Add a New Client</span>
+    </h1>
     <form on:submit="this.submit">
 
       <div class=row>
-        <input name=name placeholder="Full Name*" value="${ this.client.name }" required>
+        <input name=name placeholder="Full Name*" value="${ this.client.name || '' }" required>
       </div>
 
-      <input class=row type=email name=email placeholder="Email" value="${ this.client.email }">
+      <input class=row type=email name=email placeholder="Email" value="${ this.client.email || '' }">
 
       <input class=row name=tags placeholder="Assigned Groups (insert multiple tag separated with a comma)" value="${ this.client.tags.join(', ') }" list=tags-list>
       <datalist id=tags-list>
@@ -37,7 +40,7 @@
 
       <div class=row>
         <label>Notes</label>
-        <textarea name=note>${ this.client.note }</textarea>
+        <textarea name=note>${ this.client.note || '' }</textarea>
       </div>
 
       <footer class=toolbar>
@@ -47,7 +50,7 @@
     </form>
   </main>
 
-  <aside class="block">
+  <aside class="block" :if="this.client.id">
     <h1><x-icon figure=file-medical-alt></x-icon>Assigned tests</h1>
     <ul>
       <li :for="assignment in this.assignments">
@@ -107,10 +110,13 @@
 
   this.submit = (event) => {
     event.preventDefault()
+    const client = this.state.client
     const form = event.currentTarget
     const data = {}
     Array.from(form.elements).filter(e => e.name).forEach(e => data[e.name] = e.value)
-    api('/client', { data })
+    client.id
+      ? api(`/client/${client.id}`, { data, method: 'PUT' })
+      : api(`/client`, { data })
   }
 </script>
 
