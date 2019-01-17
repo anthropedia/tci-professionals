@@ -3,6 +3,9 @@
     <h1 id=logo><a href="/">
       <img src=https://assets.tci.anthropedia.org/images/anthropedia.svg alt="Anthropedia Foundation">
     </a></h1>
+    <div>
+      ${ this.user.name }
+    </div>
   </header>
 
   <main>
@@ -21,9 +24,10 @@
   this.setState({
     page: '',
     clients: [],
-    clientId: null
+    clientId: null,
+    user: {}
   })
-  
+
   page('/', () => this.render({ page: 'dashboard' }))
   page('/client', () => this.render({ page: 'client-edit', clientId: '' }))
   page('/client/:id', (req) => this.render({ page: 'client-edit', clientId: req.params.id }))
@@ -31,6 +35,11 @@
   page('*', () => this.state.page = 'error')
 
   page({ hashbang: true })
+
+  this.connected = async () => {
+    const response = await api('/user')
+    this.render({ user: response.data })
+  }
 </script>
 
 <style>
@@ -47,8 +56,11 @@
   }
   #logo a,
   #logo img {
-    display: block;
+    display: inline-block;
     width: 100%;
+  }
+  header div {
+    text-align: right;
   }
 
   footer {
