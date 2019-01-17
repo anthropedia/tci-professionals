@@ -4,12 +4,18 @@
   <section class=block>
 
     <h1><x-icon figure=address-book></x-icon>Overview</h1>
-
     <nav>
       <a :for="client in this.clients" href="/client/${ this.client.id }">
         <h3><x-icon figure=user></x-icon>${ this.client.name }</h3>
-        <p><x-icon figure=clock color=#F5BA01></x-icon>pending since Jan 7th 2019 – 5 tests</p>
-        <x-tag :if="this.client" :for="tag in this.client.tags">hey${ this.tag }</x-tag>
+        <p :if="this.client.assignments.length"><x-icon figure=clock color=#F5BA01></x-icon>
+          pending since ${(new Date(this.client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ this.client.assignments.length } tests
+        </p>
+        <p :if="!this.client.assignments.length">
+          No test have been assigned yet
+        </p>
+        <div class=tags>
+          <x-tag :for="tag in this.client.tags">${ this.tag }</x-tag>
+        </div>
       </a>
     </nav>
     <footer class="row  toolbar">
@@ -32,7 +38,6 @@
 </template>
 
 <script>
-  this.useVDOM = false
   this.setState({
     quantity: 0,
     clients: []
@@ -83,7 +88,7 @@
     display: inline-block;
     width: 1rem;
   }
-  nav x-tag {
+  nav .tags {
     position: absolute;
     right: 1rem;
     top: .5rem;
