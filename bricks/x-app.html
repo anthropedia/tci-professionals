@@ -18,6 +18,12 @@
 </template>
 
 <script>
+  this.setState({
+    page: '',
+    clients: [],
+    clientId: null
+  })
+  
   page('/', () => this.render({ page: 'dashboard' }))
   page('/client', () => this.render({ page: 'client-edit', clientId: '' }))
   page('/client/:id', (req) => this.render({ page: 'client-edit', clientId: req.params.id }))
