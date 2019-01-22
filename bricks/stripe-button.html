@@ -13,7 +13,7 @@
       image: '',
       locale: 'auto',
       token: async (token) => {
-        const response = await api('/payment', token)
+        const response = await api('/payment', { data: { token, quantity: this.state.quantity }})
       }
     })
   }
