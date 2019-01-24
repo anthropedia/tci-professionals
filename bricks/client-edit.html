@@ -63,7 +63,7 @@
             <a href="https://client.tci.anthropedia.org/${ this.assignment.key }" title="Go to the TCI test form">
               <x-icon figure=file-signature></x-icon>
             </a>
-            <x-icon figure=trash on:click="this.removeAssignement" title="Unassign this test from the Client"></x-icon>
+            <x-icon figure=trash on:click="this.removeAssignement" value="${ this.assignment.key }" title="Unassign this test from the Client"></x-icon>
           </nav>
         </div>
         <div :if="this.assignment && this.assignment.status === 'complete'">
@@ -103,9 +103,9 @@
     this.render({ user: response.data })
   }
 
-  this.removeAssignement = () => {
+  this.removeAssignement = (event) => {
      if(!confirm('Are your sure you want to remove this assignment?')) return
-     alert('Should delete this then!')
+     const response = api(`/assignment/${event.currentTarget.getAttribute('value')}`, { method: 'delete' })
   }
 
   this.submit = (event) => {
