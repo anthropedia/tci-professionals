@@ -1,4 +1,4 @@
-<template clients>
+<template clients user>
 <div class=two-columns>
 
   <section class=block>
@@ -25,7 +25,7 @@
 
   <aside class=block>
     <h1><x-icon figure=balance-scale></x-icon>Balance</h1>
-    <p><strong>47</strong> TCIs remaining</p>
+    <p><strong>${ this.user.credit }</strong> TCIs remaining</p>
     <p class=row>
       <span>Reload balance with</span>
       <input name=quantity type=number on:input="this.addCredit" value=50>
@@ -40,7 +40,8 @@
 <script>
   this.setState({
     quantity: 0,
-    clients: []
+    clients: [],
+    user: {credit: 0}
   })
 
   this.connected = async () => {

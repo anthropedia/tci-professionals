@@ -9,7 +9,7 @@
   </header>
 
   <main>
-    <x-dashboard :if="this.page === 'dashboard'" clients="${ this.clients }"></x-dashboard>
+    <x-dashboard :if="this.page === 'dashboard'" user="${ this.user }"></x-dashboard>
     <client-edit :if="this.page === 'client-edit'" id="${ this.clientId }"></client-edit>
     <error-404 :if="this.page === 'error'"></error-404>
   </main>
