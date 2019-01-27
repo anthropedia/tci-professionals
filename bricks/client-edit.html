@@ -91,7 +91,7 @@
 
   this.connected = async () => {
     if(this.state.id) {
-      const response = await api(`/client/${ this.state.id }`)
+      const response = await api(`/client/${this.state.id}`)
       this.state.client = response.data
       this.state.assignments = this.state.client.assignments.reverse()
     }
@@ -100,12 +100,13 @@
 
   this.assign = async () => {
     const response = await api(`/client/${this.state.id}/assignment`, { method: 'post' })
-    this.render({ user: response.data })
+    this.render({ assignments: response.data.assignments.reverse() })
   }
 
-  this.removeAssignement = (event) => {
-     if(!confirm('Are your sure you want to remove this assignment?')) return
-     const response = api(`/assignment/${event.currentTarget.getAttribute('value')}`, { method: 'delete' })
+  this.removeAssignement = async (event) => {
+    if(!confirm('Are your sure you want to remove this assignment?')) return
+    const response = await api(`/client/${this.state.id}/assignment/${event.currentTarget.getAttribute('value')}`, { method: 'delete' })
+    this.render({ assignments: response.data.assignments.reverse() })
   }
 
   this.submit = (event) => {
@@ -113,7 +114,7 @@
     const client = this.state.client
     const form = event.currentTarget
     const data = {}
-    Array.from(form.elements).filter(e => e.name).forEach(e => data[e.name] = e.value)
+    Array.from(form.elements).filter(e => e.name && e.value).forEach(e => data[e.name] = e.value)
     client.id
       ? api(`/client/${client.id}`, { data, method: 'PUT' })
       : api(`/client`, { data })
