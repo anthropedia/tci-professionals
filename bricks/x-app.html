@@ -3,12 +3,14 @@
     <h1 id=logo><a href="/">
       <img src=https://assets.tci.anthropedia.org/images/anthropedia.svg alt="Anthropedia Foundation">
     </a></h1>
-    <div>
+    <div :if="this.user.name">
       ${ this.user.name }
+      <button on:click="this.logout">Logout</button>
     </div>
   </header>
 
   <main>
+    <x-login :if="this.page === 'login'"></x-login>
     <x-dashboard :if="this.page === 'dashboard'" user="${ this.user }"></x-dashboard>
     <client-edit :if="this.page === 'client-edit'" id="${ this.clientId }"></client-edit>
     <error-404 :if="this.page === 'error'"></error-404>
@@ -28,17 +30,29 @@
     user: {}
   })
 
-  page('/', () => this.render({ page: 'dashboard' }))
-  page('/client', () => this.render({ page: 'client-edit', clientId: '' }))
-  page('/client/:id', (req) => this.render({ page: 'client-edit', clientId: req.params.id }))
+  function checkAuth(redirect = true) {
+    return document.cookie ? true : (redirect && page('/login'))
+  }
+
+  page('/', () => checkAuth() && this.render({ page: 'dashboard' }))
+  page('/login', () => this.render({ page: 'login' }))
+  page('/client', () => checkAuth() && this.render({ page: 'client-edit', clientId: '' }))
+  page('/client/:id', (req) => checkAuth() && this.render({ page: 'client-edit', clientId: req.params.id }))
 
   page('*', () => this.state.page = 'error')
 
   page({ hashbang: true })
 
   this.connected = async () => {
-    const response = await api('/user')
-    this.render({ user: response.data })
+    if (checkAuth(false)) {
+      const response = await api('/user')
+      this.render({ user: response.data })
+    }
+  }
+
+  this.logout = () => {
+    document.cookie = ''
+    page('/')
   }
 </script>
 

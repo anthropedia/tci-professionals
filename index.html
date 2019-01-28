@@ -14,7 +14,9 @@
 <script type=module src=dist/bricks.js></script>
 
 <script>
-  function api (uri, options) {
+  function api (uri, options = {}) {
+    const token = document.cookie
+    if (token) options.auth = token
     return request(`http://localhost:3579${uri}`, options)
   }
 </script>

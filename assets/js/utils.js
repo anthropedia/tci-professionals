@@ -1,6 +1,10 @@
 function request (url, options = {}) {
   const params = Object.assign(options, { mode: 'cors' })
   let response = null
+  if (options.auth) {
+    params.headers = options.headers || {}
+    Object.assign(params.headers, { Authorization: options.auth })
+  }
   if (options.data) {
     if (!options.method) options.method = 'post'
     options.body = typeof options.data === 'string'
