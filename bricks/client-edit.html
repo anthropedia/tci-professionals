@@ -8,10 +8,10 @@
     <form on:submit="this.submit">
 
       <div class=row>
-        <input name=name placeholder="Full Name*" value="${ this.client.name || '' }" required>
+        <input name=name placeholder="Full Name*" value="${ this.client.name }" required>
       </div>
 
-      <input class=row type=email name=email placeholder="Email" value="${ this.client.email || '' }">
+      <input class=row type=email name=email placeholder="Email" value="${ this.client.email }">
 
       <input class=row name=tags placeholder="Assigned Groups (insert multiple tag separated with a comma)" value="${ this.client.tags.join(', ') }" list=tags-list>
       <datalist id=tags-list>
@@ -83,24 +83,27 @@
 </template>
 
 <script>
-  this.setState({
+  const defaults = {
     id: null,
-    client: { tags: [] },
+    client: { tags: [], assignments: [] },
     assignments: []
-  })
+  }
+  this.setState(defaults)
 
   this.connected = async () => {
     if(this.state.id) {
       const response = await api(`/client/${this.state.id}`)
-      this.state.client = response.data
-      this.state.assignments = this.state.client.assignments.reverse()
+      if(response.data) {
+        this.state.client = response.data
+        this.state.assignments = this.state.client.assignments.reverse()
+      }
     }
     this.render()
   }
 
   this.assign = async () => {
     const response = await api(`/client/${this.state.id}/assignment`, { method: 'post' })
-    this.render({ assignments: response.data.assignments.reverse() })
+    if (response.data) this.render({ assignments: response.data.assignments.reverse() })
   }
 
   this.removeAssignement = async (event) => {
@@ -118,6 +121,7 @@
     client.id
       ? api(`/client/${client.id}`, { data, method: 'PUT' })
       : api(`/client`, { data })
+    page('/')
   }
 </script>
 

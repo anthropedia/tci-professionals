@@ -1,4 +1,4 @@
-<template>
+<template page>
   <header>
     <h1 id=logo><a href="/">
       <img src=https://assets.tci.anthropedia.org/images/anthropedia.svg alt="Anthropedia Foundation">
@@ -43,11 +43,12 @@
 
   page({ hashbang: true })
 
-  this.connected = async () => {
+  this.connected = this.changed = async () => {
     if (checkAuth(false)) {
       const response = await api('/user')
-      this.render({ user: response.data })
+      this.state.user = response.data
     }
+    this.render()
   }
 
   this.logout = () => {
@@ -82,5 +83,4 @@
     padding: 1rem;
     font-size: .6rem;
   }
-
 </style>
