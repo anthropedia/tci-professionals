@@ -5,7 +5,10 @@
     </a></h1>
     <div :if="this.user.name">
       ${ this.user.name }
-      <button on:click="this.logout">Logout</button>
+      <nav>
+        <a href="/admin" :if="${ this.user.is_admin }">Admin Panel</a>
+        <a href="/logout">Logout</a>
+      </nav>
     </div>
   </header>
 
@@ -14,6 +17,8 @@
     <x-dashboard :if="this.page === 'dashboard'" user="${ this.user }"></x-dashboard>
     <client-edit :if="this.page === 'client-edit'" id="${ this.clientId }"></client-edit>
     <error-404 :if="this.page === 'error'"></error-404>
+
+    <admin-dashboard :if="this.page === 'admin-dashboard'"></admin-dashboard>
   </main>
 
   <footer>
@@ -30,14 +35,19 @@
     user: {}
   })
 
-  function checkAuth(redirect = true) {
-    return document.cookie ? true : (redirect && page('/login'))
+  const checkAuth = (redirect = true) => document.cookie ? true : (redirect && page('/login'))
+  const checkAdmin = async (redirect = true) => {
+    if(!checkAuth(redirect) || !this.state.user) return
+    return !!this.state.user.is_admin
   }
 
   page('/', () => checkAuth() && this.render({ page: 'dashboard' }))
   page('/login', () => this.render({ page: 'login' }))
+  page('/logout', () => { document.cookie = ''; page('/') })
   page('/client', () => checkAuth() && this.render({ page: 'client-edit', clientId: '' }))
   page('/client/:id', (req) => checkAuth() && this.render({ page: 'client-edit', clientId: req.params.id }))
+
+  page('/admin', (req) => checkAdmin() && this.render({ page: 'admin-dashboard' }))
 
   page('*', () => this.state.page = 'error')
 
@@ -49,11 +59,6 @@
       this.state.user = response.data
     }
     this.render()
-  }
-
-  this.logout = () => {
-    document.cookie = ''
-    page('/')
   }
 </script>
 

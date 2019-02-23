@@ -4,7 +4,7 @@
   <section class=block>
 
     <h1><x-icon figure=address-book></x-icon>Overview</h1>
-    <nav>
+    <nav :if="${ this.clients.length }">
       <a :for="client in this.clients" href="/client/${ this.client.id }">
         <h3><x-icon figure=user></x-icon>${ this.client.name }</h3>
         <p :if="this.client.assignments.length"><x-icon figure=clock color=#F5BA01></x-icon>
@@ -18,6 +18,14 @@
         </div>
       </a>
     </nav>
+    <div :if="${ !this.clients.length }">
+      <h2>Welcome on the TCI application for professionals!</h2>
+      <p>To get properly started, first <x-icon figure=credit-card></x-icon>purchase some credit, then <x-icon figure=user-plus></x-icon> add a client and finally <x-icon figure=file-medical></x-icon>assign him a test.</p>
+      <p>
+        Once a test is assigned to a client, provide him the link to the test or open it directly from his profile.<br>
+        When the client is done with the test the results will appear in his profile.
+      </p>
+    </div>
     <footer class="row  toolbar">
       <a href=/client class="button"><x-icon figure=user-plus></x-icon>Add a client</a>
     </footer>

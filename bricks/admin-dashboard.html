@@ -1,0 +1,28 @@
+<template>
+  <form on:submit="this.submit" class=block>
+    <h2>Create a new provider</h2>
+    <fieldset>
+      <legend>General informations</legend>
+      <input class=row name="name" value="" placeholder="Full name" required>
+      <input class=row type="email" name="email" value="" placeholder="Email address" required>
+      <input class=row type="password" name="password" value="" placeholder="Create a password" required>
+    </fieldset>
+    <button>Create</button>
+  </form>
+</template>
+
+<script>
+  this.submit = async (event) => {
+    event.preventDefault()
+    const form = event.target
+    const data = { name: form.name.value, email: form.email.value, password: form.password.value }
+    const response = await api('/provider', { data })
+    if(!response.ok) return alert(response.data)
+    alert("Provider created!")
+    page()
+  }
+</script>
+
+<style>
+  @import url(/assets/css/main.css);
+</style>

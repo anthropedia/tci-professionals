@@ -11,8 +11,12 @@
 <script>
   this.login = async (event) => {
     event.preventDefault()
-    const data = { email: this.root.querySelector('[name=email]').value }
+    const data = {
+      email: this.root.querySelector('[name=email]').value,
+      password: this.root.querySelector('[name=password]').value
+    }
     const response = await api('/token', { data })
+    if (!response.ok) return alert("Check your email and password")
     document.cookie = response.data
     if(document.cookie) page('/')
   }
