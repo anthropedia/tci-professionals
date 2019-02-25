@@ -13,7 +13,7 @@
   </header>
 
   <main>
-    <x-login :if="this.page === 'login'"></x-login>
+    <x-login :if="this.page === 'login'" user="${ this.user }"></x-login>
     <x-dashboard :if="this.page === 'dashboard'" user="${ this.user }"></x-dashboard>
     <client-edit :if="this.page === 'client-edit'" id="${ this.clientId }"></client-edit>
     <error-404 :if="this.page === 'error'"></error-404>
@@ -28,36 +28,63 @@
 </template>
 
 <script>
-  this.setState({
-    page: '',
-    clients: [],
-    clientId: null,
-    user: {}
-  })
-
-  const checkAuth = (redirect = true) => document.cookie ? true : (redirect && page('/login'))
-  const checkAdmin = async (redirect = true) => {
-    if(!checkAuth(redirect) || !this.state.user) return
-    return !!this.state.user.is_admin
+  const user = {
+    get defaults() {
+      return { name: '', email: '', is_admin: false, credit: 0, token: '' }
+    },
+    get isAdmin() {
+      return !!this.is_admin
+    },
+    isAuthenticated() {
+      return !!this.token
+    },
+    async authenticate(token) {
+      document.cookie = token
+      const response = await api('/user')
+      if(!response.ok) {
+        document.cookie = ''
+        return false
+      }
+      this.token = token
+      return Object.assign(this, response.data)
+    },
+    revoke() {
+      document.cookie = ''
+      return Object.assign(this, this.defaults)
+    }
   }
 
-  page('/', () => checkAuth() && this.render({ page: 'dashboard' }))
-  page('/login', () => this.render({ page: 'login' }))
-  page('/logout', () => { document.cookie = ''; page('/') })
-  page('/client', () => checkAuth() && this.render({ page: 'client-edit', clientId: '' }))
-  page('/client/:id', (req) => checkAuth() && this.render({ page: 'client-edit', clientId: req.params.id }))
+  this.setState({
+    page: '',
+    clientId: '',
+    user
+  })
 
-  page('/admin', (req) => checkAdmin() && this.render({ page: 'admin-dashboard' }))
+  this.authRequired = (ctx, next) => {
+    if (!this.state.user.isAuthenticated()) return page('/login')
+    next()
+  }
+
+  this.adminRequied = (ctx, next) => {
+    if (!this.state.user.isAdmin) return page('/')
+    next()
+  }
+
+  page('/', this.authRequired, () => this.render({ page: 'dashboard' }))
+  page('/login', () => this.render({ page: 'login' }))
+  page('/logout', () => { this.state.user.revoke(); page.redirect('/') })
+  page('/client', this.authRequired, () => this.render({ page: 'client-edit', clientId: '' }))
+  page('/client/:id', this.authRequired, (req) => this.render({ page: 'client-edit', clientId: req.params.id }))
+
+  page('/admin', this.adminRequied, () => this.render({ page: 'admin-dashboard' }))
 
   page('*', () => this.state.page = 'error')
 
-  page({ hashbang: true })
 
-  this.connected = this.changed = async () => {
-    if (checkAuth(false)) {
-      const response = await api('/user')
-      this.state.user = response.data
-    }
+  this.connected = async () => {
+    const token = document.cookie
+    if(token) await this.state.user.authenticate(token)
+    page({ hashbang: true })
     this.render()
   }
 </script>

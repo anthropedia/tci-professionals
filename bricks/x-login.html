@@ -1,4 +1,4 @@
-<template>
+<template user>
   <main class=block>
     <form on:submit="this.login">
       <input type=email name=email required class=row placeholder="Signin with your email">
@@ -9,6 +9,8 @@
 </template>
 
 <script>
+  this.setState({ user: {} })
+
   this.login = async (event) => {
     event.preventDefault()
     const data = {
@@ -17,8 +19,8 @@
     }
     const response = await api('/token', { data })
     if (!response.ok) return alert("Check your email and password")
-    document.cookie = response.data
-    if(document.cookie) page('/')
+    await this.state.user.authenticate(response.data)
+    page('/')
   }
 </script>
 

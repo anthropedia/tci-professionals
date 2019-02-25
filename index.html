@@ -17,6 +17,6 @@
   function api (uri, options = {}) {
     const token = document.cookie
     if (token) options.auth = token
-    return request(`http://localhost:3579${uri}`, options)
+    return request(`${config.apiUrl}${uri}`, options)
   }
 </script>
