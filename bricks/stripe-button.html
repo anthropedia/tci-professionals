@@ -14,6 +14,9 @@
       locale: 'auto',
       token: async (token) => {
         const response = await api('/payment', { data: { token, quantity: this.state.quantity }})
+        if(!response.ok) alert("The payment could not be processed!")
+        alert("Your purchase was successfully completed!")
+        location.reload()  // TODO: refresh the user instead of hard reloading the page
       }
     })
   }
