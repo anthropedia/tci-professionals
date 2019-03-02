@@ -1,6 +1,12 @@
-<template figure color>
-  <i class="fas fa-${ this.figure }" style="color: ${ this.color }"></i>
+<template figure color category>
+  <i class=" ${ this.category } fa-${ this.figure }" style="color: ${ this.color }"></i>
 </template>
+
+<script>
+  this.setState({
+    category: 'fas'
+  })
+</script>
 
 <style>
   @import url(/assets/css/main.css);
