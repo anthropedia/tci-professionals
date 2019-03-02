@@ -30,3 +30,7 @@ function request (url, options = {}) {
     })
     .catch(console.error.bind(console))
 }
+
+function date(d) {
+  return d && (new Date(d * 1000)).toLocaleDateString()
+}
