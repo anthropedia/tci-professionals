@@ -20,15 +20,15 @@ button,
   transition: all .3s;
 }
 
-button:not(.primary),
-.button:not(.primary),
-[type=input]:not(.primary) {
+button,
+.button,
+[type=input] {
   color: var(--light-color);
 }
 
-button:hover,
-.button:hover,
-[type=submit]:hover {
+button:not(.danger):hover,
+.button:not(.danger):hover,
+[type=submit]:not(.danger):hover {
   color: var(--primary-color);
   background-color: #fcfcfc;
 }
@@ -38,6 +38,13 @@ button.primary:hover,
 [type=input].primary:hover {
   color: #fff;
   background-color: var(--light-color);
+}
+
+button.danger:hover,
+.button.danger:hover,
+[type=input].danger:hover {
+  color: #fff;
+  background-color: #b93f3b;
 }
 
 .two-columns {

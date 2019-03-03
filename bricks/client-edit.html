@@ -49,6 +49,10 @@
       <footer class=toolbar>
         <button class=primary>Save</button>
         <a href=/ class=button>Cancel</a>
+        <div class="secondary">
+          <button type=button :if="this.client.id" on:click="this.delete" class="danger">delete</delete>
+        </div>
+
       </footer>
     </form>
   </main>
@@ -115,15 +119,27 @@
     component.render({ assignments: response.data.assignments.reverse() })
   }
 
-  this.submit = (event) => {
+  this.submit = async (event) => {
     event.preventDefault()
     const client = this.state.client
     const form = event.currentTarget
     const data = {}
     Array.from(form.elements).filter(e => e.name && e.value).forEach(e => data[e.name] = e.value)
-    client.id
-      ? api(`/client/${client.id}`, { data, method: 'PUT' })
-      : api(`/client`, { data })
+    data.tags = data.tags && data.tags.split(',')
+    const response = client.id
+                   ? await api(`/client/${client.id}`, { data, method: 'PUT' })
+                   : await api(`/client`, { data })
+    if(!response.ok) {
+      if(response.data.includes('duplicate key error')) return alert("A client exists with similar data. Is it a duplicate?")
+      return alert('An error occured and the client could not be saved!')
+    }
+    page('/')
+  }
+
+  this.delete = async () => {
+    if(!confirm("Are you sure you want to delete this client and all his data?")) return
+    const response = await api(`/client/${ this.state.client.id }`, { method: 'delete' })
+    if(!response.ok) return alert("An error occured. This contact could not be deleted!")
     page('/')
   }
 </script>
