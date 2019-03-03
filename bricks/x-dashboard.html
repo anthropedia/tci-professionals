@@ -2,7 +2,6 @@
 <div class=two-columns>
 
   <section class=block>
-
     <h1><x-icon figure=address-book></x-icon>Overview</h1>
     <nav :if="${ this.clients.length }">
       <a :for="client in this.clients" href="/client/${ this.client.id }">
