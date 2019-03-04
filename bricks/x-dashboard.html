@@ -3,6 +3,13 @@
 
   <section class=block>
     <h1><x-icon figure=address-book></x-icon>Overview</h1>
+
+    <section class=filters>
+      Filter by
+      <x-tag on:click="this.filterTag" value="" :selected="this.tag == ''">All</x-tag>
+      <x-tag :for="tagName in this.tags" on:click="this.filterTag" value="${ this.tagName }"  :selected="this.tagName == this.tag">${ this.tagName }</x-tag>
+    </section>
+
     <nav :if="${ this.clients.length }">
       <a :for="client in this.clients" href="/client/${ this.client.id }">
         <h3><x-icon figure=user></x-icon>${ this.client.name }</h3>
@@ -13,11 +20,11 @@
           No test have been assigned yet
         </p>
         <div class=tags>
-          <x-tag :for="tag in this.client.tags">${ this.tag }</x-tag>
+          <x-tag :for="tag in this.client.tags" on:click="this.filterTag" value="${ this.tag }">${ this.tag }</x-tag>
         </div>
       </a>
     </nav>
-    <div :if="${ !this.clients.length }">
+    <div :if="${ !this.clients.length && !this.tags.length }">
       <h2>Welcome on the TCI application for professionals!</h2>
       <p>To get properly started, first <x-icon figure=credit-card></x-icon>purchase some credit, then <x-icon figure=user-plus></x-icon> add a client and finally <x-icon figure=file-medical></x-icon>assign him a test.</p>
       <p>
@@ -48,16 +55,25 @@
   this.setState({
     quantity: 0,
     clients: [],
-    user: { credit: 0 }
+    user: { credit: 0 },
+    tags: [],
+    tag: ''
   })
 
   this.connected = async () => {
-    const response = await api('/clients')
-    this.render({ clients: response.data })
+    const response = await api(`/clients`)
+    const tagsResponse = await api('/provider/tags')
+    this.render({ clients: response.data, tags: tagsResponse.data })
   }
 
   this.addCredit = (event) => {
     this.render({ quantity: event.currentTarget.value })
+  }
+
+  this.filterTag = async (event) => {
+    const tag = event.target.getAttribute('value')
+    const response = await api(`/clients?tag=${ tag }`)
+    this.render({ tag, clients: response.data })
   }
 </script>
 
@@ -100,6 +116,12 @@
     position: absolute;
     right: 1rem;
     top: .5rem;
+  }
+
+  .filters {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1rem;
   }
 
   aside input {
