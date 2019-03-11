@@ -15,7 +15,7 @@
 
 <script>
   function api (uri, options = {}) {
-    const token = document.cookie
+    const token = localStorage.getItem('token')
     if (token) options.auth = token
     return request(`${config.apiUrl}${uri}`, options)
   }

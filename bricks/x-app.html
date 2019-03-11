@@ -39,17 +39,17 @@
       return !!this.token
     },
     async authenticate(token) {
-      document.cookie = token
+      localStorage.setItem('token', token)
       const response = await api('/user')
       if(!response.ok) {
-        document.cookie = ''
+        localStorage.removeItem('token')
         return false
       }
       this.token = token
       return Object.assign(this, response.data)
     },
     revoke() {
-      document.cookie = ''
+      localStorage.removeItem('token')
       return Object.assign(this, this.defaults)
     }
   }
@@ -83,7 +83,7 @@
 
 
   this.connected = async () => {
-    const token = document.cookie
+    const token = localStorage.getItem('token')
     if(token) await this.state.user.authenticate(token)
     page({ hashbang: true })
     this.render()
