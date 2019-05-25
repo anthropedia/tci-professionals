@@ -4,6 +4,10 @@
   <section class=block>
     <h1><x-icon figure=address-book></x-icon>Overview</h1>
 
+    <section class=search>
+      <input type=search name=q on:change="this.searchClient">
+    </section>
+
     <section class=filters>
       Filter by
       <x-tag on:click="this.filterTag" value="" :selected="this.tag == ''">All</x-tag>
@@ -57,23 +61,39 @@
     clients: [],
     user: { credit: 0 },
     tags: [],
-    tag: ''
+    tag: '',
+    q: '',
   })
+  this.searchTimeout = null
 
   this.connected = async () => {
-    const response = await api(`/clients`)
     const tagsResponse = await api('/provider/tags')
-    this.render({ clients: response.data, tags: tagsResponse.data })
+    this.setState({ tags: tagsResponse.data }, false)
+    this.updateClients()
+  }
+
+  this.updateClients = async () => {
+    const response = await api(`/clients?q=${ this.state.q }&tag=${ this.state.tag }`)
+    if(!response.ok) return alert(response.data)
+    this.render({ clients: response.data })
   }
 
   this.addCredit = (event) => {
     this.render({ quantity: event.currentTarget.value })
   }
 
-  this.filterTag = async (event) => {
-    const tag = event.target.getAttribute('value')
-    const response = await api(`/clients?tag=${ tag }`)
-    this.render({ tag, clients: response.data })
+  this.filterTag = (event) => {
+    this.setState({ tag: event.target.getAttribute('value') }, false)
+    this.updateClients()
+  }
+
+  this.searchClient = (event) => {
+    if(this.searchTimeout) clearTimeout(this.searchTimeout)
+    const q = event.target.value
+    this.searchTimeout = setTimeout(() => {
+      this.setState({ q }, false)
+      this.updateClients()
+    }, 400)
   }
 </script>
 
