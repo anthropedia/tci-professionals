@@ -79,6 +79,8 @@
             <a class=score href="${config.apiUrl}/assignment/${ this.assignment.id }/score/1d" target=_blank title="Download results in 1D">1D</a>
             <a class=score href="${config.apiUrl}/assignment/${ this.assignment.id }/score/2d" target=_blank title="Download results in 2D">2D</a>
             <a class=score href="${config.apiUrl}/assignment/${ this.assignment.id }/score/3d" target=_blank title="Download results in 3D">3D</a>
+            <hr>
+            <a class=score href="${config.apiUrl}/assignment/${ this.assignment.id }/score/3d-plus" target=_blank title="Download results in 3D+">3D+</a>
           </nav>
         </div>
       </li>
@@ -160,12 +162,14 @@
     padding: .5rem 0;
     border-bottom: 1px solid #eee;
   }
-
-  nav > * {
-    display: inline-block;
+  nav {
+    display: flex;
+  }
+  nav > a,
+  nav > x-icon {
+    display: block;
     font-size: .7rem;
     font-weight: bold;
-    width: 1.5rem;
     color: var(--primary-color);
     cursor: pointer;
     text-decoration: none;
@@ -174,8 +178,12 @@
     border-radius: .2rem;
     border: 1px solid transparent;
   }
-  nav > *:hover {
+  nav > a:hover,
+  nav > x-icon:hover {
     border-color: var(--primary-color);
+  }
+  nav > hr {
+    margin: .5rem;
   }
 
   aside button {
