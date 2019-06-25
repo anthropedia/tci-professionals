@@ -1,16 +1,33 @@
 <template>
-  <form on:submit="this.submit" class=block>
-    <h2>Create a new provider</h2>
-    <fieldset>
-      <legend>General informations</legend>
-      <input class=row name="name" value="" placeholder="Full name" required>
-      <input class=row type="email" name="email" value="" placeholder="Email address" required>
-    </fieldset>
-    <button>Create</button>
-  </form>
+  <div class=two-columns>
+    <main>
+      <form on:submit="this.submit" class=block>
+        <h1><i class="fas fa-user-plus"></i> Create a New Provider</h1>
+        <fieldset>
+          <legend>General Information</legend>
+          <input class=row name="name" value="" placeholder="Full name" required>
+          <input class=row type="email" name="email" value="" placeholder="Email address" required>
+        </fieldset>
+        <button>Create</button>
+      </form>
+    </main>
+
+    <aside class=block>
+      <h1><i class="fas fa-users"></i> Existing Providers</h1>
+      <ul>
+        <li :for="provider in this.providers">
+          ${ this.provider.name } (${ this.provider.email }) – ${ this.provider.credit } credits
+        </li>
+      </ul>
+    </aside>
+  </div>
 </template>
 
 <script>
+  this.setState({
+    providers: [],
+  })
+
   this.submit = async (event) => {
     event.preventDefault()
     const form = event.target
@@ -20,8 +37,26 @@
     alert("Provider created!")
     page()
   }
+
+  this.connected = async () => {
+    const response = await api('/providers')
+    const providers = response.data
+    this.render({ providers })
+  }
 </script>
 
 <style>
   @import url(/assets/css/main.css);
+  form {
+    max-width: inherit;
+  }
+
+  aside ul {
+    padding: 0;
+  }
+  aside li {
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    list-style: none;
+  }
 </style>
