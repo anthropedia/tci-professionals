@@ -4,8 +4,8 @@
   <section class=block>
     <h1><x-icon figure=address-book></x-icon>Overview</h1>
 
-    <section class=search>
-      <input type=search name=q on:change="this.searchClient" placeholder="Search for a client by name">
+    <section class="search row">
+      <input type=search name=q on:keyup="this.searchClient" placeholder="Search for a client by name">
     </section>
 
     <section class=filters>
@@ -15,13 +15,16 @@
     </section>
 
     <nav :if="${ this.clients.length }">
+      <h2>${ this.clients.length } clients</h2>
       <a :for="client in this.clients" href="/client/${ this.client.id }">
         <h3><x-icon figure=user></x-icon>${ this.client.name }</h3>
         <p :if="this.client.assignments.length && this.client.assignments.slice(-1)[0].status === 'completed'"><x-icon figure=clock color=#F5BA01></x-icon>
           Completed on ${(new Date(this.client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ this.client.assignments.length } tests
         </p>
         <p :if="this.client.assignments.length && this.client.assignments.slice(-1)[0].status === 'pending'"><x-icon figure=clock color=#F5BA01></x-icon>
-          Pending since ${(new Date(this.client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ this.client.assignments.length } tests
+          Pending since ${(new Date(this.client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ this.client.assignments.length }
+          <span if="${this.client.assignments.length == 1}">test</span>
+          <span if="${this.client.assignments.length > 1}">tests</span>
         </p>
         <p :if="!this.client.assignments.length">
           No test yet
@@ -32,8 +35,8 @@
       </a>
     </nav>
     <div :if="${ !this.clients.length && !this.tags.length }">
-      <h2>Welcome on the TCI application for professionals!</h2>
-      <p>To get properly started, first <x-icon figure=credit-card></x-icon>purchase some credit, then <x-icon figure=user-plus></x-icon> add a client and finally <x-icon figure=file-medical></x-icon>assign him a test.</p>
+      <h2>Welcome to the TCI site for professionals!</h2>
+      <p>To get properly started, first <x-icon figure=credit-card></x-icon>purchase some credits, then <x-icon figure=user-plus></x-icon> add clients, and finally <x-icon figure=file-medical></x-icon>assign them a test.</p>
       <p>
         Once a test is assigned to a client, provide him the link to the test or open it directly from his profile.<br>
         When the client is done with the test the results will appear in his profile.
@@ -149,6 +152,7 @@
 
   aside input {
     width: 3rem;
+    min-width: inherit;
     padding: .1rem;
     border: 0;
     border-bottom: 1px dashed #888;

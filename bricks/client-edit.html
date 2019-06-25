@@ -14,20 +14,28 @@
       <input type=email name=email placeholder="Email" value="${ this.client.email }">
 
       <fieldset>
-        <legend>Test Informations</legend>
+        <legend>Test Information</legend>
         <div class=row>
-          <label>Language for the test</label>
-          <select name=language>
-            <option value=fr :selected="${ this.client.language == 'fr' }">French</option>
-            <option value=en :selected="${ this.client.language == 'en' }">English</option>
-          </select>
+          <label>Test Language</label>
+          <div>
+            <select name=language>
+              <option value=en :selected="${ this.client.language == 'en' }">English</option>
+              <option value=fr :selected="${ this.client.language == 'fr' }">French</option>
+              <option value=se :selected="${ this.client.language == 'se' }">Swedish</option>
+            </select>
+            <small>This field determines the language used when taking the test</small>
+          </div>
         </div>
         <div class=row>
-          <label>Cultural Country</label>
-          <select class=row name=culture>
-            <option value=fr :selected="${ this.client.language == 'fr' }">France</option>
-            <option value=us :selected="${ this.client.language == 'us' }">United States</option>
-          </select>
+          <label>Test Country</label>
+          <div>
+            <select name=culture>
+              <option value=fr :selected="${ this.client.country == 'fr' }">France</option>
+              <option value=se :selected="${ this.client.country == 'se' }">Sweden</option>
+              <option value=us :selected="${ this.client.country == 'us' }">United States</option>
+            </select>
+            <small>This field determines which norms are used to analyze the test results</small>
+          </div>
         </div>
       </fieldset>
 
@@ -35,22 +43,19 @@
         <legend>Side Notes</legend>
 
         <label>Groups (comma separared)</label>
-        <input name=tags placeholder="Assigned Groups (insert multiple tag separated with a comma)" value="${ this.client.tags.join(', ') }" list=tags-list>
-        <datalist id=tags-list>
-          <option value=palm>
-          <option value=st-patrick>
-          <option value=archive>
-        </datalist>
-
-        <label>Notes</label>
-        <textarea name=note>${ this.client.note || '' }</textarea>
+        <div>
+          <input name=tags placeholder="Assigned groups (insert multiple tags, separate with a comma)" value="${ this.client.tags.join(', ') }" list=tags-list>
+          <small if="${this.client.tags.length }">Your existing goups: ${ this.client.tags.join(', ') }</small>
+        </div>
+        <label>Personal Notes</label>
+        <textarea name=note placeholder="Extra information about the client or the sessions">${ this.client.note || '' }</textarea>
       </fieldset>
 
       <footer class=toolbar>
         <button class=primary>Save</button>
         <a href=/ class=button>Cancel</a>
         <div class="secondary">
-          <button type=button :if="this.client.id" on:click="this.delete" class="danger">delete</delete>
+          <button type=button :if="this.client.id" on:click="this.delete" class="danger">Delete</delete>
         </div>
 
       </footer>
@@ -64,13 +69,13 @@
         <div :if="this.assignment && this.assignment.status === 'pending'">
           <span><x-icon figure=clock color=#F5BA01></x-icon>pending since ${ date(this.assignment.creation_date) }</span>
           <nav class=actions>
-            <a href="${ config.testUrl.replace('{key}', this.assignment.key) }" title="Go to the TCI test form" target=_blank>
+            <a href="${ this.assignment.url }" title="Go to the test" target=_blank>
               <x-icon figure=file-signature></x-icon>
             </a>
-            <a :if="this.client.email" href="mailto:${ this.client.email }?subject=A TCI test was assigned to you." title="Send the TCI by email to the Client">
+            <a :if="this.client.email" href="mailto:${ this.client.email }?subject=A TCI test was assigned to you&body=A TCI test is available at ${ this.assignment.url }%0A%0A${ user.name }" title="Send the test to the client via email">
               <x-icon figure=envelope></x-icon>
             </a>
-            <x-icon figure=trash on:click="this.removeAssignement" value="${ this.assignment.id }" title="Unassign this test from the Client"></x-icon>
+            <x-icon figure=trash on:click="this.removeAssignement" value="${ this.assignment.id }" title="Unassign this test from the client"></x-icon>
           </nav>
         </div>
         <div :if="this.assignment && this.assignment.status === 'completed'">
@@ -86,7 +91,7 @@
         </div>
       </li>
     </ul>
-    <button class=primary on:click="this.assign"><x-icon figure=file-medical></x-icon>Assign a new test</button>
+    <button class=primary on:click="this.assign"><x-icon figure=file-medical></x-icon>Assign a New Test</button>
   </aside>
 
 </div>
@@ -96,7 +101,7 @@
   const defaults = {
     id: null,
     client: { tags: [], assignments: [] },
-    assignments: []
+    assignments: [],
   }
   this.setState(defaults)
 
@@ -105,7 +110,10 @@
       const response = await api(`/client/${this.state.id}`)
       if(response.data) {
         this.state.client = response.data
-        this.state.assignments = this.state.client.assignments.reverse()
+        this.state.assignments = this.state.client.assignments.reverse().map(assignment => {
+          assignment.url = config.testUrl.replace('{key}', assignment.key)
+          return assignment
+        })
       }
     }
     this.render()
@@ -142,7 +150,7 @@
   }
 
   this.delete = async () => {
-    if(!confirm("Are you sure you want to delete this client and all his data?")) return
+    if(!confirm("Are you sure you want to delete this client?")) return
     const response = await api(`/client/${ this.state.client.id }`, { method: 'delete' })
     if(!response.ok) return alert("An error occured. This contact could not be deleted!")
     page('/')

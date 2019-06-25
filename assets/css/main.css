@@ -81,3 +81,20 @@ button.danger:hover,
 .toolbar {
   background-color: var(--white-background);
 }
+
+.row label {
+  width: 6rem;
+  margin-right: 2rem;
+}
+input,
+select,
+textarea {
+  min-width: 88%;
+}
+
+/* help text for input */
+label + div > small {
+  display: block;
+  font-size: .8em;
+  color: #888;
+}

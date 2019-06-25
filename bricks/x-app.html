@@ -6,6 +6,7 @@
     <div :if="this.user.name">
       <span>${ this.user.name }</span>
       <nav>
+        <a href="/">Dashboard</a>
         <a href="/admin" :if="${ this.user.is_admin }">Admin Panel</a>
         <a href="/logout">Logout</a>
       </nav>
@@ -84,7 +85,10 @@
 
   this.connected = async () => {
     const token = localStorage.getItem('token')
-    if(token) await this.state.user.authenticate(token)
+    if(token) {
+      await this.state.user.authenticate(token)
+      window.user = this.state.user
+    }
     page({ hashbang: true })
     this.render()
   }
