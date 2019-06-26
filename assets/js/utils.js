@@ -34,3 +34,9 @@ function request (url, options = {}) {
 function date(d) {
   return d && (new Date(d * 1000)).toLocaleDateString()
 }
+
+
+function notify(message) {
+  if (Notification.permission === 'granted') new Notification(message)
+  else alert(message)
+}
