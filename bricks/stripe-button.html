@@ -9,23 +9,23 @@
 
   this.connected = () => {
     this.handler = StripeCheckout.configure({
-      key: config.stripeKey,
+      key: config.stripe_public_key,
       image: '',
       locale: 'auto',
       token: async (token) => {
         const response = await api('/payment', { data: { token, quantity: this.state.quantity }})
-        if(!response.ok) alert("The payment could not be processed!")
-        alert("Your purchase was successfully completed!")
+        if(!response.ok) notify("The payment could not be processed!")
+        notify("Your purchase was successfully completed!")
         location.reload()  // TODO: refresh the user instead of hard reloading the page
       }
     })
   }
 
   this.showPayment = () => {
-    const unitPrice = 15
+    const unitPrice = 5
     this.handler.open({
       name: 'Anthropedia',
-      description: `${this.state.quantity} TCI tests`,
+      description: `${this.state.quantity} TCI credits`,
       amount: this.state.quantity * 100 * unitPrice
     })
   }

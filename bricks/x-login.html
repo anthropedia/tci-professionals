@@ -18,7 +18,7 @@
       password: this.root.querySelector('[name=password]').value
     }
     const response = await api('/token', { data })
-    if (!response.ok) return alert("Check your email and password")
+    if (!response.ok) return notify("Check your email and password")
     await this.state.user.authenticate(response.data)
     page('/')
   }

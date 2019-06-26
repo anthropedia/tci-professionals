@@ -16,7 +16,7 @@
   function api (uri, options = {}) {
     const token = localStorage.getItem('token')
     if (token) options.auth = token
-    return request(`${config.apiUrl}${uri}`, options)
+    return request(`${config.api_url}${uri}`, options)
   }
   const bricks = document.createElement('script')
   bricks.src = `dist/bricks.js?${Math.random()}`

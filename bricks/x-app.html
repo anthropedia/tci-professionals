@@ -59,7 +59,8 @@
     page: '',
     clientId: '',
     user,
-    tag: ''
+    tag: '',
+    config: '',
   })
 
   this.authRequired = (ctx, next) => {
@@ -67,7 +68,7 @@
     next()
   }
 
-  this.adminRequied = (ctx, next) => {
+  this.adminRequired = (ctx, next) => {
     if (!this.state.user.isAdmin) return page('/')
     next()
   }
@@ -78,7 +79,7 @@
   page('/client', this.authRequired, () => this.render({ page: 'client-edit', clientId: '' }))
   page('/client/:id', this.authRequired, (req) => this.render({ page: 'client-edit', clientId: req.params.id }))
 
-  page('/admin', this.adminRequied, () => this.render({ page: 'admin-dashboard' }))
+  page('/admin', this.adminRequired, () => this.render({ page: 'admin-dashboard' }))
 
   page('*', () => this.state.page = 'error')
 
@@ -88,6 +89,14 @@
     if(token) {
       await this.state.user.authenticate(token)
       window.user = this.state.user
+      if(user.isAuthenticated()) {
+        const response = await api('/config')
+        Object.assign(window.config, response.data)
+      }
+      if(Notification.permission !== 'granted') {
+        const permission = await Notification.requestPermission()
+        if(permission === 'denied') notify("You will not see any feedback from the application.")
+      }
     }
     page({ hashbang: true })
     this.render()
