@@ -84,8 +84,8 @@
             <a class=score href="${config.api_url}/assignment/${ this.assignment.id }/score/2d.html" target=_blank title="Download results in 2D">2D</a>
             <a class=score href="${config.api_url}/assignment/${ this.assignment.id }/score/3d.pdf" target=_blank title="Download results in 3D">3D</a>
             <hr>
-            <a class=score on:click="this.scoreOrPurchase" :disabled="${ !this.assignment.options.includes('3dplus') }" version="3dplus" assignmentid="${ this.assignment.id }" href="${config.api_url}/assignment/${ this.assignment.id }/score/3d-plus.pdf" target=_blank title="Download results in 3D+">3D+</a>
-            <a class=score on:click="this.scoreOrPurchase" :disabled="${ !this.assignment.options.includes('unity') }" version="unity" assignmentid="${ this.assignment.id }" href="${config.api_url}/assignment/${ this.assignment.id }/score/unity-separation.pdf" target=_blank title="Download results for Unity and Separateness">U/S</a>
+            <a class=score on:click="this.scoreOrPurchase" :disabled="${ !this.assignment.options.includes('3d-plus') }" version="3d-plus" assignmentid="${ this.assignment.id }" href="${config.api_url}/assignment/${ this.assignment.id }/score/3d-plus.pdf" target=_blank title="Download results in 3D+">3D+</a>
+            <a class=score on:click="this.scoreOrPurchase" :disabled="${ !this.assignment.options.includes('unity-separateness') }" version="unity-separateness" assignmentid="${ this.assignment.id }" href="${config.api_url}/assignment/${ this.assignment.id }/score/unity-separateness.pdf" target=_blank title="Download results for Unity and Separateness">U/S</a>
           </nav>
           <div :if="{ this.assignmentId == this.assignment.id }" class="purchase row">
             <button class=primary on:click="this.purchase">Purchase this ${ this.assignmentVersion } score</button>
@@ -138,6 +138,7 @@
       const index = this.state.assignments.findIndex(a => a.id == this.state.assignmentId)
       this.state.assignments[index] = response.data
       this.render()
+      notify(`Your ${this.state.assignmentVersion} sheet is ready`)
     }
     else notify(response.data)
   }
