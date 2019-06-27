@@ -1,7 +1,16 @@
 <template>
   <div class=two-columns>
-    <main>
-      <form on:submit="this.submit" class=block>
+    <main class=block>
+      <h1><i class="fas fa-users"></i> Existing Providers</h1>
+      <ul>
+        <li :for="provider in this.providers">
+          ${ this.provider.name } (${ this.provider.email }) – ${ this.provider.credit } credits <a class=button href="/provider/${ this.provider.id }">Edit</a>
+        </li>
+      </ul>
+    </main>
+
+    <aside class=block>
+      <form on:submit="this.submit">
         <h1><i class="fas fa-user-plus"></i> Create a New Provider</h1>
         <fieldset>
           <legend>General Information</legend>
@@ -10,15 +19,6 @@
         </fieldset>
         <button>Create</button>
       </form>
-    </main>
-
-    <aside class=block>
-      <h1><i class="fas fa-users"></i> Existing Providers</h1>
-      <ul>
-        <li :for="provider in this.providers">
-          ${ this.provider.name } (${ this.provider.email }) – ${ this.provider.credit } credits
-        </li>
-      </ul>
     </aside>
   </div>
 </template>
@@ -51,10 +51,10 @@
     max-width: inherit;
   }
 
-  aside ul {
+  main ul {
     padding: 0;
   }
-  aside li {
+  main li {
     padding: 1rem;
     border-bottom: 1px solid #ddd;
     list-style: none;
