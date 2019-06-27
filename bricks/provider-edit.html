@@ -1,0 +1,54 @@
+<template id>
+  <main class=block>
+    <h1><i class="fas fa-user-plus"></i> Edit ${ this.provider.name }</h1>
+    <form on:submit="this.save">
+      <fieldset>
+        <legend>General Information</legend>
+        <div class=row>
+          <label>Name</label>
+          <input name="name" value="${ this.provider.name }" placeholder="Full name" required>
+        </div>
+        <div class=row>
+          <label>Email</label>
+          <input type="email" name="email" value="${ this.provider.email }" placeholder="Email address" required>
+        </div>
+        <div class=row>
+          <label>Remaining Credits</label>
+          <input type="number" name="credit" value="${ this.provider.credit }" placeholder="Email address" required>
+        </div>
+      </fieldset>
+
+      <div class=row>
+        <button class=primary>Save</button>
+        <button type=reset>Cancel</button>
+      </div>
+    </form>
+  </main>
+</template>
+
+<script>
+  this.setState({
+    provider: {},
+    id: '',
+  })
+
+  this.connected = async () => {
+    const response = await api(`/provider/${this.state.id}`)
+    if (response.ok) this.state.provider = response.data
+    this.render()
+  }
+
+  this.save = async (event) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const data = {}
+    Array.from(form.elements).filter(e => e.name && e.value).forEach(e => data[e.name] = e.value)
+    const response = await api(`/provider/${ this.state.id }`, { data, method: 'PATCH' })
+    if(response.ok) notify('Provider saved')
+    else notify(response.data)
+  }
+</script>
+
+<style>
+  @import url('/assets/css/main.css');
+</style>

@@ -7,7 +7,7 @@
       <span>${ this.user.name }</span>
       <nav>
         <a href="/">Dashboard</a>
-        <a href="/admin" :if="${ this.user.is_admin }">Admin Panel</a>
+        <a href="/provider" :if="${ this.user.is_admin }">Providers</a>
         <a href="/logout">Logout</a>
       </nav>
     </div>
@@ -19,7 +19,8 @@
     <client-edit :if="this.page === 'client-edit'" id="${ this.clientId }"></client-edit>
     <error-404 :if="this.page === 'error'"></error-404>
 
-    <admin-dashboard :if="this.page === 'admin-dashboard'"></admin-dashboard>
+    <admin-dashboard :if="this.page === 'providers'"></admin-dashboard>
+    <provider-edit :if="this.page === 'provider-edit'" id="${ this.providerId }"></provider-edit>
   </main>
 
   <footer>
@@ -58,9 +59,11 @@
   this.setState({
     page: '',
     clientId: '',
+    providerId: '',
     user,
     tag: '',
     config: '',
+    I: null,
   })
 
   this.authRequired = (ctx, next) => {
@@ -79,7 +82,8 @@
   page('/client', this.authRequired, () => this.render({ page: 'client-edit', clientId: '' }))
   page('/client/:id', this.authRequired, (req) => this.render({ page: 'client-edit', clientId: req.params.id }))
 
-  page('/admin', this.adminRequired, () => this.render({ page: 'admin-dashboard' }))
+  page('/provider', this.adminRequired, () => this.render({ page: 'providers' }))
+  page('/provider/:id', this.adminRequired, (req) => this.render({ page: 'provider-edit', providerId: req.params.id }))
 
   page('*', () => this.state.page = 'error')
 
