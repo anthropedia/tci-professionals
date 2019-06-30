@@ -6,9 +6,9 @@
     <div :if="this.user.name">
       <span>${ this.user.name }</span>
       <nav>
-        <a href="/">Dashboard</a>
-        <a href="/provider" :if="${ this.user.is_admin }">Providers</a>
-        <a href="/help">Help</a>
+        <a href="/" :active="${ this.page === 'dashboard' }">Dashboard</a>
+        <a href="/provider" :if="${ this.user.is_admin }" :active="${ this.page === 'providers' }">Providers</a>
+        <a href="/help" :active="${ this.page === 'help' }">Help</a>
         <a href="/logout">Logout</a>
       </nav>
     </div>
@@ -138,7 +138,8 @@
     border-left: none;
     margin-left: 0;
   }
-  header nav a:hover {
+  header nav a:hover,
+  header nav a[active] {
     color: #555;
     border-color: #555;
   }

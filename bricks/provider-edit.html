@@ -33,6 +33,8 @@
   })
 
   this.connected = async () => {
+    // Quick hack to force the id to be there
+    if(!this.state.id) setTimeout( () => location.reload(), 1)
     const response = await api(`/provider/${this.state.id}`)
     if (response.ok) this.state.provider = response.data
     this.render()

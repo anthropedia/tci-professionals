@@ -112,6 +112,7 @@
       </li>
     </ul>
     <button class=primary on:click="this.assign"><x-icon figure=file-medical></x-icon>Assign a New Test</button>
+    <p :if="${ user.credit < 3 }">You need at least 3 credits to assign a new test. <a href=/>Purchase credits</a></p>
   </aside>
 
 </div>
