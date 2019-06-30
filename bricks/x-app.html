@@ -8,6 +8,7 @@
       <nav>
         <a href="/">Dashboard</a>
         <a href="/provider" :if="${ this.user.is_admin }">Providers</a>
+        <a href="/help">Help</a>
         <a href="/logout">Logout</a>
       </nav>
     </div>
@@ -17,6 +18,7 @@
     <x-login :if="this.page === 'login'" user="${ this.user }"></x-login>
     <x-dashboard :if="this.page === 'dashboard'" user="${ this.user }"></x-dashboard>
     <client-edit :if="this.page === 'client-edit'" id="${ this.clientId }"></client-edit>
+    <x-help :if="this.page === 'help'"></x-help>
     <error-404 :if="this.page === 'error'"></error-404>
 
     <admin-dashboard :if="this.page === 'providers'"></admin-dashboard>
@@ -78,6 +80,7 @@
 
   page('/', this.authRequired, () => this.render({ page: 'dashboard' }))
   page('/login', () => this.render({ page: 'login' }))
+  page('/help', () => this.render({ page: 'help' }))
   page('/logout', () => { this.state.user.revoke(); page.redirect('/') })
   page('/client', this.authRequired, () => this.render({ page: 'client-edit', clientId: '' }))
   page('/client/:id', this.authRequired, (req) => this.render({ page: 'client-edit', clientId: req.params.id }))
@@ -118,6 +121,26 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  header div span {
+    font-size: .65rem;
+  }
+  header nav a {
+    text-decoration: none;
+    color: #888;
+    margin-left: 1rem;
+    font-size: .8rem;
+    font-weight: bold;
+    padding-left: 1rem;
+    border-left: 1px solid #888;
+  }
+  header nav a:first-of-type {
+    border-left: none;
+    margin-left: 0;
+  }
+  header nav a:hover {
+    color: #555;
+    border-color: #555;
   }
   #logo {
     width: 5rem;

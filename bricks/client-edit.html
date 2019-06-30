@@ -57,14 +57,14 @@
       </fieldset>
 
       <fieldset>
-        <legend>Side Notes</legend>
+        <legend>Personal Notes</legend>
 
-        <label>Groups (comma separared)</label>
+        <label>Groups (comma separated)</label>
         <div>
           <input name=tags placeholder="Assigned groups (insert multiple tags, separate with a comma)" value="${ this.client.tags.join(', ') }" list=tags-list>
           <small if="${this.client.tags.length }">Your existing goups: ${ this.client.tags.join(', ') }</small>
         </div>
-        <label>Personal Notes</label>
+        <label>About the client or sessions</label>
         <textarea name=note placeholder="Extra information about the client or the sessions">${ this.client.note || '' }</textarea>
       </fieldset>
 
@@ -155,7 +155,7 @@
     if(response.ok) {
       const index = this.state.assignments.findIndex(a => a.id == this.state.assignmentId)
       this.state.assignments[index] = response.data
-      this.render()
+      this.render({ assignmentId: '', assignmentVersion: '' })
       notify(`Your ${this.state.assignmentVersion} sheet is ready`)
     }
     else notify(response.data)
@@ -196,7 +196,7 @@
   }
 
   this.delete = async () => {
-    if(!confirm("Are you sure you want to delete this client?")) return
+    if(!confirm("Are you sure you want to delete this client and all his data?")) return
     const response = await api(`/client/${ this.state.client.id }`, { method: 'delete' })
     if(!response.ok) return notify("An error occured. This contact could not be deleted!")
     page('/')

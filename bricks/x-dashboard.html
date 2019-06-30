@@ -35,13 +35,18 @@
       </a>
     </nav>
     <div :if="${ !this.clients.length && !this.tags.length }">
-      <h2>Welcome to the TCI site for professionals!</h2>
-      <p>To get properly started, first <x-icon figure=credit-card></x-icon>purchase some credits, then <x-icon figure=user-plus></x-icon> add clients, and finally <x-icon figure=file-medical></x-icon>assign them a test.</p>
-      <p>
-        Once a test is assigned to a client, provide him the link to the test or open it directly from his profile.<br>
-        When the client is done with the test the results will appear in his profile.
-      </p>
+      <h2>Welcome to the TCI Site for Professionals!</h2>
+
+      <p>Assigning tests and getting results is simple; just follow these steps:</p>
+      <ol>
+        <li><x-icon figure=credit-card></x-icon> Purchase credits.</li>
+        <li><x-icon figure=user-plus></x-icon> Add a client or clients.</li>
+        <li><x-icon figure=file-medical></x-icon> Assign the client a test.</li>
+        <li>Wait to receive an automatically generated email notification that your client has finished the test, and then you can access the results in their profile.</li>
+      </ol>
+      <p>For more details, <a href=/help>visit the help section</a>.</p>
     </div>
+
     <footer class="row  toolbar">
       <a href=/client class="button"><x-icon figure=user-plus></x-icon>Add a client</a>
     </footer>
@@ -51,16 +56,28 @@
     <h1><x-icon figure=balance-scale></x-icon>Balance</h1>
     <p><strong>${ this.user.credit }</strong> credits remaining</p>
     <p class=row>
-      <span>Reload balance with</span>
+      <span>Add</span>
       <input name=quantity type=number on:input="this.addCredit" value=50>
-      <span>credits</span>
+      <span>credits to my account.</span>
     </p>
     <stripe-button quantity="${ this.quantity || 50 }" class="button primary"><x-icon figure=credit-card></x-icon> Purchase</stripe-button>
 
-    <h3>How to spend credits?</h3>
-    <p>Credits can be spent for assigning a TCI to a client and printing the 1D/2D/3D scores (package of 3 credits).</p>
-    <p>Extra scoring sheets such as 3D+, Unity/Separateness, Validity/performance can also be purchased with 1 credit each.</p>
-    <p>Each credit costs $5. Therefore assigning a TCI to a client and printing the regular scoring (1D/2D/3D) costs $15. Adding extra scoring sheets cost $5 each.</p>
+    <h3>The Credit System</h3>
+
+    <p>1 credit = $5.</p>
+
+    <h4>Standard analysis:</h4>
+    <ul>
+      <li>Includes 1D, 2D, and 3D analysis = 3 credits ($15)</li>
+      <li>Automatically generated when you assign a test to a client</li>
+    </ul>
+    <h4>Additional analyses:</h4>
+    <p>You can add any of the following to the standard analysis:</p>
+    <ul>
+      <li>3D+ (Resilience Analysis) = 1 credit ($5)</li>
+      <li>U/S (Unity and Separateness) = 1 credit ($5)</li>
+      <li>V/P (Validity and Performance) = 1 credit ($5)<em> – Coming soon!</em></li>
+    </ul>
   </aside>
 
 </div>
