@@ -15,7 +15,8 @@
     </section>
 
     <nav :if="${ this.clients.length }">
-      <h2>${ this.clients.length } clients</h2>
+      <h2 :if="${ !this.tag }">${ this.clients.length } clients</h2>
+      <h2 :if="${ this.tag }">${ this.clients.length } clients in group "${ this.tag }"</h2>
       <a :for="client in this.clients" href="/client/${ this.client.id }">
         <h3><x-icon figure=user></x-icon>${ this.client.name }</h3>
         <p :if="this.client.assignments.length && this.client.assignments.slice(-1)[0].status === 'completed'"><x-icon figure=clock color=#F5BA01></x-icon>
@@ -23,8 +24,8 @@
         </p>
         <p :if="this.client.assignments.length && this.client.assignments.slice(-1)[0].status === 'pending'"><x-icon figure=clock color=#F5BA01></x-icon>
           Pending since ${(new Date(this.client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ this.client.assignments.length }
-          <span if="${this.client.assignments.length == 1}">test</span>
-          <span if="${this.client.assignments.length > 1}">tests</span>
+          <span :if="${this.client.assignments.length == 1}">test</span>
+          <span :if="${this.client.assignments.length > 1}">tests</span>
         </p>
         <p :if="!this.client.assignments.length">
           No test yet
