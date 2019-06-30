@@ -13,9 +13,26 @@
       <label>Email</label>
       <input type=email name=email placeholder="Email" value="${ this.client.email }">
 
+      <label>Gender</label>
+      <select name=gender required>
+        <option value="m" :selected="${ this.client.gender == 'm' }">Man</option>
+        <option value="f" :selected="${ this.client.gender == 'f' }">Woman</option>
+        <option value="tm" :selected="${ this.client.gender == 'tm' }">Trans-Male</option>
+        <option value="tf" :selected="${ this.client.gender == 'tf' }">Trans-Female</option>
+        <option value="to" :selected="${ this.client.gender == 'to' }">Genderqueer/Gender, Non-binary</option>
+        <option value="o" :selected="${ this.client.gender == 'o' }">Not listed/Other</option>
+        <option value="u" :selected="${ this.client.gender == 'u' }">Prefer not to say</option>
+      </select>
+      <small>Select one that best describes your current gender identity</small>
+
+      <div>
+        <label>Year of birth</label>
+        <input type=number name=birthyear value="${ this.client.birthyear || '1970' }" min="${ this.year - 100 }" max="${ this.year }" required>
+      </div>
+
       <fieldset>
         <legend>Test Information</legend>
-        <div class=row>
+        <div>
           <label>Test Language</label>
           <div>
             <select name=language>
@@ -26,7 +43,7 @@
             <small>This field determines the language used when taking the test</small>
           </div>
         </div>
-        <div class=row>
+        <div>
           <label>Test Country</label>
           <div>
             <select name=culture>
@@ -107,6 +124,7 @@
     assignments: [],
     assignmentVersion: '',
     purchaseId: null,
+    year: (new Date()).getFullYear(),
   }
   this.setState(defaults)
 
@@ -116,7 +134,7 @@
       if(response.data) {
         this.state.client = response.data
         this.state.assignments = this.state.client.assignments.reverse().map(assignment => {
-          assignment.url = config.clients_url.replace('{key}', assignment.key)
+          assignment.url = config.tests_url.replace('{key}', assignment.key)
           return assignment
         })
       }
@@ -226,6 +244,10 @@
   aside button {
     width: 100%;
     margin-top: 1rem;
+  }
+
+  select {
+    width: 100%;
   }
 
   a.score[disabled] {
