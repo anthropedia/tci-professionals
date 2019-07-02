@@ -3,6 +3,7 @@
     <form on:submit="this.login">
       <input type=email name=email required class=row placeholder="Sign in with your email">
       <input type=password name=password required class=row placeholder="Password">
+      <button type=button class=reset on:click="this.resetPassword">Password Lost? Send a password by email.</button>
       <button class=primary>Login</login>
     </form>
   </main>
@@ -22,6 +23,14 @@
     await this.state.user.authenticate(response.data)
     page('/')
   }
+
+  this.resetPassword = async () => {
+    const email = this.root.querySelector('[name=email]').value
+    if(!email) return notify("Insert your email")
+    const response = await api('/reset-password', { data: { email } })
+    if(response.ok) return notify("Check your mailbox")
+    else return notify(response.data)
+  }
 </script>
 
 <style>
@@ -31,5 +40,14 @@
   }
   button {
     width: 100%;
+  }
+  .reset {
+    border: 0;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    margin-top: -2rem;
+    font-size: .6rem;
+    color: inherit;
   }
 </style>
