@@ -4,7 +4,7 @@
       <img src=https://assets.tci.anthropedia.org/images/anthropedia.svg alt="Anthropedia Foundation">
     </a></h1>
     <div :if="this.user.name">
-      <span>${ this.user.name }</span>
+      <a href=/profile>${ this.user.name }</a>
       <nav>
         <a href="/" :active="${ this.page === 'dashboard' }">Dashboard</a>
         <a href="/provider" :if="${ this.user.is_admin }" :active="${ this.page === 'providers' }">Providers</a>
@@ -18,6 +18,7 @@
     <x-login :if="this.page === 'login'" user="${ this.user }"></x-login>
     <x-dashboard :if="this.page === 'dashboard'" user="${ this.user }"></x-dashboard>
     <client-edit :if="this.page === 'client-edit'" id="${ this.clientId }"></client-edit>
+    <x-profile :if="this.page === 'profile'"></x-profile>
     <x-help :if="this.page === 'help'"></x-help>
     <error-404 :if="this.page === 'error'"></error-404>
 
@@ -34,13 +35,16 @@
 <script>
   const user = {
     get defaults() {
-      return { name: '', email: '', is_admin: false, credit: 0, token: '' }
+      return { name: '', email: '', is_admin: false, credit: 0, token: '', password: '' }
     },
     get isAdmin() {
       return !!this.is_admin
     },
     isAuthenticated() {
       return !!this.token
+    },
+    fromData(data) {
+      Object.assign(this, data)
     },
     async authenticate(token) {
       localStorage.setItem('token', token)
@@ -50,11 +54,11 @@
         return false
       }
       this.token = token
-      return Object.assign(this, response.data)
+      return this.fromData(response.data)
     },
     revoke() {
       localStorage.removeItem('token')
-      return Object.assign(this, this.defaults)
+      return this.fromData(this.defaults)
     }
   }
 
@@ -82,6 +86,7 @@
   page('/login', () => this.render({ page: 'login' }))
   page('/help', () => this.render({ page: 'help' }))
   page('/logout', () => { this.state.user.revoke(); page.redirect('/') })
+  page('/profile', this.authRequired, () => this.render({ page: 'profile' }))
   page('/client', this.authRequired, () => this.render({ page: 'client-edit', clientId: '' }))
   page('/client/:id', this.authRequired, (req) => this.render({ page: 'client-edit', clientId: req.params.id }))
 
@@ -122,8 +127,10 @@
     justify-content: space-between;
     align-items: center;
   }
-  header div span {
+  header div > a {
     font-size: .65rem;
+    color: inherit;
+    text-decoration: none;
   }
   header nav a {
     text-decoration: none;
