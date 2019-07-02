@@ -22,7 +22,7 @@
   }
 
   this.showPayment = () => {
-    const unitPrice = 5
+    const unitPrice = this.state.quantity < config.credit_discount_volume ? config.credit_price : config.credit_discount_price
     this.handler.open({
       name: 'Anthropedia',
       description: `${this.state.quantity} TCI credits`,
