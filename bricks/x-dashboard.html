@@ -63,22 +63,24 @@
     </p>
     <stripe-button quantity="${ this.quantity || 150 }" class="button primary"><x-icon figure=credit-card></x-icon> Purchase</stripe-button>
 
-    <h3>The Credit System</h3>
+    <details>
+      <summary>About the Credit System</summary>
 
-    <p>1 credit = $5 (or $4 when purchasing 150 credits or more).</p>
+      <p>1 credit = $5 (or $4 when purchasing 150 credits or more)</p>
 
-    <h4>Standard analysis:</h4>
-    <ul>
-      <li>Includes 1D, 2D, and 3D analysis = 3 credits ($12/$15)</li>
-      <li>Automatically generated when you assign a test to a client</li>
-    </ul>
-    <h4>Additional analyses:</h4>
-    <p>You can add any of the following to the standard analysis:</p>
-    <ul>
-      <li>3D+ (Resilience Analysis) = 1 credit ($4/$5)</li>
-      <li>U/S (Unity and Separateness) = 1 credit ($4/$5)</li>
-      <li>V/P (Validity and Performance) = 1 credit ($4/$5)<em> – Coming soon!</em></li>
-    </ul>
+      <h4>Standard Analysis:</h4>
+      <ul>
+        <li>Includes 1D, 2D, and 3D analysis = 3 credits</li>
+        <li>Automatically generated when you assign a test to a client</li>
+      </ul>
+      <h4>Additional Analyses:</h4>
+      <p>You can add any of the following to the standard analysis at any stage:</p>
+      <ul>
+        <li>3D+ (Resilience Analysis) = 1 credit</li>
+        <li>U/S (Unity and Separateness) = 1 credit</li>
+        <li>V/P (Validity and Performance) = 1 credit<em> – Coming soon!</em></li>
+      </ul>
+    </details>
   </aside>
 
 </div>
@@ -184,6 +186,10 @@
 
   stripe-button {
     display: block !important;
+    margin-top: 2rem;
+  }
+
+  aside details {
     margin-top: 2rem;
   }
 </style>

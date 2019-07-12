@@ -3,7 +3,7 @@
     <form on:submit="this.login">
       <input type=email name=email required class=row placeholder="Sign in with your email">
       <input type=password name=password required class=row placeholder="Password">
-      <button type=button class=reset on:click="this.resetPassword">Password Lost? Send a password by email.</button>
+      <button type=button class=reset on:click="this.resetPassword">Forgot your password? Receive a new password via email.</button>
       <button class=primary>Login</login>
     </form>
   </main>
@@ -48,6 +48,7 @@
     margin: 0;
     margin-top: -2rem;
     font-size: .6rem;
-    color: inherit;
+    color: #555;
+    font-weight: normal;
   }
 </style>
