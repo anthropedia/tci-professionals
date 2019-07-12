@@ -4,11 +4,12 @@
       <img src=https://assets.tci.anthropedia.org/images/anthropedia.svg alt="Anthropedia Foundation">
     </a></h1>
     <div :if="this.user.name">
-      <a href=/profile>${ this.user.name }</a>
       <nav>
         <a href="/" :active="${ this.page === 'dashboard' }">Dashboard</a>
         <a href="/provider" :if="${ this.user.is_admin }" :active="${ this.page === 'providers' }">Providers</a>
         <a href="/help" :active="${ this.page === 'help' }">Help</a>
+        <hr>
+        <a href="/profile" :active="${ this.page === 'profile' }">My Profile</a>
         <a href="/logout">Logout</a>
       </nav>
     </div>
@@ -127,31 +128,33 @@
     justify-content: space-between;
     align-items: center;
   }
-  header div > a {
-    font-size: .65rem;
-    color: inherit;
-    text-decoration: none;
+  #logo {
+    margin: .5rem 1rem;
   }
   header nav a {
     text-decoration: none;
-    color: #888;
-    margin-left: 1rem;
     font-size: .8rem;
-    font-weight: bold;
-    padding-left: 1rem;
+    color: inherit;
+    padding: 38px 1rem;
+    border-top: 3px solid transparent;
+    transition: .3s border-color,color;
+  }
+  header nav hr {
+    border: 0;
+    display: inline;
     border-left: 1px solid #888;
   }
+
   header nav a:first-of-type {
-    border-left: none;
     margin-left: 0;
   }
   header nav a:hover,
   header nav a[active] {
-    color: #555;
-    border-color: #555;
+    color: #333;
+    border-top-color: var(--background-color);
   }
   #logo {
-    width: 5rem;
+    width: 120px;
   }
   #logo a,
   #logo img {
