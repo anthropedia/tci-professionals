@@ -40,3 +40,11 @@ function notify(message) {
   if (Notification.permission === 'granted') new Notification(message)
   else alert(message)
 }
+
+/**
+ * Because Lego can't always read the appropriate data, forcing to reload
+ * the page helps out while this bug is not fixed.
+ */
+function forceReload() {
+  setTimeout(() => location.reload(), 1)
+}

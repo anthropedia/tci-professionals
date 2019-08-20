@@ -40,16 +40,15 @@
               <option value=fr :selected="${ this.client.language == 'fr' }">French</option>
               <option value=se :selected="${ this.client.language == 'se' }">Swedish</option>
             </select>
-            <small>This field determines the language used when taking the test.</small>
-          </div>
+e           </div>
         </div>
         <div>
           <label>Test Country</label>
           <div>
             <select name=culture>
-              <option value=fr :selected="${ this.client.country == 'fr' }">France</option>
-              <option value=se :selected="${ this.client.country == 'se' }">Sweden</option>
-              <option value=us :selected="${ this.client.country == 'us' }">United States</option>
+              <option value=fr :selected="${ this.client.culture == 'fr' }">France</option>
+              <option value=se :selected="${ this.client.culture == 'se' }">Sweden</option>
+              <option value=us :selected="${ this.client.culture == 'us' }">United States</option>
             </select>
             <small>This field determines which norms are used to analyze the test results.</small>
           </div>
@@ -88,7 +87,7 @@
             <a href="${ this.assignment.url }" title="Go to the test" target=_blank>
               <x-icon figure=file-signature></x-icon>
             </a>
-            <a :if="this.client.email" href="mailto:${ this.client.email }?subject=A TCI test was assigned to you&body=A TCI test is available at ${ this.assignment.url }%0A%0A${ user.name }" title="Send the test to the client via email">
+            <a :if="this.client.email" on:click="this.sendMail" href="#" title="Send the test to the client via email" id="${ this.assignment.id }">
               <x-icon figure=envelope></x-icon>
             </a>
             <x-icon figure=trash on:click="this.removeAssignement" value="${ this.assignment.id }" title="Unassign this test from the client"></x-icon>
@@ -168,7 +167,27 @@
 
   this.assign = async () => {
     const response = await api(`/client/${this.state.id}/assignment`, { method: 'post' })
-    if (response.data) this.render({ assignments: response.data.assignments.reverse() })
+    if (response.data) {
+      //this.render({ assignments: response.data.assignments.reverse() })
+      forceReload()
+    }
+  }
+
+  this.sendMail = (event) => {
+    const link = event.currentTarget
+    const assignment = this.state.client.assignments.find(a => a.id === link.id)
+    link.href = `
+    mailto:${ this.state.client.email }?subject=A TCI test was assigned to you&body=
+      Here is a link for you to access the TCI: ${assignment.url}
+
+Read the instructions carefully, and please be sure to take it in one sitting as your responses will not be saved if you close your browser. In the event you need to exit the browser before you are finished, you will need to start from the beginning the next time.
+
+Also, note that once you make a selection for an item, you will automatically be brought to the next question, with no option of changing your first response or going back to previous items.
+
+Let me know if you have any questions.
+
+Enjoy!
+    `.trim().replace(/\n/g, '%0A')
   }
 
   // pass component scope to function
