@@ -14,7 +14,7 @@
         </div>
         <div class=row>
           <label>Remaining Credits</label>
-          <input type="number" name="credit" value="${ this.provider.credit }" placeholder="Email address" required>
+          <input type="number" name="credit" value="${ this.provider.credit || '0' }" placeholder="Enter an amount of credits" required>
         </div>
       </fieldset>
 
