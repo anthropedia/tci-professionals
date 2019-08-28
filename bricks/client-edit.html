@@ -177,7 +177,7 @@
     const link = event.currentTarget
     const assignment = this.state.client.assignments.find(a => a.id === link.id)
     link.href = `
-    mailto:${ this.state.client.email }?subject=A TCI test was assigned to you&body=
+    mailto:${ this.state.client.email }?subject=A TCI has been assigned to you&body=
       Here is a link for you to access the TCI: ${assignment.url}
 
 Read the instructions carefully, and please be sure to take it in one sitting as your responses will not be saved if you close your browser. In the event you need to exit the browser before you are finished, you will need to start from the beginning the next time.
