@@ -176,9 +176,7 @@
   this.sendMail = (event) => {
     const link = event.currentTarget
     const assignment = this.state.client.assignments.find(a => a.id === link.id)
-    link.href = `
-    mailto:${ this.state.client.email }?subject=A TCI has been assigned to you&body=
-      Here is a link for you to access the TCI: ${assignment.url}
+    const body = `Here is a link for you to access the TCI: ${assignment.url}
 
 Read the instructions carefully, and please be sure to take it in one sitting as your responses will not be saved if you close your browser. In the event you need to exit the browser before you are finished, you will need to start from the beginning the next time.
 
@@ -186,8 +184,9 @@ Also, note that once you make a selection for an item, you will automatically be
 
 Let me know if you have any questions.
 
-Enjoy!
-    `.trim().replace(/\n/g, '%0A')
+Enjoy!`
+    link.href = `
+    mailto:${ this.state.client.email }?subject=A TCI has been assigned to you&body=${ encodeURIComponent(body.trim()) }`
   }
 
   // pass component scope to function
