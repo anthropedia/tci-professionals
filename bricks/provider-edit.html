@@ -46,8 +46,8 @@
     const data = {}
     Array.from(form.elements).filter(e => e.name && e.value).forEach(e => data[e.name] = e.value)
     const response = await api(`/provider/${ this.state.id }`, { data, method: 'PATCH' })
-    if(response.ok) notify('Provider saved')
-    else notify(response.data)
+    if(response.ok) notify('Provider saved', 'success')
+    else notify(response.data, 'error')
   }
 </script>
 

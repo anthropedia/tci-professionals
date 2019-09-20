@@ -39,14 +39,14 @@
     const form = event.currentTarget
     const data = {}
     Array.from(form.elements).filter(e => e.name && e.value).forEach(e => data[e.name] = e.value)
-    if(data.password_bis !== data.password) return notify("Your 2 password must match!")
+    if(data.password_bis !== data.password) return notify("Your 2 password must match!", 'error')
     const response = await api(`/user`, { data, method: 'PATCH' })
     if(response.ok) {
-      notify('Info saved')
+      notify('Info saved', 'success')
       window.user.fromData(response.data)
       page('/')
     }
-    else notify(response.data)
+    else notify(response.data, 'error')
   }
 </script>
 

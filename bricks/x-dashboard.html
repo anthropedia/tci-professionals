@@ -105,7 +105,7 @@
 
   this.updateClients = async () => {
     const response = await api(`/clients?q=${ this.state.q }&tag=${ this.state.tag }`)
-    if(!response.ok) return notify(response.data)
+    if(!response.ok) return notify(response.data, 'error')
     this.render({ clients: response.data })
   }
 

@@ -106,10 +106,6 @@
         const response = await api('/config')
         Object.assign(window.config, response.data)
       }
-      if(Notification.permission !== 'granted') {
-        const permission = await Notification.requestPermission()
-        if(permission === 'denied') notify("You will not see any feedback from the application.")
-      }
     }
     page({ hashbang: true })
     this.render()

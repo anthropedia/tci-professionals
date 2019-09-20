@@ -36,9 +36,12 @@ function date(d) {
 }
 
 
-function notify(message) {
-  if (Notification.permission === 'granted') new Notification(message)
-  else alert(message)
+function notify(message, type = 'log') {
+  if (typeof message !== 'string') message = JSON.stringify(message)
+  const toast = document.querySelector('x-toast')
+  toast.show(message, type)
+  const method = type in Object.keys(console) ? type : 'log'
+  console[method](message)
 }
 
 /**

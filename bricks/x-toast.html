@@ -1,0 +1,92 @@
+<template type duration>
+  <div class="${ this.type }">
+    <span>${ this.message }</span>
+    <button if="${ this.type == 'error' }" on:click=this.close class=plain>
+      ╳
+    </button>
+  </div>
+</template>
+
+<script>
+  this.duration = Number(this.state.duration) || 5000
+
+  this.show = (message, type) => {
+    this.classList.add('visible')
+    if (this.state.type !== 'error') this.autoClose()
+    this.render({ type, message })
+  }
+
+  this.autoClose = () => {
+    if(this._latestTimeOut) clearTimeout(this._latestTimeOut)
+    this._latestTimeOut = setTimeout(this.close, this.duration)
+  }
+
+  this.close = () => {
+    this.classList.remove('visible')
+    this.render() // ???
+  }
+</script>
+
+<style>
+  :host {
+    position: fixed;
+    left: 50%;
+    bottom: -10rem;
+    min-width: 15rem;
+    width: auto;
+    min-height: 2.8rem;
+    height: auto;
+    margin-left: -7.5rem;
+    overflow: hidden;
+    z-index: 9;
+    transition: bottom .3s;
+    border-radius: .4rem;
+  }
+
+  :host(.visible) {
+    bottom: .3rem;
+  }
+
+  div {
+    display: flex;
+    padding: .8rem;
+    color: #fff;
+    background: #4646AA;
+    border-radius: .4rem;
+  }
+
+  div:before {
+    content: '';
+    display: block;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 0.4rem;
+  }
+
+  span {
+    width: calc(100% - 2.8rem);
+  }
+
+  .success {
+    background: #0F8246;
+  }
+
+  .warning {
+    background: #D22D00;
+  }
+
+  .error {
+    background: #D20019;
+  }
+
+  button {
+    width: auto;
+    height: auto;
+    padding-right: 0;
+    font-weight: bold;background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+
+</style>

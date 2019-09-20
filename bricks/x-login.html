@@ -19,17 +19,17 @@
       password: this.root.querySelector('[name=password]').value
     }
     const response = await api('/token', { data })
-    if (!response.ok) return notify("Check your email and password")
+    if (!response.ok) return notify("Check your email and password", 'error')
     await this.state.user.authenticate(response.data)
     page('/')
   }
 
   this.resetPassword = async () => {
     const email = this.root.querySelector('[name=email]').value
-    if(!email) return notify("Insert your email")
+    if(!email) return notify("Insert your email", 'warning')
     const response = await api('/reset-password', { data: { email } })
-    if(response.ok) return notify("Check your mailbox")
-    else return notify(response.data)
+    if(response.ok) return notify("Check your mailbox", 'success')
+    else return notify(response.data, 'error')
   }
 </script>
 

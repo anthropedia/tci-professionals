@@ -156,9 +156,9 @@
       const index = this.state.assignments.findIndex(a => a.id == this.state.assignmentId)
       this.state.assignments[index] = response.data
       this.render({ assignmentId: '', assignmentVersion: '' })
-      notify(`Your ${this.state.assignmentVersion} sheet is ready`)
+      notify(`Your ${this.state.assignmentVersion} sheet is ready`, 'info')
     }
-    else notify(response.data)
+    else notify(response.data, 'error')
   }
 
   this.cancelPurchase = () => {
@@ -209,8 +209,8 @@ Enjoy!
                    ? await api(`/client/${client.id}`, { data, method: 'PUT' })
                    : await api(`/client`, { data })
     if(!response.ok) {
-      if(response.data.includes('duplicate key error')) return notify("A client exists with similar data. Is it a duplicate?")
-      return notify('An error occured and the client could not be saved!')
+      if(response.data.includes('duplicate key error')) return notify("A client exists with similar data. Is it a duplicate?", 'warning')
+      return notify('An error occured and the client could not be saved!', 'error')
     }
     page('/')
   }
@@ -218,7 +218,7 @@ Enjoy!
   this.delete = async () => {
     if(!confirm("Are you sure you want to delete this client and all his data?")) return
     const response = await api(`/client/${ this.state.client.id }`, { method: 'delete' })
-    if(!response.ok) return notify("An error occured. This contact could not be deleted!")
+    if(!response.ok) return notify("An error occured. This contact could not be deleted!", 'error')
     page('/')
   }
 </script>
