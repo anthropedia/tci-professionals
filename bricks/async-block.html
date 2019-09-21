@@ -1,0 +1,14 @@
+<template>
+  <slot></slot>
+</template>
+
+<style>
+  :host {
+    opacity: 0;
+  }
+
+  :host([loaded]) {
+    opacity: 1;
+    transition: opacity .3s;
+  }
+</style>

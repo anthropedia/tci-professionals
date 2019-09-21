@@ -1,7 +1,7 @@
 <template clients user>
 <div class=two-columns>
 
-  <section class=block>
+  <async-block :loaded="${ this.loaded }" class="block">
     <h1><x-icon figure=address-book></x-icon>Overview</h1>
 
     <section class="search row">
@@ -48,10 +48,10 @@
       <p>For more details, <a href=/help>visit the help section</a>.</p>
     </div>
 
-    <footer class="row  toolbar">
+    <footer class="row toolbar">
       <a href=/client class="button"><x-icon figure=user-plus></x-icon>Add a client</a>
     </footer>
-  </section>
+  </async-block>
 
   <aside class=block>
     <h1><x-icon figure=balance-scale></x-icon>Balance</h1>
@@ -94,6 +94,7 @@
     tags: [],
     tag: '',
     q: '',
+    loaded: false,
   })
   this.searchTimeout = null
 
@@ -101,6 +102,7 @@
     const tagsResponse = await api('/provider/tags')
     this.setState({ tags: tagsResponse.data }, false)
     this.updateClients()
+    this.state.loaded = true
   }
 
   this.updateClients = async () => {
