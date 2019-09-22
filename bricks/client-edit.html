@@ -128,15 +128,19 @@
   }
   this.setState(defaults)
 
+  function assignmentsFromResponse (assignments) {
+    return assignments.reverse().map(assignment => {
+      assignment.url = config.tests_url.replace('{key}', assignment.key)
+      return assignment
+    })
+  }
+
   this.connected = async () => {
     if(this.state.id) {
       const response = await api(`/client/${this.state.id}`)
       if(response.data) {
         this.state.client = response.data
-        this.state.assignments = this.state.client.assignments.reverse().map(assignment => {
-          assignment.url = config.tests_url.replace('{key}', assignment.key)
-          return assignment
-        })
+        this.state.assignments = assignmentsFromResponse(this.state.client.assignments)
       }
     }
     this.render()
@@ -167,15 +171,12 @@
 
   this.assign = async () => {
     const response = await api(`/client/${this.state.id}/assignment`, { method: 'post' })
-    if (response.data) {
-      //this.render({ assignments: response.data.assignments.reverse() })
-      forceReload()
-    }
+    if (response.data) this.render({ assignments: assignmentsFromResponse(response.data.assignments) })
   }
 
   this.sendMail = (event) => {
     const link = event.currentTarget
-    const assignment = this.state.client.assignments.find(a => a.id === link.id)
+    const assignment = this.state.assignments.find(a => a.id === link.id)
     const body = `Here is a link for you to access the TCI: ${assignment.url}
 
 Read the instructions carefully, and please be sure to take it in one sitting as your responses will not be saved if you close your browser. In the event you need to exit the browser before you are finished, you will need to start from the beginning the next time.
