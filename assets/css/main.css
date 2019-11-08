@@ -78,6 +78,9 @@ button.danger:hover,
   border-radius: .2rem;
   box-shadow: 0 0 .3rem rgba(88, 88, 88, .8);
 }
+.block h1:first-child x-icon {
+  margin-right: .3rem;
+}
 .block h1:first-child {
   font-size: 1rem;
   color: #555;
