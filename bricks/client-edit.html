@@ -96,7 +96,7 @@
         <div :if="this.assignment && this.assignment.status === 'completed'">
           <span><x-icon figure=file-invoice></x-icon>completed on ${ date(this.assignment.completion_date) }</span>
           <nav class=actions>
-            <a class=score href="${config.api_url}/${ this.client.language }/${ this.assignment.id }/score/1d.pdf" target=_blank title="Download results in 1D">1D</a>
+            <a class=score href="${config.api_url}/${ this.client.language }/assignment/${ this.assignment.id }/score/1d.pdf" target=_blank title="Download results in 1D">1D</a>
             <a class=score href="${config.api_url}/${ this.client.language }/assignment/${ this.assignment.id }/score/2d.html" target=_blank title="Download results in 2D">2D</a>
             <a class=score href="${config.api_url}/${ this.client.language }/assignment/${ this.assignment.id }/score/3d.pdf" target=_blank title="Download results in 3D">3D</a>
             <hr>
