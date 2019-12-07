@@ -13,6 +13,14 @@
           <input type="email" name="email" value="${ this.provider.email }" placeholder="Email address" required>
         </div>
         <div class=row>
+          <label>Language</label>
+          <select name=language required>
+            <option value=en :selected="${ this.provider.language == 'en' }">English</option>
+            <option value=fr :selected="${ this.provider.language == 'fr' }">French</option>
+            <option value=se :selected="${ this.provider.language == 'se' }">Swedish</option>
+          </select>
+        </div>
+        <div class=row>
           <label>Remaining Credits</label>
           <input type="number" name="credit" value="${ this.provider.credit || '0' }" placeholder="Enter an amount of credits" required>
         </div>

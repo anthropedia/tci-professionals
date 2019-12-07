@@ -2,35 +2,35 @@
 <div class=two-columns>
 
   <async-block :loaded="${ this.loaded }" class="block">
-    <h1><x-icon figure=address-book></x-icon>Overview</h1>
+    <h1><x-icon figure=address-book></x-icon>${ _("Overview") }</h1>
 
     <section class="search row">
-      <input type=search name=q on:keyup="this.searchClient" placeholder="Search for a client by name">
+      <input type=search name=q on:keyup="this.searchClient" placeholder="${ _('Search a client by name') }">
     </section>
 
     <section class=filters>
-      Filter by
-      <x-tag on:click="this.filterTag" value="" :selected="this.tag == ''">All</x-tag>
-      <x-tag :for="tagName in this.tags" on:click="this.filterTag" value="${ this.tagName }"  :selected="this.tagName == this.tag">${ this.tagName }</x-tag>
+      ${ _("Filter by") }
+      <x-tag on:click="this.filterTag" value="" :selected="this.tag == ''">${ _("All") }</x-tag>
+      <x-tag :for="tagName in this.tags" on:click="this.filterTag" value="${ this.tagName }" :selected="this.tagName == this.tag">${ this.tagName }</x-tag>
     </section>
 
     <nav :if="${ this.clients.length }">
-      <h2 :if="${ !this.tag }">${ this.clients.length } clients</h2>
-      <h2 :if="${ this.tag }">${ this.clients.length } clients in group "${ this.tag }"</h2>
+      <h2 :if="${ !this.tag }">${ this.clients.length } ${ _("clients") }</h2>
+      <h2 :if="${ this.tag }">${ this.clients.length } ${ _("clients in group") } "${ this.tag }"</h2>
       <a :for="client in this.clients" href="/client/${ this.client.id }">
         <h3><x-icon figure=user></x-icon>${ this.client.name }</h3>
         <p :if="this.client.assignments.length && this.client.assignments.slice(-1)[0].status === 'completed'"><x-icon figure=file-invoice></x-icon>
-          Completed on ${(new Date(this.client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ this.client.assignments.length }
-          <span :if="${this.client.assignments.length == 1}">test</span>
-          <span :if="${this.client.assignments.length > 1}">tests</span>
+          ${ _("Completed on") } ${(new Date(this.client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ this.client.assignments.length }
+          <span :if="${this.client.assignments.length == 1}">${ _("test") }</span>
+          <span :if="${this.client.assignments.length > 1}">${ _("tests") }</span>
         </p>
         <p :if="this.client.assignments.length && this.client.assignments.slice(-1)[0].status === 'pending'"><x-icon figure=clock color=#F5BA01></x-icon>
-          Pending since ${(new Date(this.client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ this.client.assignments.length }
-          <span :if="${this.client.assignments.length == 1}">test</span>
-          <span :if="${this.client.assignments.length > 1}">tests</span>
+          ${ _("Pending since") } ${(new Date(this.client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ this.client.assignments.length }
+          <span :if="${this.client.assignments.length == 1}">${ _("test") }</span>
+          <span :if="${this.client.assignments.length > 1}">${ _("tests") }</span>
         </p>
         <p :if="!this.client.assignments.length">
-          No test yet
+          ${ _("No test yet") }
         </p>
         <div class=tags>
           <x-tag :for="tag in this.client.tags" on:click="this.filterTag" value="${ this.tag }">${ this.tag }</x-tag>
@@ -38,35 +38,35 @@
       </a>
     </nav>
     <div :if="${ !this.clients.length && !this.tags.length }">
-      <h2>Welcome to the TCI Site for Professionals!</h2>
+      <h2>${ _("Welcome to the TCI Site for Professionals!") }</h2>
 
-      <p>Assigning tests and getting results is simple; just follow these steps:</p>
+      <p>${ _("Assigning tests and getting results is simple; just follow these steps:") }</p>
       <ol>
-        <li><x-icon figure=credit-card></x-icon> Purchase credits.</li>
-        <li><x-icon figure=user-plus></x-icon> Add a client or clients.</li>
-        <li><x-icon figure=file-medical></x-icon> Assign the client a test.</li>
-        <li>Wait to receive an automatically generated email notification that your client has finished the test, and then you can access the results in their profile.</li>
+        <li><x-icon figure=credit-card></x-icon>${ _("Purchase credits") }.</li>
+        <li><x-icon figure=user-plus></x-icon>${ _("Add a client or clients") }.</li>
+        <li><x-icon figure=file-medical></x-icon>${ _("Assign the client a test") }.</li>
+        <li>${ _("Wait to receive an automatically generated email notification that your client has finished the test, and then you can access the results in their profile") }.</li>
       </ol>
-      <p>For more details, <a href=/help>visit the help section</a>.</p>
+      <p>${ _('For more details') }, <a href=/help>${ _('visit the help section') }</a>.</p>
     </div>
 
     <footer class="row toolbar">
-      <a href=/client class="button"><x-icon figure=user-plus></x-icon>Add a client</a>
+      <a href=/client class="button"><x-icon figure=user-plus></x-icon>${ _("Add a client") }</a>
     </footer>
   </async-block>
 
   <aside class=block>
-    <h1><x-icon figure=balance-scale></x-icon>Balance</h1>
-    <p><strong>${ this.user.credit }</strong> credits remaining</p>
+    <h1><x-icon figure=balance-scale></x-icon>${ _("Balance") }</h1>
+    <p><strong>${ this.user.credit }</strong> ${ _("credits remaining") }</p>
     <p class=row>
-      <span>Add</span>
+      <span>${ _("Add") }</span>
       <input name=quantity type=number on:input="this.addCredit" value=150>
-      <span>credits to my account.</span>
+      <span>${ _("credits to my account") }.</span>
     </p>
-    <stripe-button quantity="${ this.quantity || 150 }" class="button primary"><x-icon figure=credit-card></x-icon> Purchase</stripe-button>
+    <stripe-button quantity="${ this.quantity || 150 }" class="button primary"><x-icon figure=credit-card></x-icon> ${ _("Purchase") }</stripe-button>
 
     <details>
-      <summary>About the Credit System</summary>
+      <summary>${ _("About the Credit System") }</summary>
 
       <p>1 credit = $5 (or $4 when purchasing 150 credits or more)</p>
 

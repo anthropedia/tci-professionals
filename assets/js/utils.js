@@ -51,3 +51,8 @@ function notify(message, type = 'log') {
 function forceReload() {
   setTimeout(() => location.reload(), 1)
 }
+
+function _ (text) {
+  if (Object.keys(window.trans).includes(text)) return window.trans[text]
+  return text
+}

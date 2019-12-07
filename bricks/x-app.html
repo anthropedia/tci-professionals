@@ -5,12 +5,12 @@
     </a></h1>
     <div :if="this.user.name">
       <nav>
-        <a href="/" :active="${ this.page === 'dashboard' }">Dashboard</a>
-        <a href="/provider" :if="${ this.user.is_admin }" :active="${ this.page === 'providers' }">Providers</a>
-        <a href="/help" :active="${ this.page === 'help' }">Help</a>
+        <a href="/" :active="${ this.page === 'dashboard' }">${ _('Dashboard') }</a>
+        <a href="/provider" :if="${ this.user.is_admin }" :active="${ this.page === 'providers' }">${ _('Providers') }</a>
+        <a href="/help" :active="${ this.page === 'help' }">${ _('Help') }</a>
         <hr>
-        <a href="/profile" :active="${ this.page === 'profile' }">My Profile</a>
-        <a href="/logout">Logout</a>
+        <a href="/profile" :active="${ this.page === 'profile' }">${ _('My Profile') }</a>
+        <a href="/logout">${ _('Logout') }</a>
       </nav>
     </div>
   </header>
@@ -36,7 +36,7 @@
 <script>
   const user = {
     get defaults() {
-      return { name: '', email: '', is_admin: false, credit: 0, token: '', password: '' }
+      return { name: '', email: '', is_admin: false, credit: 0, token: '', password: '', language: 'en' }
     },
     get isAdmin() {
       return !!this.is_admin
@@ -107,6 +107,8 @@
         Object.assign(window.config, response.data)
       }
     }
+    const langResponse = await api(`/i18n/${this.state.user.language}/professionals`)
+    window.trans = langResponse.data
     page({ hashbang: true })
     this.render()
   }

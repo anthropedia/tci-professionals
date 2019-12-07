@@ -14,8 +14,8 @@
       locale: 'auto',
       token: async (token) => {
         const response = await api('/payment', { data: { token, quantity: this.state.quantity }})
-        if(!response.ok) notify("The payment could not be processed!", 'error')
-        notify("Your purchase was successfully completed!", 'success')
+        if(!response.ok) notify(_("The payment could not be processed!"), 'error')
+        notify(_("Your purchase was successfully completed!"), 'success')
         location.reload()  // TODO: refresh the user instead of hard reloading the page
       }
     })
@@ -25,7 +25,7 @@
     const unitPrice = this.state.quantity < config.credit_discount_volume ? config.credit_price : config.credit_discount_price
     this.handler.open({
       name: 'Anthropedia',
-      description: `${this.state.quantity} TCI credits`,
+      description: `${this.state.quantity} ${_('TCI credits')}`,
       amount: this.state.quantity * 100 * unitPrice
     })
   }
