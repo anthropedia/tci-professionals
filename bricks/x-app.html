@@ -107,7 +107,7 @@
         Object.assign(window.config, response.data)
       }
     }
-    const langResponse = await api(`/i18n/${this.state.user.language}/professionals`)
+    const langResponse = await api(`/i18n/${this.state.user.language || 'en'}/professionals`)
     window.trans = langResponse.data
     page({ hashbang: true })
     this.render()

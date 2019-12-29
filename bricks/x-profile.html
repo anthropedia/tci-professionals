@@ -1,27 +1,27 @@
 <template>
   <main class=block>
-    <h1><i class="fas fa-user-plus"></i> Edit Your Profile</h1>
+    <h1><i class="fas fa-user-plus"></i> ${ _("Edit Your Profile") }</h1>
     <form on:submit="this.save">
       <div class=row>
-        <label>Name</label>
-        <input name="name" value="${ user.name }" placeholder="Full name" required>
+        <label>${ _("Name") }</label>
+        <input name="name" value="${ user.name }" placeholder="${ _('Full name') }" required>
       </div>
       <div class=row>
-        <label>Email</label>
-        <input type="email" name="email" value="${ user.email }" placeholder="Email address" required>
+        <label>${ _("Email") }</label>
+        <input type="email" name="email" value="${ user.email }" placeholder="${ _('Email address') }" required>
       </div>
       <div class=row>
-        <label>Password</label>
+        <label>${ _("Password") }</label>
         <input type="password" name="password" value="">
       </div>
       <div class=row>
-        <label>Re-enter your password</label>
+        <label>${ _("Re-enter your password") }</label>
         <input type="password" name="password_bis" value="">
       </div>
 
       <div class=row>
-        <button class=primary>Save</button>
-        <button type=reset>Cancel</button>
+        <button class=primary>${ _("Save") }</button>
+        <button type=reset>${ _("Cancel") }</button>
       </div>
     </form>
   </main>
@@ -39,10 +39,10 @@
     const form = event.currentTarget
     const data = {}
     Array.from(form.elements).filter(e => e.name && e.value).forEach(e => data[e.name] = e.value)
-    if(data.password_bis !== data.password) return notify("Your 2 password must match!", 'error')
+    if(data.password_bis !== data.password) return notify(_("Your 2 password must match!"), 'error')
     const response = await api(`/user`, { data, method: 'PATCH' })
     if(response.ok) {
-      notify('Info saved', 'success')
+      notify(_('Info saved'), 'success')
       window.user.fromData(response.data)
       page('/')
     }
