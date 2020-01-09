@@ -56,3 +56,9 @@ function _ (text) {
   if (Object.keys(window.trans).includes(text)) return window.trans[text]
   return text
 }
+
+function validateConfig(config) {
+  const errors = []
+  if(!config.clients_url.includes('{key}')) errors.push(`the clients_url requires "{key}" in the url that is replaced by the client's key. Current value is ${config.clients_url}`)
+  errors.forEach(e => console.error(e))
+}

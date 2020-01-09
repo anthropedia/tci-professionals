@@ -104,6 +104,7 @@
       window.user = this.state.user
       if(user.isAuthenticated()) {
         const response = await api('/config')
+        validateConfig(response.data)
         Object.assign(window.config, response.data)
       }
     }
