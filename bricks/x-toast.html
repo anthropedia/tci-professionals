@@ -1,29 +1,32 @@
 <template type duration>
   <div class="${ this.type }">
     <span>${ this.message }</span>
-    <button if="${ this.type == 'error' }" on:click=this.close class=plain>
+    <button :if="this.type == 'error'" @click=close class=plain>
       ╳
     </button>
   </div>
 </template>
 
 <script>
-  this.duration = Number(this.state.duration) || 5000
-
-  this.show = (message, type) => {
-    this.classList.add('visible')
-    if (this.state.type !== 'error') this.autoClose()
-    this.render({ type, message })
+  init() {
+    this.duration = Number(this.state.duration) || 5000
   }
 
-  this.autoClose = () => {
+  show(message, type) {
+    this.classList.add('visible')
+    if (this.state.type !== 'error') this.autoClose()
+    this.state.type = type
+    this.state.message = message
+  }
+
+  autoClose() {
     if(this._latestTimeOut) clearTimeout(this._latestTimeOut)
     this._latestTimeOut = setTimeout(this.close, this.duration)
   }
 
-  this.close = () => {
+  close() {
     this.classList.remove('visible')
-    this.render() // ???
+    this.render()
   }
 </script>
 

@@ -2,32 +2,32 @@
 <div class=two-columns>
   <main class=block>
     <h1><x-icon figure=user-edit></x-icon>
-      <span :if="this.client.id">${ _("{client}'s Profile").replace('{client}', this.client.name) }</span>
-      <span :if="!this.client.id">${ _("Add a New Client") }</span>
+      <span :if="state.client.id">${ _("{client}'s Profile").replace('{client}', state.client.name) }</span>
+      <span :if="!state.client.id">${ _("Add a New Client") }</span>
     </h1>
-    <form on:submit="this.submit">
+    <form @submit="submit">
 
       <label>${ _("Full Name") }</label>
-      <input name=name placeholder="${ _('Full Name') }*" value="${ this.client.name }" required>
+      <input name=name placeholder="${ _('Full Name') }*" value="${ state.client.name }" required>
 
       <label>${ _("Email") }</label>
-      <input type=email name=email placeholder="${ _('Email') }" value="${ this.client.email }">
+      <input type=email name=email placeholder="${ _('Email') }" value="${ state.client.email }">
 
       <label>${ _("Gender") }</label>
       <select name=gender required>
-        <option value="m" :selected="${ this.client.gender == 'm' }">${ _("Male") }</option>
-        <option value="f" :selected="${ this.client.gender == 'f' }">${ _("Female") }</option>
-        <option value="tm" :selected="${ this.client.gender == 'tm' }">${ _("Trans-Male") }</option>
-        <option value="tf" :selected="${ this.client.gender == 'tf' }">${ _("Trans-Female") }</option>
-        <option value="to" :selected="${ this.client.gender == 'to' }">${ _("Genderqueer/Non-binary") }</option>
-        <option value="o" :selected="${ this.client.gender == 'o' }">${ _("Not listed/Other") }</option>
-        <option value="u" :selected="${ this.client.gender == 'u' }">${ _("Prefer not to say") }</option>
+        <option value="m" :selected="state.client.gender == 'm'">${ _("Male") }</option>
+        <option value="f" :selected="state.client.gender == 'f'">${ _("Female") }</option>
+        <option value="tm" :selected="state.client.gender == 'tm'">${ _("Trans-Male") }</option>
+        <option value="tf" :selected="state.client.gender == 'tf'">${ _("Trans-Female") }</option>
+        <option value="to" :selected="state.client.gender == 'to'">${ _("Genderqueer/Non-binary") }</option>
+        <option value="o" :selected="state.client.gender == 'o'">${ _("Not listed/Other") }</option>
+        <option value="u" :selected="state.client.gender == 'u'">${ _("Prefer not to say") }</option>
       </select>
       <small>${ _("Select the option that best describes your current gender identity") }.</small>
 
       <div>
         <label>${ _("Year of birth") }</label>
-        <input type=number name=birthyear value="${ this.client.birthyear || '1970' }" min="${ this.year - 100 }" max="${ this.year }" required>
+        <input type=number name=birthyear value="${ state.client.birthyear || '1970' }" min="${ state.year - 100 }" max="${ state.year }" required>
       </div>
 
       <fieldset>
@@ -36,9 +36,9 @@
           <label>${ _("Test Language") }</label>
           <div>
             <select name=language>
-              <option value=en :selected="${ this.client.language == 'en' }">${ _("English") }</option>
-              <option value=fr :selected="${ this.client.language == 'fr' }">${ _("French") }</option>
-              <option value=se :selected="${ this.client.language == 'se' }">${ _("Swedish") }</option>
+              <option value=en :selected="state.client.language == 'en'">${ _("English") }</option>
+              <option value=fr :selected="state.client.language == 'fr'">${ _("French") }</option>
+              <option value=se :selected="state.client.language == 'se'">${ _("Swedish") }</option>
             </select>
           </div>
         </div>
@@ -46,9 +46,9 @@
           <label>${ _("Test Country") }</label>
           <div>
             <select name=culture>
-              <option value=fr :selected="${ this.client.culture == 'fr' }">${ _("France") }</option>
-              <option value=se :selected="${ this.client.culture == 'se' }">${ _("Sweden") }</option>
-              <option value=us :selected="${ this.client.culture == 'us' }">${ _("United States") }</option>
+              <option value=fr :selected="state.client.culture == 'fr'">${ _("France") }</option>
+              <option value=se :selected="state.client.culture == 'se'">${ _("Sweden") }</option>
+              <option value=us :selected="state.client.culture == 'us'">${ _("United States") }</option>
             </select>
             <small>${ _("This field determines which norms are used to analyze the test results") }.</small>
           </div>
@@ -60,82 +60,79 @@
 
         <label>${ _("Groups (comma separated)") }</label>
         <div>
-          <input name=tags placeholder="${ _('Assigned groups (insert multiple tags, separate with a comma)') }'" value="${ this.client.tags.join(', ') }" list=tags-list>
-          <small if="${this.client.tags.length }">${ _("Your existing goups:") } ${ this.client.tags.join(', ') }</small>
+          <input name=tags placeholder="${ _('Assigned groups (insert multiple tags, separate with a comma)') }'" value="${ state.client.tags.join(', ') }" list=tags-list>
+          <small if="${state.client.tags.length }">${ _("Your existing goups:") } ${ state.client.tags.join(', ') }</small>
         </div>
         <label>${ _("Notes") }</label>
-        <textarea name=note placeholder="${ _('Extra information about the client or the sessions') }">${ this.client.note || '' }</textarea>
+        <textarea name=note placeholder="${ _('Extra information about the client or the sessions') }">${ state.client.note || '' }</textarea>
       </fieldset>
 
       <footer class=toolbar>
         <button class=primary>${ _("Save") }</button>
         <a href=/ class=button>${ _("Cancel") }</a>
         <div class="secondary">
-          <button type=button :if="this.client.id" on:click="this.delete" class="danger">${ _("Delete") }</delete>
+          <button type=button :if="state.client.id" @click="delete" class="danger">${ _("Delete") }</delete>
         </div>
       </footer>
     </form>
   </main>
 
-  <aside class="block" :if="this.client.id">
+  <aside class="block" :if="state.client.id">
     <h1><x-icon figure=file-medical-alt></x-icon>${ _("Assigned Tests") }</h1>
     <ul>
-      <li :for="assignment in this.assignments">
-        <div :if="this.assignment && this.assignment.status === 'pending'">
-          <span><x-icon figure=clock color=#F5BA01></x-icon>${ _("Pending since") } ${ date(this.assignment.creation_date) }</span>
+      <li :for="assignment in state.assignments">
+        <div :if="state.assignment && state.assignment.status === 'pending'">
+          <span><x-icon figure=clock color=#F5BA01></x-icon>${ _("Pending since") } ${ date(state.assignment.creation_date) }</span>
           <nav class=actions>
-            <a href="${ this.assignment.url }" title="${ _('Go to the test') }" target=_blank>
+            <a href="${ state.assignment.url }" title="${ _('Go to the test') }" target=_blank>
               <x-icon figure=file-signature></x-icon>
             </a>
-            <a :if="this.client.email" on:click="this.sendMail" href="#" title="${ _('Send the test to the client via email') }" id="${ this.assignment.id }">
+            <a :if="state.client.email" @click="sendMail" href="#" title="${ _('Send the test to the client via email') }" id="${ state.assignment.id }">
               <x-icon figure=envelope></x-icon>
             </a>
-            <x-icon figure=trash on:click="this.removeAssignement" value="${ this.assignment.id }" title="${ _('Unassign this test from the client') }"></x-icon>
+            <x-icon figure=trash @click="removeAssignement" value="${ state.assignment.id }" title="${ _('Unassign this test from the client') }"></x-icon>
           </nav>
         </div>
-        <div :if="this.assignment && this.assignment.status === 'completed'">
-          <span><x-icon figure=file-invoice></x-icon>${ _("completed on") } ${ date(this.assignment.completion_date) }</span>
+        <div :if="state.assignment && state.assignment.status === 'completed'">
+          <span><x-icon figure=file-invoice></x-icon>${ _("completed on") } ${ date(state.assignment.completion_date) }</span>
           <nav class=actions>
-            <a class=score href="${config.api_url}/${ this.client.language }/assignment/${ this.assignment.id }/score/1d.pdf" target=_blank title="${ _('Download results in 1D') }">1D</a>
-            <a class=score href="${config.api_url}/${ this.client.language }/assignment/${ this.assignment.id }/score/2d.pdf" target=_blank title="${ _('Download results in 2D') }">2D</a>
-            <a class=score href="${config.api_url}/${ this.client.language }/assignment/${ this.assignment.id }/score/3d.pdf" target=_blank title="${ _('Download results in 3D') }">3D</a>
+            <a class=score href="${config.api_url}/${ state.client.language }/assignment/${ state.assignment.id }/score/1d.pdf" target=_blank title="${ _('Download results in 1D') }">1D</a>
+            <a class=score href="${config.api_url}/${ state.client.language }/assignment/${ state.assignment.id }/score/2d.pdf" target=_blank title="${ _('Download results in 2D') }">2D</a>
+            <a class=score href="${config.api_url}/${ state.client.language }/assignment/${ state.assignment.id }/score/3d.pdf" target=_blank title="${ _('Download results in 3D') }">3D</a>
             <hr>
-            <a class=score on:click="this.scoreOrPurchase" :disabled="${ !this.assignment.options.includes('3d-plus') }" version="3d-plus" assignmentid="${ this.assignment.id }" href="${config.api_url}/${ this.client.language }/assignment/${ this.assignment.id }/score/3d-plus.pdf" target=_blank title="Download results in 3D+">3D+</a>
-            <a class=score on:click="this.scoreOrPurchase" :disabled="${ !this.assignment.options.includes('unity-separateness') }" version="unity-separateness" assignmentid="${ this.assignment.id }" href="${config.api_url}/${ this.client.language }/assignment/${ this.assignment.id }/score/unity-separateness.pdf" target=_blank title="${ _('Download results for Unity and Separateness') }">U/S</a>
+            <a class=score @click="scoreOrPurchase" :disabled="!state.assignment.options.includes('3d-plus')" version="3d-plus" assignmentid="${ state.assignment.id }" href="${config.api_url}/${ state.client.language }/assignment/${ state.assignment.id }/score/3d-plus.pdf" target=_blank title="Download results in 3D+">3D+</a>
+            <a class=score @click="scoreOrPurchase" :disabled="!state.assignment.options.includes('unity-separateness')" version="unity-separateness" :assignmentid="state.assignment.id" href="${config.api_url}/${ state.client.language }/assignment/${ state.assignment.id }/score/unity-separateness.pdf" target=_blank :title="_('Download results for Unity and Separateness')">U/S</a>
           </nav>
-          <div :if="{ this.assignmentId == this.assignment.id }" class="purchase row">
-            <button class=primary on:click="this.purchase">${ _("Purchase this") } ${ this.assignmentVersion } score</button>
-            <button on:click="this.cancelPurchase">${ ("Cancel") }</button>
+          <div :if="state.assignmentId == state.assignment.id" class="purchase row">
+            <button class=primary @click="purchase">${ _("Purchase this") } ${ state.assignmentVersion } score</button>
+            <button @click="cancelPurchase">${ ("Cancel") }</button>
           </div>
         </div>
       </li>
     </ul>
-    <button class=primary on:click="this.assign"><x-icon figure=file-medical></x-icon>${ _("Assign a New Test") }</button>
-    <p :if="${ user.credit < 3 }">${ _("You need at least 3 credits to assign a new test") }. <a href=/>${ ("Purchase credits") }</a></p>
+    <button class=primary @click="assign"><x-icon figure=file-medical></x-icon>${ _("Assign a New Test") }</button>
+    <p :if="user.credit < 3">${ _("You need at least 3 credits to assign a new test") }. <a href=/>${ ("Purchase credits") }</a></p>
   </aside>
 
 </div>
 </template>
 
 <script>
-  const defaults = {
-    id: null,
-    client: { tags: [], assignments: [] },
-    assignments: [],
-    assignmentVersion: '',
-    purchaseId: null,
-    year: (new Date()).getFullYear(),
-  }
-  this.setState(defaults)
+  async init() {
+    const defaults = {
+      id: null,
+      client: { tags: [], assignments: [] },
+      assignments: [],
+      assignmentVersion: '',
+      purchaseId: null,
+      year: (new Date()).getFullYear(),
+    }
+    this.state = defaults
 
-  function assignmentsFromResponse (assignments) {
-    return assignments.reverse().map(assignment => {
-      assignment.url = config.clients_url.replace('{key}', assignment.key)
-      return assignment
-    })
+    await loadData()
   }
 
-  this.connected = async () => {
+  async loadData() {
     if(this.state.id) {
       const response = await api(`/client/${this.state.id}`)
       if(response.data) {
@@ -143,17 +140,23 @@
         this.state.assignments = assignmentsFromResponse(this.state.client.assignments)
       }
     }
-    this.render()
   }
 
-  this.scoreOrPurchase = (event) => {
+  assignmentsFromResponse (assignments) {
+    return assignments.reverse().map(assignment => {
+      assignment.url = config.clients_url.replace('{key}', assignment.key)
+      return assignment
+    })
+  }
+
+  scoreOrPurchase (event) {
     const button = event.target
     if(!button.hasAttribute('disabled')) return
     event.preventDefault()
     this.render({ assignmentVersion: button.getAttribute('version'), assignmentId: button.getAttribute('assignmentid') })
   }
 
-  this.purchase = async () => {
+  async purchase () {
     const response = await api(`/assignment/${this.state.assignmentId}/purchase`,
     { data: { version: this.state.assignmentVersion }} )
     if(response.ok) {
@@ -165,19 +168,20 @@
     else notify(response.data, 'error')
   }
 
-  this.cancelPurchase = () => {
-    this.render({ assignmentId: null, assignmentVersion: '' })
+  cancelPurchase () {
+    this.state.assignmentId = null
+    this.state.assignmentVersion = ''
   }
 
-  this.assign = async () => {
+  async assign() {
     const response = await api(`/client/${this.state.id}/assignment`, { method: 'post' })
     if (response.data) {
-      this.render({ assignments: assignmentsFromResponse(response.data.assignments) })
+      this.state.assignments = assignmentsFromResponse(response.data.assignments)
       notify(_('A new assignment is available for this client'), 'success')
     }
   }
 
-  this.sendMail = (event) => {
+  sendMail(event) {
     const link = event.currentTarget
     const assignment = this.state.assignments.find(a => a.id === link.id)
     const body = `Here is a link for you to access the TCI: ${assignment.url}
@@ -194,14 +198,13 @@ Enjoy!`
   }
 
   // pass component scope to function
-  const component = this
-  this.removeAssignement = async function (event) {
+  async removeAssignement(event) {
     if(!confirm('Are your sure you want to remove this assignment?')) return
     const response = await api(`/assignment/${this.getAttribute('value')}`, { method: 'delete' })
-    component.render({ assignments: response.data.assignments.reverse() })
+    this.state.assignments = response.data.assignments.reverse()
   }
 
-  this.submit = async (event) => {
+  async submit(event) {
     event.preventDefault()
     const client = this.state.client
     const form = event.currentTarget
@@ -218,7 +221,7 @@ Enjoy!`
     page('/')
   }
 
-  this.delete = async () => {
+  async delete () {
     if(!confirm(_("Are you sure you want to delete this client and all his data?"))) return
     const response = await api(`/client/${ this.state.client.id }`, { method: 'delete' })
     if(!response.ok) return notify(_("An error occured. This contact could not be deleted!"), 'error')

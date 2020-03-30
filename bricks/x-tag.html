@@ -1,10 +1,12 @@
-<template disabled="true">
+<template>
   <a><slot></slot></a>
 </template>
 
 <script>
-  const value = this.textContent
-  this.state.filter = this.state.active ? '' : `?tag=${ this.textContent }`;
+  init() {
+    const value = this.textContent
+    this.state.filter = this.state.active ? '' : `?tag=${ this.textContent }`
+  }
 </script>
 
 <style>
