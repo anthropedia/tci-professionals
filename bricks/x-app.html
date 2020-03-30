@@ -3,28 +3,28 @@
     <h1 id=logo><a href="/">
       <img src=https://assets.tci.anthropedia.org/images/anthropedia.svg alt="Anthropedia Foundation">
     </a></h1>
-    <div :if="this.user.name">
+    <div :if="state.user.name">
       <nav>
-        <a href="/" :active="${ this.page === 'dashboard' }">${ _('Dashboard') }</a>
-        <a href="/provider" :if="${ this.user.is_admin }" :active="${ this.page === 'providers' }">${ _('Providers') }</a>
-        <a href="/help" :active="${ this.page === 'help' }">${ _('Help') }</a>
+        <a href="/" :active="state.page === 'dashboard'">${ _('Dashboard') }</a>
+        <a href="/provider" :if="state.user.is_admin" :active="state.page === 'providers'">${ _('Providers') }</a>
+        <a href="/help" :active="state.page === 'help'">${ _('Help') }</a>
         <hr>
-        <a href="/profile" :active="${ this.page === 'profile' }">${ _('My Profile') }</a>
+        <a href="/profile" :active="state.page === 'profile'">${ _('My Profile') }</a>
         <a href="/logout">${ _('Logout') }</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <x-login :if="this.page === 'login'" user="${ this.user }"></x-login>
-    <x-dashboard :if="this.page === 'dashboard'" user="${ this.user }"></x-dashboard>
-    <client-edit :if="this.page === 'client-edit'" id="${ this.clientId }"></client-edit>
-    <x-profile :if="this.page === 'profile'"></x-profile>
-    <x-help :if="this.page === 'help'"></x-help>
-    <error-404 :if="this.page === 'error'"></error-404>
+    <x-login :if="state.page === 'login'" user="state.user"></x-login>
+    <x-dashboard :if="state.page === 'dashboard'" user="state.user"></x-dashboard>
+    <client-edit :if="state.page === 'client-edit'" id="state.clientId"></client-edit>
+    <x-profile :if="state.page === 'profile'"></x-profile>
+    <x-help :if="state.page === 'help'"></x-help>
+    <error-404 :if="state.page === 'error'"></error-404>
 
-    <admin-dashboard :if="this.page === 'providers'"></admin-dashboard>
-    <provider-edit :if="this.page === 'provider-edit'" id="${ this.providerId }"></provider-edit>
+    <admin-dashboard :if="state.page === 'providers'"></admin-dashboard>
+    <provider-edit :if="state.page === 'provider-edit'" id="state.providerId"></provider-edit>
   </main>
 
   <footer>
@@ -34,70 +34,67 @@
 </template>
 
 <script>
-  const user = {
-    get defaults() {
-      return { name: '', email: '', is_admin: false, credit: 0, token: '', password: '', language: 'en' }
-    },
-    get isAdmin() {
-      return !!this.is_admin
-    },
-    isAuthenticated() {
-      return !!this.token
-    },
-    fromData(data) {
-      Object.assign(this, data)
-    },
-    async authenticate(token) {
-      localStorage.setItem('token', token)
-      const response = await api('/user')
-      if(!response.ok) {
+  async init() {
+    const user = {
+      get defaults() {
+        return { name: '', email: '', is_admin: false, credit: 0, token: '', password: '', language: 'en' }
+      },
+      get isAdmin() {
+        return !!this.is_admin
+      },
+      isAuthenticated() {
+        return !!this.token
+      },
+      fromData(data) {
+        Object.assign(this, data)
+      },
+      async authenticate(token) {
+        localStorage.setItem('token', token)
+        const response = await api('/user')
+        if(!response.ok) {
+          localStorage.removeItem('token')
+          return false
+        }
+        this.token = token
+        return this.fromData(response.data)
+      },
+      revoke() {
         localStorage.removeItem('token')
-        return false
+        return this.fromData(this.defaults)
       }
-      this.token = token
-      return this.fromData(response.data)
-    },
-    revoke() {
-      localStorage.removeItem('token')
-      return this.fromData(this.defaults)
     }
-  }
 
-  this.setState({
-    page: '',
-    clientId: '',
-    providerId: '',
-    user,
-    tag: '',
-    config: '',
-    I: null,
-  })
+    this.state = {
+      page: '',
+      clientId: '',
+      providerId: '',
+      user,
+      tag: '',
+      config: '',
+    }
 
-  this.authRequired = (ctx, next) => {
-    if (!this.state.user.isAuthenticated()) return page('/login')
-    next()
-  }
+    page('/', this.authRequired.bind(this), () => this.state.page = 'dashboard')
+    page('/login', () => this.state.page = 'login')
+    page('/help', () => this.state.page = 'help')
+    page('/logout', () => { this.state.user.revoke(); page.redirect('/')})
+    page('/profile', this.authRequired.bind(this), () => this.state.page = 'profile')
+    page('/client', this.authRequired.bind(this), () => {
+      this.state.page = 'client-edit'
+      this.state.clientId = ''
+    })
+    page('/client/:id', this.authRequired.bind(this), (req) => {
+      this.state.page = 'client-edit'
+      this.state.clientId = req.params.id
+    })
 
-  this.adminRequired = (ctx, next) => {
-    if (!this.state.user.isAdmin) return page('/')
-    next()
-  }
+    page('/provider', this.adminRequired, () => this.state.page = 'providers')
+    page('/provider/:id', this.adminRequired, (req) => {
+      this.state.page = 'provider-edit'
+      this.state.providerId = req.params.id
+    })
 
-  page('/', this.authRequired, () => this.render({ page: 'dashboard' }))
-  page('/login', () => this.render({ page: 'login' }))
-  page('/help', () => this.render({ page: 'help' }))
-  page('/logout', () => { this.state.user.revoke(); page.redirect('/') })
-  page('/profile', this.authRequired, () => this.render({ page: 'profile' }))
-  page('/client', this.authRequired, () => this.render({ page: 'client-edit', clientId: '' }))
-  page('/client/:id', this.authRequired, (req) => this.render({ page: 'client-edit', clientId: req.params.id }))
+    page('*', () => this.state.page = 'error')
 
-  page('/provider', this.adminRequired, () => this.render({ page: 'providers' }))
-  page('/provider/:id', this.adminRequired, (req) => this.render({ page: 'provider-edit', providerId: req.params.id }))
-
-  page('*', () => this.state.page = 'error')
-
-
-  this.connected = async () => {
     const token = localStorage.getItem('token')
     if(token) {
       await this.state.user.authenticate(token)
@@ -111,7 +108,16 @@
     const langResponse = await api(`/i18n/${this.state.user.language || 'en'}/professionals`)
     window.trans = langResponse.data
     page({ hashbang: true })
-    this.render()
+  }
+
+  authRequired(ctx, next) {
+    if (!this.state.user.isAuthenticated()) return page('/login')
+    next()
+  }
+
+  adminRequired (ctx, next) {
+    if (!this.state.user.isAdmin) return page('/')
+    next()
   }
 </script>
 

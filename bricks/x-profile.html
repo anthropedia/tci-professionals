@@ -1,14 +1,14 @@
 <template>
   <main class=block>
     <h1><i class="fas fa-user-plus"></i> ${ _("Edit Your Profile") }</h1>
-    <form on:submit="this.save">
+    <form @submit="save">
       <div class=row>
         <label>${ _("Name") }</label>
-        <input name="name" value="${ user.name }" placeholder="${ _('Full name') }" required>
+        <input name="name" :value="user.name" placeholder="${ _('Full name') }" required>
       </div>
       <div class=row>
         <label>${ _("Email") }</label>
-        <input type="email" name="email" value="${ user.email }" placeholder="${ _('Email address') }" required>
+        <input type="email" name="email" :value="user.email" :placeholder="_('Email address')" required>
       </div>
       <div class=row>
         <label>${ _("Password") }</label>
@@ -28,13 +28,7 @@
 </template>
 
 <script>
-  this.setState({})
-
-  this.connected = async () => {
-    this.render()
-  }
-
-  this.save = async (event) => {
+  async save(event) {
     event.preventDefault()
     const form = event.currentTarget
     const data = {}

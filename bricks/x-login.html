@@ -1,22 +1,24 @@
 <template user>
   <main class=block>
-    <form on:submit="this.login">
+    <form @submit="login">
       <input type=email name=email required class=row placeholder="Sign in with your email">
       <input type=password name=password required class=row placeholder="Password">
-      <button type=button class=reset on:click="this.resetPassword">Forgot your password? Receive a new password via email.</button>
+      <button type=button class=reset @click="resetPassword">Forgot your password? Receive a new password via email.</button>
       <button class=primary>Login</login>
     </form>
   </main>
 </template>
 
 <script>
-  this.setState({ user: {} })
+  init(){
+    this.state = { user: {} }
+  }
 
-  this.login = async (event) => {
+  async login(event) {
     event.preventDefault()
     const data = {
-      email: this.root.querySelector('[name=email]').value,
-      password: this.root.querySelector('[name=password]').value
+      email: this.document.querySelector('[name=email]').value,
+      password: this.document.querySelector('[name=password]').value
     }
     const response = await api('/token', { data })
     if (!response.ok) return notify("Check your email and password", 'error')
@@ -24,8 +26,8 @@
     page('/')
   }
 
-  this.resetPassword = async () => {
-    const email = this.root.querySelector('[name=email]').value
+  async resetPassword() {
+    const email = this.document.querySelector('[name=email]').value
     if(!email) return notify("Insert your email", 'warning')
     const response = await api('/reset-password', { data: { email } })
     if(response.ok) return notify("Check your mailbox", 'success')

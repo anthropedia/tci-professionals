@@ -47,7 +47,7 @@
     return request(`${config.api_url}${uri}`, options)
   }
   const bricks = document.createElement('script')
-  bricks.src = `dist/bricks.js?${Math.random()}`
+  bricks.src = `dist/index.js?${Math.random()}`
   bricks.type = 'module'
   document.head.append(bricks)
 </script>

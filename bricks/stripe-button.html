@@ -3,11 +3,11 @@
 </template>
 
 <script>
-  this.setState({
+  init() {
+    this.state = {
     quantity: 1
-  })
+    }
 
-  this.connected = () => {
     this.handler = StripeCheckout.configure({
       key: config.stripe_public_key,
       image: '',
@@ -21,7 +21,7 @@
     })
   }
 
-  this.showPayment = () => {
+  showPayment() {
     const unitPrice = this.state.quantity < config.credit_discount_volume ? config.credit_price : config.credit_discount_price
     this.handler.open({
       name: 'Anthropedia',

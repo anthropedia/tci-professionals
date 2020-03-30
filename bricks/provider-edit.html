@@ -6,23 +6,23 @@
         <legend>General Information</legend>
         <div class=row>
           <label>Name</label>
-          <input name="name" value="${ this.provider.name }" placeholder="Full name" required>
+          <input name="name" :value="this.provider.name" placeholder="Full name" required>
         </div>
         <div class=row>
           <label>Email</label>
-          <input type="email" name="email" value="${ this.provider.email }" placeholder="Email address" required>
+          <input type="email" name="email" :value="this.provider.email" placeholder="Email address" required>
         </div>
         <div class=row>
           <label>Language</label>
           <select name=language required>
-            <option value=en :selected="${ this.provider.language == 'en' }">English</option>
-            <option value=fr :selected="${ this.provider.language == 'fr' }">French</option>
-            <option value=se :selected="${ this.provider.language == 'se' }">Swedish</option>
+            <option value=en :selected="this.provider.language == 'en'">English</option>
+            <option value=fr :selected="this.provider.language == 'fr'">French</option>
+            <option value=se :selected="this.provider.language == 'se'">Swedish</option>
           </select>
         </div>
         <div class=row>
           <label>Remaining Credits</label>
-          <input type="number" name="credit" value="${ this.provider.credit || '0' }" placeholder="Enter an amount of credits" required>
+          <input type="number" name="credit" :value="this.provider.credit || '0'" placeholder="Enter an amount of credits" required>
         </div>
       </fieldset>
 
@@ -35,20 +35,21 @@
 </template>
 
 <script>
-  this.setState({
-    provider: {},
-    id: '',
-  })
+  init() {
+    this.state = {
+      provider: {},
+      id: '',
+    }
+  }
 
-  this.connected = async () => {
+  async connected() {
     // Quick hack to force the id to be there
     if(!this.state.id) forceReload()
     const response = await api(`/provider/${this.state.id}`)
     if (response.ok) this.state.provider = response.data
-    this.render()
   }
 
-  this.save = async (event) => {
+  async save(event) {
     event.preventDefault()
     const form = event.currentTarget
     const data = {}
