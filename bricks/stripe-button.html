@@ -1,11 +1,11 @@
 <template quantity=0>
-  <slot on:click="this.showPayment"></slot>
+  <slot @click="showPayment"></slot>
 </template>
 
 <script>
   init() {
     this.state = {
-    quantity: 1
+      quantity: 1
     }
 
     this.handler = StripeCheckout.configure({

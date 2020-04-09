@@ -3,14 +3,14 @@
     <main class=block>
       <h1><i class="fas fa-users"></i> Existing Providers</h1>
       <ul>
-        <li :for="provider in this.providers">
-          ${ state.provider.name } (${ state.provider.email }) – ${ state.provider.credit } credits <a class=button href="/provider/${ state.provider.id }">Edit</a>
+        <li :for="provider in state.providers">
+          ${ provider.name } (${ provider.email }) – ${ provider.credit } credits <a class=button href="/provider/${ provider.id }">Edit</a>
         </li>
       </ul>
     </main>
 
     <aside class=block>
-      <form on:submit="this.submit">
+      <form @submit="submit">
         <h1><i class="fas fa-user-plus"></i> Create a New Provider</h1>
         <fieldset>
           <legend>General Information</legend>
@@ -37,7 +37,7 @@
     const response = await api('/provider', { data })
     if(!response.ok) return notify(response.data, 'error')
     notify("Provider created!", 'success')
-    page()
+    forceReload()
   }
 
   async connected() {

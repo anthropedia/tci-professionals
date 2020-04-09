@@ -16,15 +16,15 @@
   </header>
 
   <main>
-    <x-login :if="state.page === 'login'" user="state.user"></x-login>
-    <x-dashboard :if="state.page === 'dashboard'" user="state.user"></x-dashboard>
-    <client-edit :if="state.page === 'client-edit'" id="state.clientId"></client-edit>
+    <x-login :if="state.page === 'login'" :user="state.user"></x-login>
+    <x-dashboard :if="state.page === 'dashboard'" :user="state.user"></x-dashboard>
+    <client-edit :if="state.page === 'client-edit'" :id="state.clientId"></client-edit>
     <x-profile :if="state.page === 'profile'"></x-profile>
     <x-help :if="state.page === 'help'"></x-help>
     <error-404 :if="state.page === 'error'"></error-404>
 
     <admin-dashboard :if="state.page === 'providers'"></admin-dashboard>
-    <provider-edit :if="state.page === 'provider-edit'" id="state.providerId"></provider-edit>
+    <provider-edit :if="state.page === 'provider-edit'" :id="state.providerId"></provider-edit>
   </main>
 
   <footer>
@@ -79,18 +79,18 @@
     page('/logout', () => { this.state.user.revoke(); page.redirect('/')})
     page('/profile', this.authRequired.bind(this), () => this.state.page = 'profile')
     page('/client', this.authRequired.bind(this), () => {
-      this.state.page = 'client-edit'
       this.state.clientId = ''
+      this.state.page = 'client-edit'
     })
     page('/client/:id', this.authRequired.bind(this), (req) => {
       this.state.page = 'client-edit'
       this.state.clientId = req.params.id
     })
 
-    page('/provider', this.adminRequired, () => this.state.page = 'providers')
-    page('/provider/:id', this.adminRequired, (req) => {
-      this.state.page = 'provider-edit'
+    page('/provider', this.adminRequired.bind(this), () => this.state.page = 'providers')
+    page('/provider/:id', this.adminRequired.bind(this), (req) => {
       this.state.providerId = req.params.id
+      this.state.page = 'provider-edit'
     })
 
     page('*', () => this.state.page = 'error')

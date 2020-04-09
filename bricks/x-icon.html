@@ -1,10 +1,19 @@
 <template figure color category>
-  <i class="fa fa-${ this.figure }" style="color: ${ this.color }"></i>
+  <i class="fa fa-${ state.figure }" style="color: ${ state.color }"></i>
 </template>
+
+<script>
+  init() {
+    this.state = {
+      figure: '',
+      color: '',
+    }
+  }
+</script>
 
 <style>
   @import url(/assets/css/main.css);
-  :host {
-    margin-right: .2rem;
+  root {
+    margin: 0 .2rem;
   }
 </style>

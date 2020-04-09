@@ -6,7 +6,7 @@
   "scripts": {
     "start": "concurrently 'npm run watch' 'live-server --no-browser'",
     "watch": "npm run build -- -w",
-    "build": "lego bricks/ dist/",
+    "build": "lego bricks dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,9 +16,7 @@
   "author": "Vincent Agnano",
   "license": "ISC",
   "dependencies": {
-    "@polight/brick": "file:../../lego/brick",
-    "@polight/lego": "file:../../lego/src",
-    "petit-dom": "*"
+    "@polight/lego": "^1.0.0"
   },
   "devDependencies": {
     "concurrently": "*",
