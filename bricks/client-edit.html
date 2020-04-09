@@ -1,6 +1,6 @@
-<template id>
+<template>
 <div class=two-columns>
-  <main class=block>
+  <async-block :loaded="state.loaded" class=block>
     <h1><x-icon figure=user-edit></x-icon>
       <span :if="state.client.id">${ _("{client}'s Profile").replace('{client}', state.client.name) }</span>
       <span :if="!state.client.id">${ _("Add a New Client") }</span>
@@ -8,10 +8,10 @@
     <form @submit="submit">
 
       <label>${ _("Full Name") }</label>
-      <input name=name placeholder="${ _('Full Name') }*" value="${ state.client.name }" required>
+      <input name=name placeholder="${ _('Full Name') }*" :value="state.client.name" required>
 
       <label>${ _("Email") }</label>
-      <input type=email name=email placeholder="${ _('Email') }" value="${ state.client.email }">
+      <input type=email name=email :placeholder="_('Email')" :value="state.client.email">
 
       <label>${ _("Gender") }</label>
       <select name=gender required>
@@ -61,7 +61,7 @@
         <label>${ _("Groups (comma separated)") }</label>
         <div>
           <input name=tags placeholder="${ _('Assigned groups (insert multiple tags, separate with a comma)') }'" value="${ state.client.tags.join(', ') }" list=tags-list>
-          <small if="${state.client.tags.length }">${ _("Your existing goups:") } ${ state.client.tags.join(', ') }</small>
+          <small if="${state.client.tags.length }">${ _("Your existing groups:") } ${ state.client.tags.join(', ') }</small>
         </div>
         <label>${ _("Notes") }</label>
         <textarea name=note placeholder="${ _('Extra information about the client or the sessions') }">${ state.client.note || '' }</textarea>
@@ -75,35 +75,35 @@
         </div>
       </footer>
     </form>
-  </main>
+  </async-block>
 
   <aside class="block" :if="state.client.id">
     <h1><x-icon figure=file-medical-alt></x-icon>${ _("Assigned Tests") }</h1>
     <ul>
       <li :for="assignment in state.assignments">
-        <div :if="state.assignment && state.assignment.status === 'pending'">
-          <span><x-icon figure=clock color=#F5BA01></x-icon>${ _("Pending since") } ${ date(state.assignment.creation_date) }</span>
+        <div :if="assignment.status === 'pending'">
+          <span><x-icon figure=clock color=#F5BA01></x-icon>${ _("Pending since") } ${ date(assignment.creation_date) }</span>
           <nav class=actions>
-            <a href="${ state.assignment.url }" title="${ _('Go to the test') }" target=_blank>
+            <a href="${ assignment.url }" title="${ _('Go to the test') }" target=_blank>
               <x-icon figure=file-signature></x-icon>
             </a>
-            <a :if="state.client.email" @click="sendMail" href="#" title="${ _('Send the test to the client via email') }" id="${ state.assignment.id }">
+            <a :if="state.client.email" @click="sendMail" href="#" title="${ _('Send the test to the client via email') }" id="${ assignment.id }">
               <x-icon figure=envelope></x-icon>
             </a>
-            <x-icon figure=trash @click="removeAssignement" value="${ state.assignment.id }" title="${ _('Unassign this test from the client') }"></x-icon>
+            <x-icon figure=trash @click="removeAssignment" :value="assignment.id" title="${ _('Unassign this test from the client') }"></x-icon>
           </nav>
         </div>
-        <div :if="state.assignment && state.assignment.status === 'completed'">
-          <span><x-icon figure=file-invoice></x-icon>${ _("completed on") } ${ date(state.assignment.completion_date) }</span>
+        <div :if="assignment.status === 'completed'">
+          <span><x-icon figure=file-invoice></x-icon>${ _("completed on") } ${ date(assignment.completion_date) }</span>
           <nav class=actions>
-            <a class=score href="${config.api_url}/${ state.client.language }/assignment/${ state.assignment.id }/score/1d.pdf" target=_blank title="${ _('Download results in 1D') }">1D</a>
-            <a class=score href="${config.api_url}/${ state.client.language }/assignment/${ state.assignment.id }/score/2d.pdf" target=_blank title="${ _('Download results in 2D') }">2D</a>
-            <a class=score href="${config.api_url}/${ state.client.language }/assignment/${ state.assignment.id }/score/3d.pdf" target=_blank title="${ _('Download results in 3D') }">3D</a>
+            <a class=score href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/1d.pdf" target=_blank title="${ _('Download results in 1D') }">1D</a>
+            <a class=score href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/2d.pdf" target=_blank title="${ _('Download results in 2D') }">2D</a>
+            <a class=score href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/3d.pdf" target=_blank title="${ _('Download results in 3D') }">3D</a>
             <hr>
-            <a class=score @click="scoreOrPurchase" :disabled="!state.assignment.options.includes('3d-plus')" version="3d-plus" assignmentid="${ state.assignment.id }" href="${config.api_url}/${ state.client.language }/assignment/${ state.assignment.id }/score/3d-plus.pdf" target=_blank title="Download results in 3D+">3D+</a>
-            <a class=score @click="scoreOrPurchase" :disabled="!state.assignment.options.includes('unity-separateness')" version="unity-separateness" :assignmentid="state.assignment.id" href="${config.api_url}/${ state.client.language }/assignment/${ state.assignment.id }/score/unity-separateness.pdf" target=_blank :title="_('Download results for Unity and Separateness')">U/S</a>
+            <a class=score @click="scoreOrPurchase" :disabled="assignment.options.includes('3d-plus')" version="3d-plus" assignmentid="${ assignment.id }" href="${config.api_url}/${ state.client.language }/assignment/${assignment.id }/score/3d-plus.pdf" target=_blank title="Download results in 3D+">3D+</a>
+            <a class=score @click="scoreOrPurchase" :disabled="assignment.options.includes('unity-separateness')" version="unity-separateness" :assignmentid="assignment.id" href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/unity-separateness.pdf" target=_blank :title="_('Download results for Unity and Separateness')">U/S</a>
           </nav>
-          <div :if="state.assignmentId == state.assignment.id" class="purchase row">
+          <div :if="state.assignmentId == assignment.id" class="purchase row">
             <button class=primary @click="purchase">${ _("Purchase this") } ${ state.assignmentVersion } score</button>
             <button @click="cancelPurchase">${ ("Cancel") }</button>
           </div>
@@ -121,6 +121,7 @@
   async init() {
     const defaults = {
       id: null,
+      loaded: false,
       client: { tags: [], assignments: [] },
       assignments: [],
       assignmentVersion: '',
@@ -128,8 +129,10 @@
       year: (new Date()).getFullYear(),
     }
     this.state = defaults
+  }
 
-    await loadData()
+  async connected() {
+    await this.loadData()
   }
 
   async loadData() {
@@ -137,13 +140,20 @@
       const response = await api(`/client/${this.state.id}`)
       if(response.data) {
         this.state.client = response.data
-        this.state.assignments = assignmentsFromResponse(this.state.client.assignments)
+        this.state.assignments = this.assignmentsFromResponse(this.state.client.assignments)
+        this.state.loaded = true
       }
     }
+    else this.state.loaded = true  // new client
+  }
+
+  async __update() {
+    if(this.state.id && !this.state.client.id) await this.loadData()
+    super.__update()
   }
 
   assignmentsFromResponse (assignments) {
-    return assignments.reverse().map(assignment => {
+    return assignments && assignments.reverse().map(assignment => {
       assignment.url = config.clients_url.replace('{key}', assignment.key)
       return assignment
     })
@@ -175,10 +185,9 @@
 
   async assign() {
     const response = await api(`/client/${this.state.id}/assignment`, { method: 'post' })
-    if (response.data) {
-      this.state.assignments = assignmentsFromResponse(response.data.assignments)
-      notify(_('A new assignment is available for this client'), 'success')
-    }
+    if (!response.ok) return notify(response, 'error')
+    this.state.assignments = this.assignmentsFromResponse(response.data.assignments)
+    return notify(_('A new assignment is available for this client'), 'success', 'success')
   }
 
   sendMail(event) {
@@ -200,9 +209,12 @@ Enjoy!`
   }
 
   // pass component scope to function
-  async removeAssignement(event) {
+  async removeAssignment(event) {
     if(!confirm('Are your sure you want to remove this assignment?')) return
-    const response = await api(`/assignment/${this.getAttribute('value')}`, { method: 'delete' })
+    const response = await api(`/assignment/${event.target.value}`, { method: 'delete' })
+    if(!response.ok) {
+      return notify('error', response)
+    }
     this.state.assignments = response.data.assignments.reverse()
   }
 

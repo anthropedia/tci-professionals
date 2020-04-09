@@ -1,7 +1,7 @@
 <template type duration>
-  <div class="${ this.type }">
-    <span>${ this.message }</span>
-    <button :if="this.type == 'error'" @click=close class=plain>
+  <div class="${ state.type }">
+    <span>${ state.message }</span>
+    <button :if="state.type == 'error'" @click=close class=plain>
       ╳
     </button>
   </div>
@@ -9,6 +9,10 @@
 
 <script>
   init() {
+    this.state = {
+      type: 'info',
+      message: '',
+    }
     this.duration = Number(this.state.duration) || 5000
   }
 
@@ -21,7 +25,7 @@
 
   autoClose() {
     if(this._latestTimeOut) clearTimeout(this._latestTimeOut)
-    this._latestTimeOut = setTimeout(this.close, this.duration)
+    this._latestTimeOut = setTimeout(this.close.bind(this), this.duration)
   }
 
   close() {
