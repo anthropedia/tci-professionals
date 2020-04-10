@@ -5,7 +5,7 @@
     <h1><x-icon figure=address-book></x-icon>${ _("Overview") }</h1>
 
     <section class="search row">
-      <input type=search name=q @keyup="searchClient" :placeholder="_('Search a client by name')">
+      <input type=search name=q @keyup="searchClient" @search="searchClient" :placeholder="_('Search a client by name')">
     </section>
 
     <section class=filters>

@@ -27,7 +27,7 @@
 
       <div>
         <label>${ _("Year of birth") }</label>
-        <input type=number name=birthyear value="${ state.client.birthyear || '1970' }" min="${ state.year - 100 }" max="${ state.year }" required>
+        <input type=number name=birthyear value="${ state.client.birthyear }" min="${ state.year - 100 }" max="${ state.year - 2 }" required>
       </div>
 
       <fieldset>
