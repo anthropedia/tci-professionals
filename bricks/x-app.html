@@ -1,8 +1,8 @@
 <template page>
   <header>
     <h1 id=logo><a href="/">
-      <img src=https://assets.tci.anthropedia.org/images/anthropedia.svg alt="Anthropedia Foundation">
-    </a></h1>
+        <img src=https://assets.tci.anthropedia.org/images/anthropedia.svg alt="Anthropedia Foundation">
+      </a></h1>
     <div :if="state.user.name">
       <nav>
         <a href="/" :active="state.page === 'dashboard'">${ _('Dashboard') }</a>
@@ -37,7 +37,15 @@
   async init() {
     const user = {
       get defaults() {
-        return { name: '', email: '', is_admin: false, credit: 0, token: '', password: '', language: 'en' }
+        return {
+          name: '',
+          email: '',
+          is_admin: false,
+          credit: 0,
+          token: '',
+          password: '',
+          language: 'en'
+        }
       },
       get isAdmin() {
         return !!this.is_admin
@@ -51,7 +59,7 @@
       async authenticate(token) {
         localStorage.setItem('token', token)
         const response = await api('/user')
-        if(!response.ok) {
+        if (!response.ok) {
           localStorage.removeItem('token')
           return false
         }
@@ -76,15 +84,18 @@
     page('/', this.authRequired.bind(this), () => this.state.page = 'dashboard')
     page('/login', () => this.state.page = 'login')
     page('/help', () => this.state.page = 'help')
-    page('/logout', () => { this.state.user.revoke(); page.redirect('/')})
+    page('/logout', () => {
+      this.state.user.revoke()
+      page.redirect('/')
+    })
     page('/profile', this.authRequired.bind(this), () => this.state.page = 'profile')
     page('/client', this.authRequired.bind(this), () => {
       this.state.clientId = ''
       this.state.page = 'client-edit'
     })
     page('/client/:id', this.authRequired.bind(this), (req) => {
-      this.state.page = 'client-edit'
       this.state.clientId = req.params.id
+      this.state.page = 'client-edit'
     })
 
     page('/provider', this.adminRequired.bind(this), () => this.state.page = 'providers')
@@ -96,10 +107,10 @@
     page('*', () => this.state.page = 'error')
 
     const token = localStorage.getItem('token')
-    if(token) {
+    if (token) {
       await this.state.user.authenticate(token)
       window.user = this.state.user
-      if(user.isAuthenticated()) {
+      if (user.isAuthenticated()) {
         const response = await api('/config')
         validateConfig(response.data)
         Object.assign(window.config, response.data)
@@ -107,7 +118,9 @@
     }
     const langResponse = await api(`/i18n/${this.state.user.language || 'en'}/professionals`)
     window.trans = langResponse.data
-    page({ hashbang: true })
+    page({
+      hashbang: true
+    })
   }
 
   authRequired(ctx, next) {
@@ -115,10 +128,11 @@
     next()
   }
 
-  adminRequired (ctx, next) {
+  adminRequired(ctx, next) {
     if (!this.state.user.isAdmin) return page('/')
     next()
   }
+
 </script>
 
 <style>
@@ -133,36 +147,43 @@
     justify-content: space-between;
     align-items: center;
   }
+
   #logo {
     margin: .5rem 1rem;
   }
+
   header nav a {
     text-decoration: none;
     font-size: .8rem;
     color: inherit;
     padding: 38px 1rem;
     border-top: 3px solid transparent;
-    transition: .3s border-color,color;
+    transition: .3s border-color, color;
   }
+
   header nav hr {
     border: 0;
     display: inline;
     border-left: 1px solid #888;
     margin: 0 .5rem;
   }
+
   header nav a:hover,
   header nav a[active] {
     color: #333;
     border-top-color: var(--background-color);
   }
+
   #logo {
     width: 120px;
   }
+
   #logo a,
   #logo img {
     display: inline-block;
     width: 100%;
   }
+
   header div {
     text-align: right;
   }
@@ -172,4 +193,5 @@
     padding: 1rem;
     font-size: .6rem;
   }
+
 </style>
