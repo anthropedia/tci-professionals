@@ -88,9 +88,12 @@
       </h1>
       <ul>
         <li :for="assignment in state.assignments">
-          <div :if="assignment.status === 'pending'">
+          <div :if="assignment.status !== 'completed'">
             <span>
-              <x-icon figure=clock color=#F5BA01></x-icon>${ _("Pending since") } ${ date(assignment.creation_date) }
+              <x-icon figure=clock color=#F5BA01></x-icon>
+              <span :if="assignment.status === 'pending'">${ _("Pending since") }</span>
+              <span :if="assignment.status === 'progress'">${ _("In progress since") }</span>
+              ${ date(assignment.creation_date) }
             </span>
             <nav class=actions>
               <a href="${ assignment.url }" title="${ _('Go to the test') }" target=_blank>
