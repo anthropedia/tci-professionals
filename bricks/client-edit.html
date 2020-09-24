@@ -103,6 +103,10 @@
                 title="${ _('Send the test to the client via email') }" id="${ assignment.id }">
                 <x-icon figure=envelope></x-icon>
               </a>
+              <label class=upload>
+                <x-icon figure=upload title="Upload a CSV with 240 rows of answers"></x-icon>
+                <input type=file @change="uploadAssignment" :key="assignment.key" style="display:none">
+              </label>
               <x-icon figure=trash @click="removeAssignment" :value="assignment.id"
                 title="${ _('Unassign this test from the client') }"></x-icon>
             </nav>
@@ -251,6 +255,19 @@ Enjoy!`
     mailto:${ this.state.client.email }?subject=${_("A TCI has been assigned to you")}&body=${ encodeURIComponent(body.trim()) }`
   }
 
+  async uploadAssignment(event) {
+    const file = event.target.files[0]
+    const key = event.target.getAttribute('key')
+    const content = await file.text()
+    const answers = content.split('\n').filter(v => v.trim()).map(v => Number(v))
+    if(answers.length !== 240) return notify(`Your file should contain 240 answers in rows. It has ${answers.length} rows.`, 'error')
+    const data = { answers }
+    const response = await api(`/assignment/${key}/complete`, { data })
+    if (!response.ok) return alert(_("Can't save your data right now. Keep this window and try a little later."))
+    notify('Answers were upload. Scores are ready.')
+    forceReload()
+  }
+
   // pass component scope to function
   async removeAssignment(event) {
     if (!confirm('Are your sure you want to remove this assignment?')) return
@@ -316,8 +333,7 @@ Enjoy!`
     display: flex;
   }
 
-  nav>a,
-  nav>x-icon {
+  nav>* {
     display: block;
     font-size: .7rem;
     font-weight: bold;
@@ -328,10 +344,10 @@ Enjoy!`
     padding: .2rem;
     border-radius: .2rem;
     border: 1px solid transparent;
+    align-self: center;
   }
 
-  nav>a:hover,
-  nav>x-icon:hover {
+  nav>*:hover {
     border-color: var(--primary-color);
   }
 
@@ -360,5 +376,4 @@ Enjoy!`
   .purchase {
     margin: 0;
   }
-
 </style>
