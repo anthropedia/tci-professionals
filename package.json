@@ -1,0 +1,25 @@
+{
+  "name": "tci-professionals",
+  "version": "1.1.0",
+  "description": "TCI for professionals",
+  "main": "index.html",
+  "scripts": {
+    "start": "concurrently 'npm run watch' 'live-server --no-browser'",
+    "watch": "npm run build -- -w",
+    "build": "LEGO_URL=/node_modules/@polight/lego/dist/lego.min.js lego bricks dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/anthropedia/tci/professionals"
+  },
+  "author": "Vincent Agnano",
+  "license": "ISC",
+  "dependencies": {
+    "@polight/lego": "^1.2"
+  },
+  "devDependencies": {
+    "concurrently": "*",
+    "live-server": "*"
+  }
+}
