@@ -81,30 +81,30 @@
       config: '',
     }
 
-    page('/', this.authRequired.bind(this), () => this.state.page = 'dashboard')
-    page('/login', () => this.state.page = 'login')
-    page('/help', () => this.state.page = 'help')
+    page('/', this.authRequired.bind(this), () => this.render({ page: 'dashboard' }))
+    page('/login', () => this.render({ page:  'login' }))
+    page('/help', () => this.render({ page:  'help' }))
     page('/logout', () => {
       this.state.user.revoke()
       page.redirect('/')
     })
-    page('/profile', this.authRequired.bind(this), () => this.state.page = 'profile')
+    page('/profile', this.authRequired.bind(this), () => this.render({ page:  'profile' }))
     page('/client', this.authRequired.bind(this), () => {
-      this.state.clientId = ''
-      this.state.page = 'client-edit'
+      this.render({ clientId:  '' })
+      this.render({ page:  'client-edit' })
     })
     page('/client/:id', this.authRequired.bind(this), (req) => {
-      this.state.clientId = req.params.id
-      this.state.page = 'client-edit'
+      this.render({ clientId:  req.params.id })
+      this.render({ page:  'client-edit' })
     })
 
-    page('/provider', this.adminRequired.bind(this), () => this.state.page = 'providers')
+    page('/provider', this.adminRequired.bind(this), () => this.render({ page: 'providers' }))
     page('/provider/:id', this.adminRequired.bind(this), (req) => {
-      this.state.providerId = req.params.id
-      this.state.page = 'provider-edit'
+      this.render({ providerId: req.params.id })
+      this.render({ page: 'provider-edit' })
     })
 
-    page('*', () => this.state.page = 'error')
+    page('*', () => this.render({ page: 'error' }))
 
     const token = localStorage.getItem('token')
     if (token) {

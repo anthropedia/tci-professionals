@@ -19,8 +19,7 @@
   show(message, type) {
     this.classList.add('visible')
     if (this.state.type !== 'error') this.autoClose()
-    this.state.type = type
-    this.state.message = message
+    this.render({ type: type,  message: message })
   }
 
   autoClose() {

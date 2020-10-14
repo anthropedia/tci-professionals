@@ -5,7 +5,7 @@
 <script>
   init() {
     const value = this.textContent
-    this.state.filter = this.state.active ? '' : `?tag=${ this.textContent }`
+    this.setState({ filter: this.state.active ? '' : `?tag=${ this.textContent }` })
   }
 </script>
 

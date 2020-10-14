@@ -44,7 +44,7 @@
 
   async connected() {
     const response = await api(`/provider/${this.state.id}`)
-    if (response.ok) this.state.provider = response.data
+    if (response.ok) this.render({ provider: response.data })
   }
 
   async save(event) {

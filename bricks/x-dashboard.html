@@ -105,23 +105,23 @@
 
   async loadClients () {
     const tagsResponse = await api('/provider/tags')
-    this.state.tags = tagsResponse.data
+    this.setState({ tags: tagsResponse.data })
     await this.updateClients()
-    this.state.loaded = true
+    this.render({ loaded: true })
   }
 
   async updateClients () {
     const response = await api(`/clients?q=${ this.state.q }&tag=${ this.state.tag }`)
     if(!response.ok) return notify(response.data, 'error')
-    this.state.clients = response.data
+    this.render({ clients: response.data })
   }
 
   addCredit(event) {
-    this.state.quantity = event.currentTarget.value
+    this.render({ quantity: event.currentTarget.value })
   }
 
   async filterTag(event) {
-    this.state.tag = event.currentTarget.value
+    this.setState({ tag: event.currentTarget.value })
     await this.updateClients()
   }
 
@@ -129,7 +129,7 @@
     if(this.searchTimeout) clearTimeout(this.searchTimeout)
     const q = event.currentTarget.value
     this.searchTimeout = setTimeout(() => {
-      this.state.q = q
+      this.setState({ q })
       this.updateClients()
     }, 400)
   }

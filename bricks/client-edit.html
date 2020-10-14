@@ -74,7 +74,7 @@
 
         <footer class=toolbar>
           <button class=primary>${ _("Save") }</button>
-          <a href=/ class=button>${ _("Cancel") }</a>
+          <a href="/" class=button>${ _("Cancel") }</a>
           <div class="secondary">
             <button type=button :if="state.client.id" @click="delete" class="danger">${ _("Delete") }</delete>
           </div>
@@ -146,7 +146,7 @@
       <button class=primary @click="assign">
         <x-icon figure=file-medical></x-icon>${ _("Assign a New Test") }
       </button>
-      <p :if="window.user.credit < 3">${ _("You need at least 3 credits to assign a new test") }. <a href= />${
+      <p :if="window.user.credit < 3">${ _("You need at least 3 credits to assign a new test") }. <a href="/">${
         ("Purchase credits") }</a></p>
     </aside>
 
@@ -175,14 +175,16 @@
   }
 
   async loadData() {
+    let client, assignments, loaded
     if (this.state.id) {
       const response = await api(`/client/${this.state.id}`)
       if (response.data) {
-        this.state.client = response.data
-        this.state.assignments = this.assignmentsFromResponse(this.state.client.assignments)
-        this.state.loaded = true
+        client = response.data
+        assignments = this.assignmentsFromResponse(client.assignments)
+        loaded = true
       }
-    } else this.state.loaded = true // new client
+    } else loaded = true // new client
+    this.render({ client, assignments, loaded })
   }
 
   async __update() {
@@ -201,9 +203,9 @@
     const button = event.currentTarget
     if (!button.hasAttribute('disabled')) return
     event.preventDefault()
-    this.state.assignmentVersion = button.getAttribute('version')
-    this.state.assignmentId = button.getAttribute('assignmentid')
-
+    const assignmentVersion = button.getAttribute('version')
+    const assignmentId = button.getAttribute('assignmentid')
+    this.render({ assignmentId, assignmentVersion })
   }
 
   async purchase() {
@@ -215,16 +217,19 @@
     })
     if (response.ok) {
       const index = this.state.assignments.findIndex(a => a.id == this.state.assignmentId)
-      this.state.assignments[index] = response.data
-      this.state.assignmentId = ''
-      this.state.assignmentVersion = ''
+      const assignments = this.state.assignments
+      assignments[index] = response.data
+      const assignmentId = ''
+      const assignmentVersion = ''
+      this.render({ assignments, assignmentId, assignmentVersion })
       notify(_(`Your {version} sheet is ready`.replace('{version}', version)), 'success')
     } else notify(response.data, 'error')
   }
 
   cancelPurchase() {
-    this.state.assignmentId = null
-    this.state.assignmentVersion = ''
+    const assignmentId = null
+    const assignmentVersion = ''
+    this.render({ assignmentId, assignmentVersion })
   }
 
   async assign() {
@@ -232,7 +237,8 @@
       method: 'post'
     })
     if (!response.ok) return notify(response, 'error')
-    this.state.assignments = this.assignmentsFromResponse(response.data.assignments)
+    const assignments = this.assignmentsFromResponse(response.data.assignments)
+    this.render({ assignments })
     return notify(_('A new assignment is available for this client'), 'success', 'success')
   }
 
@@ -271,13 +277,10 @@ Enjoy!`
   // pass component scope to function
   async removeAssignment(event) {
     if (!confirm('Are your sure you want to remove this assignment?')) return
-    const response = await api(`/assignment/${event.target.value}`, {
-      method: 'delete'
-    })
-    if (!response.ok) {
-      return notify('error', response)
-    }
-    this.state.assignments = response.data.assignments.reverse()
+    const response = await api(`/assignment/${event.target.value}`, { method: 'delete' })
+    if (!response.ok) return notify('error', response)
+
+    this.render({ assignments: response.data.assignments.reverse() })
   }
 
   async submit(event) {
