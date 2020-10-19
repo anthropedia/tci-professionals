@@ -175,16 +175,16 @@
   }
 
   async loadData() {
-    let client, assignments, loaded
+    const state = { loaded: false }
     if (this.state.id) {
       const response = await api(`/client/${this.state.id}`)
       if (response.data) {
-        client = response.data
-        assignments = this.assignmentsFromResponse(client.assignments)
-        loaded = true
+        state.client = response.data
+        state.assignments = this.assignmentsFromResponse(state.client.assignments)
+        state.loaded = true
       }
-    } else loaded = true // new client
-    this.render({ client, assignments, loaded })
+    } else state.loaded = true // new client
+    this.render(state)
   }
 
   async __update() {
