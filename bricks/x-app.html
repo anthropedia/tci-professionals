@@ -114,6 +114,7 @@
         const response = await api('/config')
         validateConfig(response.data)
         Object.assign(window.config, response.data)
+        window.logUser(window.user)
       }
     }
     const langResponse = await api(`/i18n/${this.state.user.language || 'en'}/professionals`)
