@@ -115,30 +115,32 @@
             <span>
               <x-icon figure=file-invoice></x-icon>${ _("completed on") } ${ date(assignment.completion_date) }
             </span>
-            <nav class=actions>
+            <nav :if="window.user.role === 'coach'" class=actions>
               <a class=score
                 href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/1d.pdf"
                 target=_blank title="${ _('Download results in 1D') }">1D</a>
-                <a class=score
-                href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/2d.pdf"
-                target=_blank title="${ _('Download results in 2D') }">2D</a>
-                <a class=score
-                href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/3d.pdf"
-                target=_blank title="${ _('Download results in 3D') }">3D</a>
-                <hr>
-                <a class=score @click="scoreOrPurchase" :disabled="!assignment.options.includes('3d-plus')"
-                version="3d-plus" assignmentid="${ assignment.id }"
-                href="${config.api_url}/${ state.client.language }/assignment/${assignment.id }/score/3d-plus.pdf"
-                target=_blank title="Download results in 3D+">3D+</a>
-                <a class=score @click="scoreOrPurchase" :disabled="!assignment.options.includes('unity-separateness')"
-                version="unity-separateness" :assignmentid="assignment.id"
-                href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/unity-separateness.pdf"
-                target=_blank :title="_('Download results for Unity and Separateness')">U/S</a>
-                <hr>
-                <a class=score
-                  href="${config.api_url}/assignment/${ assignment.id }/score/raw.csv"
-                  target=_blank title="${ _('Download raw scores') }">Raw</a>
+              <a class=score
+              href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/2d.pdf"
+              target=_blank title="${ _('Download results in 2D') }">2D</a>
+              <a class=score
+              href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/3d.pdf"
+              target=_blank title="${ _('Download results in 3D') }">3D</a>
+              <hr>
+              <a class=score @click="scoreOrPurchase" :disabled="!assignment.options.includes('3d-plus')"
+              version="3d-plus" assignmentid="${ assignment.id }"
+              href="${config.api_url}/${ state.client.language }/assignment/${assignment.id }/score/3d-plus.pdf"
+              target=_blank title="Download results in 3D+">3D+</a>
+              <a class=score @click="scoreOrPurchase" :disabled="!assignment.options.includes('unity-separateness')"
+              version="unity-separateness" :assignmentid="assignment.id"
+              href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/unity-separateness.pdf"
+              target=_blank :title="_('Download results for Unity and Separateness')">U/S</a>
             </nav>
+            <nav :if="window.user.role === 'researcher'">
+              <a class=score
+                href="${config.api_url}/assignment/${ assignment.id }/score/raw.csv"
+                target=_blank title="${ _('Download Raw Answers') }"><x-icon figure=download></x-icon></a>
+            </nav>
+
             <div :if="state.assignmentId == assignment.id" class="purchase row">
               <button class=primary @click="purchase">${ _("Purchase this") } ${ state.assignmentVersion }
                 score</button>

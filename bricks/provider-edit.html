@@ -13,6 +13,13 @@
           <input type="email" name="email" :value="state.provider.email" placeholder="Email address" required>
         </div>
         <div class=row>
+          <label>Role</label>
+          <select name="role" required>
+            <option value="coach" :selected="state.provider.role == 'coach'">Coach</option>
+            <option value="researcher" :selected="state.provider.role == 'researcher'">Researcher</option>
+          </select>
+        </div>
+        <div class=row>
           <label>Language</label>
           <select name=language required>
             <option value=en :selected="state.provider.language == 'en'">English</option>
