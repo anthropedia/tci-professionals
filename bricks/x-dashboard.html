@@ -50,9 +50,9 @@
       <p>${ _('For more details') }, <a href=/help>${ _('visit the help section') }</a>.</p>
     </div>
 
+    <button :if="window.user.role === 'researcher'" @click="downloadAnswers"><x-icon figure="download" title="Download answers for this group/selection">${ _("Download all results") }</x-icon></button>
 
     <footer class="row toolbar">
-      <button @click="downloadAnswers">HERE<x-icon figure="download" title="Download answers for this group/selection">Download</x-icon></button>
       <a href=/client class="button"><x-icon figure=user-plus></x-icon>${ _("Add a client") }</a>
     </footer>
   </async-block>

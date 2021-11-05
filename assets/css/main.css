@@ -29,6 +29,7 @@ button,
 .button,
 [type=submit] {
   transition: all .3s;
+  cursor: pointer;
 }
 
 button,
