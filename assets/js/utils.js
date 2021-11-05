@@ -62,3 +62,15 @@ function validateConfig(config) {
   if(!config.clients_url.includes('{key}')) errors.push(`the clients_url requires "{key}" in the url that is replaced by the client's key. Current value is ${config.clients_url}`)
   errors.forEach(e => console.error(e))
 }
+
+
+function download(filename, content, headers, body = document.body) {
+  const type = headers['Content-Type'] || (headers.get && headers.get('Content-Type')) || headers
+  const blob = new File([content], filename, { type })
+  const el = document.createElement('a')
+  el.href = URL.createObjectURL(blob)
+  el.download = filename
+  body.appendChild(el)
+  el.click()
+  body.removeChild(el)
+}
