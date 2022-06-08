@@ -1,17 +1,21 @@
 <template page>
   <header>
-    <h1 id=logo><a href="/">
-        <img src=https://assets.tci.anthropedia.org/images/anthropedia.svg alt="Anthropedia Foundation">
-      </a></h1>
-    <div :if="state.user.name">
-      <nav>
-        <a href="/" :active="state.page === 'dashboard'">${ _('Dashboard') }</a>
-        <a href="/provider" :if="state.user.is_admin" :active="state.page === 'providers'">${ _('Providers') }</a>
-        <a href="/help" :active="state.page === 'help'">${ _('Help') }</a>
-        <hr>
-        <a href="/profile" :active="state.page === 'profile'">${ _('My Profile') }</a>
-        <a href="/logout">${ _('Logout') }</a>
-      </nav>
+    <div class="wrapper">
+      <h1 id=logo>
+        <a href="/">
+          <img src=https://assets.tci.anthropedia.org/images/anthropedia.svg alt="Anthropedia Foundation">
+        </a>
+      </h1>
+      <div :if="state.user.name">
+        <nav>
+          <a href="/" :active="state.page === 'dashboard'">${ _('Dashboard') }</a>
+          <a href="/provider" :if="state.user.is_admin" :active="state.page === 'providers'">${ _('Providers') }</a>
+          <a href="/help" :active="state.page === 'help'">${ _('Help') }</a>
+          <hr>
+          <a href="/profile" :active="state.page === 'profile'">${ _('My Profile') }</a>
+          <a href="/logout">${ _('Logout') }</a>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -28,8 +32,13 @@
   </main>
 
   <footer>
-    ANTHROPEDIA™ FOUNDATION is a U.S. registered 501(c)(3) tax-deductible nonprofit charity<br>
-    ©2019 ANTHROPEDIA™ FOUNDATION all rights reserved.
+    <p>
+      ANTHROPEDIA™ FOUNDATION is a U.S. registered 501(c)(3) tax-deductible nonprofit charity<br>
+      ©2019 ANTHROPEDIA™ FOUNDATION all rights reserved.
+    </p>
+    <nav>
+      <a href="https://tci.anthropedia.org/en/privacy/" target="_blank">Privacy</a>
+    </nav>
   </footer>
 </template>
 
@@ -147,8 +156,19 @@
     align-items: center;
   }
 
-  #logo {
-    margin: .5rem 1rem;
+  header > .wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 1rem auto;
+  }
+
+  header h1 {
+    margin: 0;
+    padding: 0;
+  }
+
+  header .wrapper div {
+    text-align: right;
   }
 
   header nav a {
@@ -183,14 +203,20 @@
     width: 100%;
   }
 
-  header div {
-    text-align: right;
-  }
-
   footer {
     color: white;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 1rem;
     font-size: .6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  footer a {
+    color: inherit;
+    text-decoration: inherit;
   }
 
 </style>
