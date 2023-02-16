@@ -4,7 +4,8 @@
   "description": "TCI for professionals",
   "main": "index.html",
   "scripts": {
-    "start": "concurrently 'npm run watch' 'live-server --no-browser'",
+    "start": "concurrently 'npm run watch' 'npm run serve'",
+    "serve": "live-server --no-browser",
     "watch": "npm run build -- -w",
     "build": "LEGO_URL=/node_modules/@polight/lego/dist/lego.min.js lego bricks dist",
     "test": "echo \"Error: no test specified\" && exit 1"
