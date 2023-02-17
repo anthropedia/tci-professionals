@@ -151,15 +151,15 @@
     position: sticky;
     top: 0;
     z-index: 3;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
-
+  
   header > .wrapper {
+    display: flex;
     width: 100%;
     max-width: 1200px;
     margin: 1rem auto;
+    justify-content: space-between;
+    align-items: center;
   }
 
   header h1 {
@@ -175,9 +175,10 @@
     text-decoration: none;
     font-size: .8rem;
     color: inherit;
-    padding: 38px 1rem;
-    border-top: 3px solid transparent;
-    transition: .3s border-color, color;
+    padding: 8px 1rem;
+    margin-bottom: 8px;
+    border-bottom: 3px solid transparent;
+    transition: .1s border-color, color;
   }
 
   header nav hr {
@@ -190,7 +191,7 @@
   header nav a:hover,
   header nav a[active] {
     color: #333;
-    border-top-color: var(--background-color);
+    border-color: var(--background-color);
   }
 
   #logo {
@@ -218,5 +219,4 @@
     color: inherit;
     text-decoration: inherit;
   }
-
 </style>
