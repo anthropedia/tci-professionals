@@ -21,9 +21,11 @@
       password: this.document.querySelector('[name=password]').value
     }
     const response = await api('/token', { data })
-    if (!response.ok) return notify("Check your email and password", 'error')
-    await this.state.user.authenticate(response.data)
-    page('/')
+    if (response.ok) {
+      await this.state.user.authenticate(response.data)
+      page('/')
+    }
+    else return notify("Check your email and password", 'error')
   }
 
   async resetPassword() {
