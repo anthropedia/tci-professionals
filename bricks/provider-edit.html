@@ -20,6 +20,13 @@
           </select>
         </div>
         <div class=row>
+          <label>Permissions</label>
+          <label><input type="checkbox" name="permissions" value="survey.assign" :checked="state.provider.permissions.includes('survey.assign')">Assign TCIs to a client</label>
+          <label><input type="checkbox" name="permissions" value="video.subscribe" :checked="state.provider.permissions.includes('video.subscribe')">Subscribe to Videos/DVD</label>
+          <label><input type="checkbox" name="permissions" value="video.assign" :checked="state.provider.permissions.includes('video.assign')">Assign Videos/DVD to a client</label>
+          </select>
+        </div>
+        <div class=row>
           <label>Language</label>
           <select name=language required>
             <option value=en :selected="state.provider.language == 'en'">English</option>
@@ -44,7 +51,7 @@
 <script>
   init() {
     this.state = {
-      provider: {},
+      provider: {permissions: []},
       id: '',
     }
   }
@@ -58,7 +65,19 @@
     event.preventDefault()
     const form = event.currentTarget
     const data = {}
-    Array.from(form.elements).filter(e => e.name && e.value).forEach(e => data[e.name] = e.value)
+    Array.from(form.elements).filter(e => e.name && e.value).forEach(e => {
+      const isEnumerable = !!form.elements[e.name].entries
+      // Value is an enumerable
+      if(isEnumerable) {
+        if(!data[e.name]) data[e.name] = []
+        // It's probably a checkbox
+        if(e.checked) data[e.name].push(e.value)
+      }
+      // String/number
+      else {
+        data[e.name] = e.value
+      }
+    })
     const response = await api(`/provider/${ this.state.id }`, { data, method: 'PATCH' })
     if(response.ok) notify('Provider saved', 'success')
     else notify(response.data, 'error')
