@@ -82,78 +82,101 @@
       </form>
     </async-block>
 
-    <aside class="block" :if="state.client.id">
-      <h1>
-        <x-icon figure=file-medical-alt></x-icon>${ _("Assigned Tests") }
-      </h1>
-      <ul>
-        <li :for="assignment in state.assignments">
-          <div :if="assignment.status !== 'completed'">
-            <span>
-              <x-icon figure=clock color=#F5BA01></x-icon>
-              <span :if="assignment.status === 'pending'">${ _("Pending since") }</span>
-              <span :if="assignment.status === 'progress'">${ _("In progress since") }</span>
-              ${ date(assignment.creation_date) }
-            </span>
-            <nav class=actions>
-              <a href="${ assignment.url }" title="${ _('Go to the test') }" target=_blank>
-                <x-icon figure=file-signature></x-icon>
-              </a>
-              <a :if="state.client.email" @click="sendMail" href="#"
-                title="${ _('Send the test to the client via email') }" id="${ assignment.id }">
-                <x-icon figure=envelope></x-icon>
-              </a>
-              <label class=upload>
-                <x-icon figure=upload title="Upload a CSV with 240 rows of answers"></x-icon>
-                <input type=file @change="uploadAssignment" :key="assignment.key" style="display:none">
-              </label>
-              <x-icon figure=trash @click="removeAssignment" :value="assignment.id"
-                title="${ _('Unassign this test from the client') }"></x-icon>
-            </nav>
-          </div>
-          <div :if="assignment.status === 'completed'">
-            <span>
-              <x-icon figure=file-invoice></x-icon>${ _("completed on") } ${ date(assignment.completion_date) }
-            </span>
-            <nav :if="window.user.role === 'coach'" class=actions>
-              <a class=score
-                href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/1d.pdf"
-                target=_blank title="${ _('Download results in 1D') }">1D</a>
-              <a class=score
-              href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/2d.pdf"
-              target=_blank title="${ _('Download results in 2D') }">2D</a>
-              <a class=score
-              href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/3d.pdf"
-              target=_blank title="${ _('Download results in 3D') }">3D</a>
-              <hr>
-              <a class=score @click="scoreOrPurchase" :disabled="!assignment.options.includes('3d-plus')"
-              version="3d-plus" assignmentid="${ assignment.id }"
-              href="${config.api_url}/${ state.client.language }/assignment/${assignment.id }/score/3d-plus.pdf"
-              target=_blank title="Download results in 3D+">3D+</a>
-              <a class=score @click="scoreOrPurchase" :disabled="!assignment.options.includes('unity-separateness')"
-              version="unity-separateness" :assignmentid="assignment.id"
-              href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/unity-separateness.pdf"
-              target=_blank :title="_('Download results for Unity and Separateness')">U/S</a>
-            </nav>
-            <nav :if="window.user.role === 'researcher'">
-              <a class=score
-                href="${config.api_url}/assignment/${ assignment.id }/score/raw.csv"
-                target=_blank title="${ _('Download Raw Answers') }"><x-icon figure=download></x-icon></a>
-            </nav>
+    <aside :if="state.client.id">
+      <section class="block" :if="window.user.permissions.includes('video.assign')">
+        <h1>
+          <x-icon figure=video></x-icon>${ _("Assigned Videos") }
+        </h1>
+        <form @submit="assignVideos">
+          <p>Allow access to all videos up to:</p>
+          <select name="assigned_videos">
+            <option value="">No access</option>
+            <option value="1" :selected="state.client.latest_allowed_video == '1'">DVD 1</option>
+            <option value="2" :selected="state.client.latest_allowed_video == '2'">DVD 2</option>
+            <option value="3" :selected="state.client.latest_allowed_video == '3'">DVD 3</option>
+            <option value="4" :selected="state.client.latest_allowed_video == '4'">DVD 4</option>
+            <option value="5" :selected="state.client.latest_allowed_video == '5'">DVD 5</option>
+            <option value="6" :selected="state.client.latest_allowed_video == '6'">DVD 6</option>
+            <option value="7" :selected="state.client.latest_allowed_video == '7'">DVD 7</option>
+            <option value="8" :selected="state.client.latest_allowed_video == '8'">DVD 8</option>
+          </select>
+          <button type="primary">Assign these Videos</button>
+        </form>
+      </section>
 
-            <div :if="state.assignmentId == assignment.id" class="purchase row">
-              <button class=primary @click="purchase">${ _("Purchase this") } ${ state.assignmentVersion }
-                score</button>
-              <button @click="cancelPurchase">${ ("Cancel") }</button>
+      <section class="block" :if="window.user.permissions.includes('survey.assign')">
+        <h1>
+          <x-icon figure=file-medical-alt></x-icon>${ _("Assigned Tests") }
+        </h1>
+        <ul>
+          <li :for="assignment in state.assignments">
+            <div :if="assignment.status !== 'completed'">
+              <span>
+                <x-icon figure=clock color=#F5BA01></x-icon>
+                <span :if="assignment.status === 'pending'">${ _("Pending since") }</span>
+                <span :if="assignment.status === 'progress'">${ _("In progress since") }</span>
+                ${ date(assignment.creation_date) }
+              </span>
+              <nav class=actions>
+                <a href="${ assignment.url }" title="${ _('Go to the test') }" target=_blank>
+                  <x-icon figure=file-signature></x-icon>
+                </a>
+                <a :if="state.client.email" @click="sendMail" href="#"
+                  title="${ _('Send the test to the client via email') }" id="${ assignment.id }">
+                  <x-icon figure=envelope></x-icon>
+                </a>
+                <label class=upload>
+                  <x-icon figure=upload title="Upload a CSV with 240 rows of answers"></x-icon>
+                  <input type=file @change="uploadAssignment" :key="assignment.key" style="display:none">
+                </label>
+                <x-icon figure=trash @click="removeAssignment" :value="assignment.id"
+                  title="${ _('Unassign this test from the client') }"></x-icon>
+              </nav>
             </div>
-          </div>
-        </li>
-      </ul>
-      <button class=primary @click="assign">
-        <x-icon figure=file-medical></x-icon>${ _("Assign a New Test") }
-      </button>
-      <p :if="window.user.credit < 3">${ _("You need at least 3 credits to assign a new test") }. <a href="/">${
-        ("Purchase credits") }</a></p>
+            <div :if="assignment.status === 'completed'">
+              <span>
+                <x-icon figure=file-invoice></x-icon>${ _("completed on") } ${ date(assignment.completion_date) }
+              </span>
+              <nav :if="window.user.role === 'coach'" class=actions>
+                <a class=score
+                  href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/1d.pdf"
+                  target=_blank title="${ _('Download results in 1D') }">1D</a>
+                <a class=score
+                href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/2d.pdf"
+                target=_blank title="${ _('Download results in 2D') }">2D</a>
+                <a class=score
+                href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/3d.pdf"
+                target=_blank title="${ _('Download results in 3D') }">3D</a>
+                <hr>
+                <a class=score @click="scoreOrPurchase" :disabled="!assignment.options.includes('3d-plus')"
+                version="3d-plus" assignmentid="${ assignment.id }"
+                href="${config.api_url}/${ state.client.language }/assignment/${assignment.id }/score/3d-plus.pdf"
+                target=_blank title="Download results in 3D+">3D+</a>
+                <a class=score @click="scoreOrPurchase" :disabled="!assignment.options.includes('unity-separateness')"
+                version="unity-separateness" :assignmentid="assignment.id"
+                href="${config.api_url}/${ state.client.language }/assignment/${ assignment.id }/score/unity-separateness.pdf"
+                target=_blank :title="_('Download results for Unity and Separateness')">U/S</a>
+              </nav>
+              <nav :if="window.user.role === 'researcher'">
+                <a class=score
+                  href="${config.api_url}/assignment/${ assignment.id }/score/raw.csv"
+                  target=_blank title="${ _('Download Raw Answers') }"><x-icon figure=download></x-icon></a>
+              </nav>
+
+              <div :if="state.assignmentId == assignment.id" class="purchase row">
+                <button class=primary @click="purchase">${ _("Purchase this") } ${ state.assignmentVersion }
+                  score</button>
+                <button @click="cancelPurchase">${ ("Cancel") }</button>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <button class=primary @click="assign">
+          <x-icon figure=file-medical></x-icon>${ _("Assign a New Test") }
+        </button>
+        <p :if="window.user.credit < 3">${ _("You need at least 3 credits to assign a new test") }. <a href="/">${
+          ("Purchase credits") }</a></p>
+      </section>
     </aside>
 
   </div>
@@ -212,6 +235,23 @@
     const assignmentVersion = button.getAttribute('version')
     const assignmentId = button.getAttribute('assignmentid')
     this.render({ assignmentId, assignmentVersion })
+  }
+
+  async assignVideos(event) {
+    event.preventDefault()
+    const latestVideo = event.target.elements.assigned_videos.value
+    const response = await api(`/client/${this.state.client.id}`, {
+      method: 'PATCH',
+      data: {
+        latest_allowed_video: latestVideo
+      }
+    })
+    if (response.ok) {
+      const message = latestVideo
+        ? `This client can now view up to DVD ${latestVideo}.`
+        : `This client cannot play DVDs anymore.`
+      notify(_(message), 'success')
+    } else notify(response.data, 'error')
   }
 
   async purchase() {
@@ -299,7 +339,7 @@ Enjoy!`
     const response = client.id ?
       await api(`/client/${client.id}`, {
         data,
-        method: 'PUT'
+        method: 'PATCH'
       }) :
       await api(`/client`, {
         data
