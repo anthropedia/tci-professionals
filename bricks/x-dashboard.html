@@ -57,34 +57,36 @@
     </footer>
   </async-block>
 
-  <aside class=block>
-    <h1><x-icon figure=balance-scale></x-icon>${ _("Balance") }</h1>
-    <p><strong>${ state.user.credit }</strong> ${ _("credits remaining") }</p>
-    <p class=row>
-      <span>${ _("Add") }</span>
-      <input name=quantity type=number @input="addCredit" value=150>
-      <span>${ _("credits to my account") }.</span>
-    </p>
-    <stripe-button :quantity="state.quantity || 150" class="button primary"><x-icon figure=credit-card></x-icon> ${ _("Purchase") }</stripe-button>
+  <aside>
+    <section class=block>
+      <h1><x-icon figure=scale-balanced weight="solid"></x-icon>${ _("Balance") }</h1>
+      <p><strong>${ state.user.credit }</strong> ${ _("credits remaining") }</p>
+      <p class=row>
+        <span>${ _("Add") }</span>
+        <input name=quantity type=number @input="addCredit" value=150>
+        <span>${ _("credits to my account") }.</span>
+      </p>
+      <stripe-button :quantity="state.quantity || 150" class="button primary"><x-icon figure=credit-card></x-icon> ${ _("Purchase") }</stripe-button>
 
-    <details>
-      <summary>${ _("About the Credit System") }</summary>
+      <details>
+        <summary>${ _("About the Credit System") }</summary>
 
-      <p>1 credit = $5 (or $4 when purchasing 150 credits or more)</p>
+        <p>1 credit = $5 (or $4 when purchasing 150 credits or more)</p>
 
-      <h4>Standard Analysis:</h4>
-      <ul>
-        <li>Includes 1D, 2D, and 3D analysis = 3 credits</li>
-        <li>Automatically generated when you assign a test to a client</li>
-      </ul>
-      <h4>Additional Analyses:</h4>
-      <p>You can add any of the following to the standard analysis at any stage:</p>
-      <ul>
-        <li>3D+ (Resilience Analysis) = 1 credit</li>
-        <li>U/S (Unity and Separateness) = 1 credit</li>
-        <li>V/P (Validity and Performance) = 1 credit<em> – Coming soon!</em></li>
-      </ul>
-    </details>
+        <h4>Standard Analysis:</h4>
+        <ul>
+          <li>Includes 1D, 2D, and 3D analysis = 3 credits</li>
+          <li>Automatically generated when you assign a test to a client</li>
+        </ul>
+        <h4>Additional Analyses:</h4>
+        <p>You can add any of the following to the standard analysis at any stage:</p>
+        <ul>
+          <li>3D+ (Resilience Analysis) = 1 credit</li>
+          <li>U/S (Unity and Separateness) = 1 credit</li>
+          <li>V/P (Validity and Performance) = 1 credit<em> – Coming soon!</em></li>
+        </ul>
+      </details>
+    </section>
   </aside>
 
 </div>
