@@ -6,11 +6,13 @@ before_script:
 pages:
   script:
     - npx lego
+    - mkdir .public
+    - cp -r ./* .public
+    - rm -rf public
+    - mv .public public
   artifacts:
     paths:
-      # The folder that contains the files to be exposed at the Page URL
       - public
   rules:
-    # This ensures that only pushes to the default branch will trigger
-    # a pages deploy
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
