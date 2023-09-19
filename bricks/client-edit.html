@@ -2,7 +2,7 @@
   <div class=two-columns>
     <async-block :loaded="state.loaded" class=block>
       <h1>
-        <x-icon figure=user-edit></x-icon>
+        <x-icon figure=user></x-icon>
         <span :if="state.client.id">${ _("{client}'s Profile").replace('{client}', state.client.name) }</span>
         <span :if="!state.client.id">${ _("Add a New Client") }</span>
       </h1>
@@ -85,7 +85,7 @@
     <aside :if="state.client.id">
       <section class="block" :if="window.user.permissions.includes('video.assign')">
         <h1>
-          <x-icon figure=video></x-icon>${ _("Assigned Videos") }
+          <x-icon figure=circle-play></x-icon>${ _("Assigned Videos") }
         </h1>
         <form @submit="assignVideos">
           <p>Allow access to all videos up to:</p>
@@ -106,7 +106,7 @@
 
       <section class="block" :if="window.user.permissions.includes('survey.assign')">
         <h1>
-          <x-icon figure=file-medical-alt></x-icon>${ _("Assigned Tests") }
+          <x-icon figure=file-lines></x-icon>${ _("Assigned Tests") }
         </h1>
         <ul>
           <li :for="assignment in state.assignments">
@@ -119,23 +119,23 @@
               </span>
               <nav class=actions>
                 <a href="${ assignment.url }" title="${ _('Go to the test') }" target=_blank>
-                  <x-icon figure=file-signature></x-icon>
+                  <x-icon weight="solid" figure=up-right-from-square></x-icon>
                 </a>
                 <a :if="state.client.email" @click="sendMail" href="#"
                   title="${ _('Send the test to the client via email') }" id="${ assignment.id }">
-                  <x-icon figure=envelope></x-icon>
+                  <x-icon figure=paper-plane></x-icon>
                 </a>
                 <label class=upload>
-                  <x-icon figure=upload title="Upload a CSV with 240 rows of answers"></x-icon>
+                  <x-icon figure=upload weight="solid" title="Upload a CSV with 240 rows of answers"></x-icon>
                   <input type=file @change="uploadAssignment" :key="assignment.key" style="display:none">
                 </label>
-                <x-icon figure=trash @click="removeAssignment" :value="assignment.id"
+                <x-icon figure=trash weight="solid" @click="removeAssignment" :value="assignment.id"
                   title="${ _('Unassign this test from the client') }"></x-icon>
               </nav>
             </div>
             <div :if="assignment.status === 'completed'">
               <span>
-                <x-icon figure=file-invoice></x-icon>${ _("completed on") } ${ date(assignment.completion_date) }
+                <x-icon figure=check-double weight="solid"></x-icon>${ _("completed on") } ${ date(assignment.completion_date) }
               </span>
               <nav :if="window.user.role === 'coach'" class=actions>
                 <a class=score
