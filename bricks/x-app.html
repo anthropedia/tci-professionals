@@ -68,6 +68,7 @@
       async authenticate(token) {
         localStorage.setItem('token', token)
         const response = await api('/user')
+        if (!response) return alert('The server seems to be down. Please contact the Anthropedia team for further details: dev@anthropedia.org')
         if (!response.ok) {
           localStorage.removeItem('token')
           return false
