@@ -19,7 +19,7 @@
       <h2 :if="state.tag">${ state.clients.length } ${ _("clients in group") } "${ state.tag }"</h2>
       <a :for="client in state.clients" href="/client/${ client.id }">
         <h3><x-icon figure=user></x-icon>${ client.name }</h3>
-        <p :if="client.assignments.length && client.assignments.slice(-1)[0].status === 'completed'"><x-icon figure=file-invoice></x-icon>
+        <p :if="client.assignments.length && client.assignments.slice(-1)[0].status === 'completed'"><x-icon figure=check-double weight="solid"></x-icon>
           ${ _("Completed on") } ${(new Date(client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ client.assignments.length }
           <span :if="client.assignments.length == 1">${ _("test") }</span>
           <span :if="client.assignments.length > 1">${ _("tests") }</span>
@@ -87,6 +87,19 @@
         </ul>
       </details>
     </section>
+
+    <section class="block">
+      <h1><x-icon figure=circle-play></x-icon>${ _("Know Yourself Series") }</h1>
+      <div :if="!(Date.now() <= new Date(state.user.subscription_expiration_date))">
+        <p>${ _("You don't have access to the Know Yourself audio and video series yet.") }</p>
+        <p>${ _("You can gain access for 1 year with 15 credits.") }</p>
+        <button @click="purchaseVod" class="primary" style="width: 100%">${ _('I confirm I want to gain access') }</button>
+      </div>
+      <div :if="Date.now() <= new Date(state.user.subscription_expiration_date)">
+        <p>${ _("You can extend your access for 1 extra year with 15 credits.") }</p>
+        <button @click="purchaseVod" class="primary" style="width: 100%">${ _('Extend my access') }</button>
+      </div>
+    </section>
   </aside>
 
 </div>
@@ -107,14 +120,14 @@
     this.loadClients()
   }
 
-  async loadClients () {
+  async loadClients() {
     const tagsResponse = await api('/provider/tags')
     this.setState({ tags: tagsResponse.data })
     await this.updateClients()
     this.render({ loaded: true })
   }
 
-  async updateClients () {
+  async updateClients() {
     const response = await api(`/clients?q=${ this.state.q }&tag=${ this.state.tag }`)
     if(!response.ok) return notify(response.data, 'error')
     this.render({ clients: response.data })
@@ -143,6 +156,12 @@
     let filename = (new Date()).toISOString().split('T')[0]
     if(this.state.tag) filename += `-${this.state.tag.trim()}`
     download(`${filename}.csv`, response.data, {}, this.document)
+  }
+
+  async purchaseVod(event) {
+    if(!confirm("You will spend 10 credits from your balance")) return
+    const response = await api(`/subscription/purchase`, { method: 'POST' })
+    if(!response.ok) notify(response.data, 'error')
   }
 </script>
 

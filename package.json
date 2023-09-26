@@ -4,7 +4,7 @@
   "description": "TCI for professionals",
   "main": "index.html",
   "scripts": {
-    "start": "concurrently 'npm run watch' 'npm run serve'",
+    "dev": "concurrently 'npm run watch' 'npm run serve'",
     "serve": "live-server --no-browser",
     "watch": "npm run build -- -w",
     "build": "LEGO_URL=/node_modules/@polight/lego/dist/lego.min.js lego bricks dist",
@@ -17,7 +17,7 @@
   "author": "Vincent Agnano",
   "license": "ISC",
   "dependencies": {
-    "@polight/lego": "^1.2"
+    "@polight/lego": "1.4"
   },
   "devDependencies": {
     "concurrently": "*",
