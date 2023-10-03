@@ -90,14 +90,14 @@
 
     <section class="block">
       <h1><x-icon figure=circle-play></x-icon>${ _("Know Yourself Series") }</h1>
-      <div :if="!(Date.now() <= new Date(state.user.subscription_expiration_date))">
+      <div :if="new Date(state.user.subscription_expiration_date) < Date.now()">
         <p>${ _("You don't have access to the Know Yourself audio and video series yet.") }</p>
         <p>${ _("You can gain access for 1 year with 15 credits.") }</p>
         <button @click="purchaseVod" class="primary" style="width: 100%">${ _('I confirm I want to gain access') }</button>
       </div>
-      <div :if="Date.now() <= new Date(state.user.subscription_expiration_date)">
-        <p>${ _("You can extend your access for 1 extra year with 15 credits.") }</p>
-        <button @click="purchaseVod" class="primary" style="width: 100%">${ _('Extend my access') }</button>
+      <div :if="new Date(state.user.subscription_expiration_date) >= Date.now()">
+        <p>${ _(`Your access is valid until ${new Date(state.user.subscription_expiration_date).toLocaleDateString()}.`) }</p>
+        <button @click="purchaseVod" class="primary" style="width: 100%">${ _('Extend for 1 year') }</button>
       </div>
     </section>
   </aside>
