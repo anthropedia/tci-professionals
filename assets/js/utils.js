@@ -32,7 +32,7 @@ function request (url, options = {}) {
 }
 
 function date(d) {
-  return d && (new Date(d * 1000)).toLocaleDateString()
+  return d && (new Date(d)).toLocaleDateString()
 }
 
 

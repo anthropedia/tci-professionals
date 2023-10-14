@@ -20,12 +20,12 @@
       <a :for="client in state.clients" href="/client/${ client.id }">
         <h3><x-icon figure=user></x-icon>${ client.name }</h3>
         <p :if="client.assignments.length && client.assignments.slice(-1)[0].status === 'completed'"><x-icon figure=check-double weight="solid"></x-icon>
-          ${ _("Completed on") } ${(new Date(client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ client.assignments.length }
+          ${ _("Completed on") } ${(new Date(client.assignments.reverse()[0].creation_date)).toLocaleDateString() } – ${ client.assignments.length }
           <span :if="client.assignments.length == 1">${ _("test") }</span>
           <span :if="client.assignments.length > 1">${ _("tests") }</span>
         </p>
         <p :if="client.assignments.length && client.assignments.slice(-1)[0].status === 'pending'"><x-icon figure=clock color=#F5BA01></x-icon>
-          ${ _("Pending since") } ${(new Date(client.assignments.reverse()[0].creation_date * 1000)).toLocaleDateString() } – ${ client.assignments.length }
+          ${ _("Pending since") } ${(new Date(client.assignments.reverse()[0].creation_date)).toLocaleDateString() } – ${ client.assignments.length }
           <span :if="client.assignments.length == 1">${ _("test") }</span>
           <span :if="client.assignments.length > 1">${ _("tests") }</span>
         </p>
@@ -50,7 +50,7 @@
       <p>${ _('For more details') }, <a href=/help>${ _('visit the help section') }</a>.</p>
     </div>
 
-    <button :if="window.user.role === 'researcher'" @click="downloadAnswers"><x-icon figure="download" title="Download answers for this group/selection">${ _("Download all results") }</x-icon></button>
+    <button :if="window.user.role === 'researcher'" @click="downloadAnswers"><x-icon figure="download" weight="solid" title="Download answers for this group/selection">${ _("Download all results") }</x-icon></button>
 
     <footer class="row toolbar">
       <a href=/client class="button"><x-icon figure=user-plus></x-icon>${ _("Add a client") }</a>
@@ -96,8 +96,10 @@
         <button @click="purchaseVod" class="primary" style="width: 100%">${ _('I confirm I want to gain access') }</button>
       </div>
       <div :if="new Date(state.user.subscription_expiration_date) >= Date.now()">
+        <a class="button" style="width: 100%" href="https://vod.tci.anthropedia.org" target="_blank">Visit the KYS Player</a>
+        <hr>
         <p>${ _(`Your access is valid until ${new Date(state.user.subscription_expiration_date).toLocaleDateString()}.`) }</p>
-        <button @click="purchaseVod" class="primary" style="width: 100%">${ _('Extend for 1 year') }</button>
+        <button @click="purchaseVod" class="primary">${ _('Extend for 1 year') }</button>
       </div>
     </section>
   </aside>
@@ -162,6 +164,7 @@
     if(!confirm("You will spend 10 credits from your balance")) return
     const response = await api(`/subscription/purchase`, { method: 'POST' })
     if(!response.ok) notify(response.data, 'error')
+    location.reload()
   }
 </script>
 
