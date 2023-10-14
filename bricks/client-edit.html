@@ -104,6 +104,20 @@
         </form>
       </section>
 
+      <form class="block" @submit="purchaseKYS">
+        <h1>${ _("Know Yourself Series") }</h1>
+        <p>Purchase access to the Know Yourself audio and video series for ${state.client.name}</p>
+        <fieldset>
+          <h2>Audio Series</h2>
+          <label :for="_, i in Array(16).fill()"><input type="checkbox" name="kysseries" value="a${i + 1}" :checked="state.client.knowyourself_series.includes(`a${i + 1}`)" :disabled="state.client.knowyourself_series.includes(`a${i + 1}`)">${i + 1}</input></label>
+        </fieldset>
+        <fieldset>
+          <h2>Video Series</h2>
+          <label :for="_, i in Array(16).fill()"><input type="checkbox" name="kysseries" value="v${i + 1}" :checked="state.client.knowyourself_series.includes(`v${i + 1}`)" :disabled="state.client.knowyourself_series.includes(`v${i + 1}`)">${i + 1}</input></label>
+        </fieldset>
+        <button class=primary>${ _("Add Selection") }</button>
+      </form>
+
       <section class="block" :if="window.user.permissions.includes('survey.assign')">
         <h1>
           <x-icon figure=file-lines></x-icon>${ _("Assigned Tests") }
@@ -261,6 +275,29 @@
         version
       }
     })
+    if (response.ok) {
+      const index = this.state.assignments.findIndex(a => a.id == this.state.assignmentId)
+      const assignments = this.state.assignments
+      assignments[index] = response.data
+      const assignmentId = ''
+      const assignmentVersion = ''
+      this.render({ assignments, assignmentId, assignmentVersion })
+      notify(_(`Your {version} sheet is ready`.replace('{version}', version)), 'success')
+    } else notify(response.data, 'error')
+  }
+
+  async purchaseKYS(event) {
+    event.preventDefault()
+    const assignments = [...event.target.kysseries].filter((i) => i.checked).map(i => i.value)
+    const selection = assignments.filter((k) => !this.state.client.knowyourself_series.includes(k))
+    const amount = selection.length
+    if(!confirm(_(`${amount * 3} credits will be spent from your balance.\nDo you want to process?`))) return
+
+    const response = await api(`/assignment/kys`, {
+      method: 'POST',
+      data: {client: this.state.client.id, assignments: selection}
+    })
+
     if (response.ok) {
       const index = this.state.assignments.findIndex(a => a.id == this.state.assignmentId)
       const assignments = this.state.assignments
