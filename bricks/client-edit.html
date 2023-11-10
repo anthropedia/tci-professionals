@@ -83,7 +83,7 @@
     </async-block>
 
     <aside :if="state.client.id">
-      <form class="block" @submit="purchaseKYS">
+      <form class="block" @submit="purchaseKYS" :if="window.user.permissions.includes('video.assign')">
         <h1>${ _("Know Yourself Series") }</h1>
         <p>Purchase access to the Know Yourself audio and video series for ${state.client.name}</p>
         <fieldset class="checkbox-series">

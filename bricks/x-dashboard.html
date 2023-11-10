@@ -88,9 +88,9 @@
       </details>
     </section>
 
-    <section class="block">
+    <section class="block" :if="window.user.permissions.includes('video.subscribe')">
       <h1><x-icon figure=circle-play></x-icon>${ _("Know Yourself Series") }</h1>
-      <div :if="new Date(state.user.subscription_expiration_date) < Date.now()">
+      <div :if="!state.user.subscription_expiration_date || new Date(state.user.subscription_expiration_date) < Date.now()">
         <p>${ _("You don't have access to the Know Yourself audio and video series yet.") }</p>
         <p>${ _("You can gain access for 1 year with 15 credits.") }</p>
         <button @click="purchaseVod" class="primary" style="width: 100%">${ _('I confirm I want to gain access') }</button>
