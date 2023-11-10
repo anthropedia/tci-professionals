@@ -83,37 +83,20 @@
     </async-block>
 
     <aside :if="state.client.id">
-      <section class="block" :if="window.user.permissions.includes('video.assign')">
-        <h1>
-          <x-icon figure=circle-play></x-icon>${ _("Assigned Videos") }
-        </h1>
-        <form @submit="assignVideos">
-          <p>Allow access to all videos up to:</p>
-          <select name="assigned_videos">
-            <option value="">No access</option>
-            <option value="1" :selected="state.client.latest_allowed_video == '1'">DVD 1</option>
-            <option value="2" :selected="state.client.latest_allowed_video == '2'">DVD 2</option>
-            <option value="3" :selected="state.client.latest_allowed_video == '3'">DVD 3</option>
-            <option value="4" :selected="state.client.latest_allowed_video == '4'">DVD 4</option>
-            <option value="5" :selected="state.client.latest_allowed_video == '5'">DVD 5</option>
-            <option value="6" :selected="state.client.latest_allowed_video == '6'">DVD 6</option>
-            <option value="7" :selected="state.client.latest_allowed_video == '7'">DVD 7</option>
-            <option value="8" :selected="state.client.latest_allowed_video == '8'">DVD 8</option>
-          </select>
-          <button type="primary">Assign these Videos</button>
-        </form>
-      </section>
-
       <form class="block" @submit="purchaseKYS">
         <h1>${ _("Know Yourself Series") }</h1>
         <p>Purchase access to the Know Yourself audio and video series for ${state.client.name}</p>
-        <fieldset>
-          <h2>Audio Series</h2>
-          <label :for="_, i in Array(16).fill()"><input type="checkbox" name="kysseries" value="a${i + 1}" :checked="state.client.knowyourself_series.includes(`a${i + 1}`)" :disabled="state.client.knowyourself_series.includes(`a${i + 1}`)">${i + 1}</input></label>
-        </fieldset>
-        <fieldset>
+        <fieldset class="checkbox-series">
           <h2>Video Series</h2>
-          <label :for="_, i in Array(16).fill()"><input type="checkbox" name="kysseries" value="v${i + 1}" :checked="state.client.knowyourself_series.includes(`v${i + 1}`)" :disabled="state.client.knowyourself_series.includes(`v${i + 1}`)">${i + 1}</input></label>
+          <div>
+            <label :for="_, i in Array(16).fill()"><input type="checkbox" name="kysseries" value="v${i + 1}" :checked="state.client.knowyourself_series.includes(`v${i + 1}`)" :disabled="state.client.knowyourself_series.includes(`v${i + 1}`)">${i + 1}</input></label>
+          </div>
+        </fieldset>
+        <fieldset class="checkbox-series">
+          <h2>Audio Series</h2>
+          <div>
+            <label :for="_, i in Array(16).fill()"><input type="checkbox" name="kysseries" value="a${i + 1}" :checked="state.client.knowyourself_series.includes(`a${i + 1}`)" :disabled="state.client.knowyourself_series.includes(`a${i + 1}`)">${i + 1}</input></label>
+          </div>
         </fieldset>
         <button class=primary>${ _("Add Selection") }</button>
       </form>
@@ -251,23 +234,6 @@
     this.render({ assignmentId, assignmentVersion })
   }
 
-  async assignVideos(event) {
-    event.preventDefault()
-    const latestVideo = event.target.elements.assigned_videos.value
-    const response = await api(`/client/${this.state.client.id}`, {
-      method: 'PATCH',
-      data: {
-        latest_allowed_video: latestVideo
-      }
-    })
-    if (response.ok) {
-      const message = latestVideo
-        ? `This client can now view up to DVD ${latestVideo}.`
-        : `This client cannot play DVDs anymore.`
-      notify(_(message), 'success')
-    } else notify(response.data, 'error')
-  }
-
   async purchase() {
     const version = this.state.assignmentVersion
     const response = await api(`/assignment/${this.state.assignmentId}/purchase`, {
@@ -299,13 +265,10 @@
     })
 
     if (response.ok) {
-      const index = this.state.assignments.findIndex(a => a.id == this.state.assignmentId)
-      const assignments = this.state.assignments
-      assignments[index] = response.data
-      const assignmentId = ''
-      const assignmentVersion = ''
-      this.render({ assignments, assignmentId, assignmentVersion })
-      notify(_(`Your {version} sheet is ready`.replace('{version}', version)), 'success')
+      notify(_(`Your client can now access this new selection.`), 'success')
+      setTimeout(() => {
+        forceReload()
+      }, 3000)
     } else notify(response.data, 'error')
   }
 
@@ -461,5 +424,12 @@ Enjoy!`
 
   .purchase {
     margin: 0;
+  }
+
+  .checkbox-series > div > label {
+    width: 40px;
+    display: inline-flex;
+    flex-direction: row-reverse;
+    margin: 0 20px;
   }
 </style>
